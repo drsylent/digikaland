@@ -1,6 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="First Enter"
+        android:id="@+id/devFirstEnter"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="5dp"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Client Captain Enter"
+        android:id="@+id/devClientCaptainEnter"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="5dp"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Client Simple Enter"
+        android:id="@+id/devClientSimpleEnter"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="5dp"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Admin Total Enter"
+        android:id="@+id/devAdminTotalEnter"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="5dp"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Admin Objective Enter"
+        android:id="@+id/devAdminObjectiveEnter"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="5dp"
+        />
 </LinearLayout>
