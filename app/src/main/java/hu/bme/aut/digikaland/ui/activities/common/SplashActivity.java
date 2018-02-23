@@ -1,11 +1,14 @@
 package hu.bme.aut.digikaland.ui.activities.common;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
 import hu.bme.aut.digikaland.R;
+import hu.bme.aut.digikaland.ui.activities.admin.AdminMainActivity;
+import hu.bme.aut.digikaland.ui.activities.client.ClientMainActivity;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -40,6 +43,8 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // mintha elso inditas lenne
+                Intent intent = new Intent(SplashActivity.this, StartupActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -47,6 +52,9 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // mintha teljes admin lenne aki belep
+                Intent intent = new Intent(SplashActivity.this, AdminMainActivity.class);
+                // TODO: teljes adminsag
+                startActivity(intent);
             }
         });
 
@@ -54,6 +62,9 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // mintha feladat admin lenne
+                Intent intent = new Intent(SplashActivity.this, AdminMainActivity.class);
+                // TODO: feladat adminsag
+                startActivity(intent);
             }
         });
 
@@ -61,6 +72,9 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // mintha kapitány kliens lenne
+                Intent intent = new Intent(SplashActivity.this, ClientMainActivity.class);
+                // TODO: kapitanysag
+                startActivity(intent);
             }
         });
 
@@ -68,6 +82,9 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // mintha egyszeru kliens lenne
+                Intent intent = new Intent(SplashActivity.this, ClientMainActivity.class);
+                // TODO: sima kliens
+                startActivity(intent);
             }
         });
     }
