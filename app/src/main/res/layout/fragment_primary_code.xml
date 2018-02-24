@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="5"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="@string/welcome"
+        android:gravity="center"
+        style="@style/StringFormatTitle"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="@string/racecode"
+        android:gravity="center"
+        style="@style/StringFormatSubTitle"/>
+
+    <EditText
+        android:layout_width="200dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:maxLength="8"
+        android:hint="@string/racecode_hint"
+        android:textSize="22sp"
+        android:textAlignment="center"
+        android:id="@+id/primaryCode"
+        android:gravity="bottom"
+        android:inputType="text"
+        android:layout_gravity="center_horizontal"
+        android:imeOptions="actionSend"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/send"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:id="@+id/primarySend"
+        style="@style/ButtonStyle"
+        android:textSize="20sp"
+        android:layout_gravity="center_horizontal"/>
+
+</LinearLayout>

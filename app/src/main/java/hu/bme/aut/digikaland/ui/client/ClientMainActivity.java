@@ -1,15 +1,15 @@
-package hu.bme.aut.digikaland.ui.activities.common;
+package hu.bme.aut.digikaland.ui.client;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import hu.bme.aut.digikaland.R;
 
-public class StartupActivity extends AppCompatActivity {
+public class ClientMainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_startup);
+        setContentView(R.layout.activity_client_main);
     }
 }

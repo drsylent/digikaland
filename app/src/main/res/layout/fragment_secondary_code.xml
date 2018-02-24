@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="5"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        tools:text="RaceTitle"
+        android:id="@+id/SecondaryRaceTitle"
+        android:gravity="center"
+        style="@style/StringFormatTitle"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="@string/rolecode"
+        android:gravity="center"
+        style="@style/StringFormatSubTitle"/>
+
+    <EditText
+        android:layout_width="200dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:maxLength="8"
+        android:hint="@string/racecode_hint"
+        android:id="@+id/secondaryCode"
+        android:textSize="22sp"
+        android:textAlignment="center"
+        android:inputType="text"
+        android:gravity="bottom"
+        android:layout_gravity="center_horizontal"
+        android:imeOptions="actionSend"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/send"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:id="@+id/secondarySend"
+        style="@style/ButtonStyle"
+        android:textSize="20sp"
+        android:layout_gravity="center_horizontal"/>
+
+</LinearLayout>

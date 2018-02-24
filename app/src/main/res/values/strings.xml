@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">Digikaland</string>
     <string name="title_activity_startup">StartupActivity</string>
+    <string name="welcome">Üdvözöllek a Digikalandban!</string>
+    <string name="racecode">Add meg a versenykódot, mellyel csatlakozhatsz a versenyhez!</string>
+    <string name="racecode_hint">Kód</string>
+    <string name="send">Beküldés</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="rolecode">Add meg a szerepkódod, mellyel a megfelelő csapathoz csatlakozhatsz!</string>
 </resources>

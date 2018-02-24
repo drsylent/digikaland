@@ -1,4 +1,4 @@
-package hu.bme.aut.digikaland.ui.activities.admin;
+package hu.bme.aut.digikaland.ui.admin;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

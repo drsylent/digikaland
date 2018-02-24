@@ -4,6 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="hu.bme.aut.digikaland.ui.activities.client.ClientMainActivity">
+    tools:context=".ui.client.ClientMainActivity">
 
 </android.support.constraint.ConstraintLayout>

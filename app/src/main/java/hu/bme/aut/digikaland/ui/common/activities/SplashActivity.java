@@ -1,4 +1,4 @@
-package hu.bme.aut.digikaland.ui.activities.common;
+package hu.bme.aut.digikaland.ui.common.activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -7,8 +7,8 @@ import android.view.View;
 import android.widget.Button;
 
 import hu.bme.aut.digikaland.R;
-import hu.bme.aut.digikaland.ui.activities.admin.AdminMainActivity;
-import hu.bme.aut.digikaland.ui.activities.client.ClientMainActivity;
+import hu.bme.aut.digikaland.ui.admin.AdminMainActivity;
+import hu.bme.aut.digikaland.ui.client.ClientMainActivity;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -18,7 +18,7 @@ public class SplashActivity extends AppCompatActivity {
         // itt lesz az adatbazis betoltese, es annak eldontese
         // melyik kepernyo keruljon betoltesre
         try{
-            Thread.sleep(2000);
+            Thread.sleep(500);
         }catch(InterruptedException e){
             e.printStackTrace();
         }
