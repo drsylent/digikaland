@@ -12,5 +12,8 @@
     <item android:title="@string/teams"
         android:id="@+id/adminTeams"
         />
+    <item android:title="@string/status"
+        android:id="@+id/adminStatus"
+        />
 
 </menu>

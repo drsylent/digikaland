@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="@string/actual"
+        android:id="@+id/clientActual"
+        />
+    <item android:title="@string/map"
+        android:id="@+id/clientMap"
+        />
+    <item android:title="@string/status"
+        android:id="@+id/clientStatus"
+        />
+
 
 </menu>

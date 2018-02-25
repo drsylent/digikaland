@@ -9,4 +9,12 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="rolecode">Add meg a szerepkódod, mellyel a megfelelő csapathoz csatlakozhatsz!</string>
+    <string name="actual">Aktuális</string>
+    <string name="map">Térkép</string>
+    <string name="status">Státusz</string>
+    <string name="stations">Állomások</string>
+    <string name="teams">Csapatok</string>
+    <string name="drawer_open">Drawer Open</string>
+    <string name="drawer_close">Drawer Close</string>
+    <string name="refresh">Frissítés</string>
 </resources>

@@ -22,7 +22,8 @@
             android:name=".ui.common.activities.StartupActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ui.admin.AdminMainActivity" />
-        <activity android:name=".ui.client.ClientMainActivity" />
+        <activity android:name=".ui.client.ClientMainActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
