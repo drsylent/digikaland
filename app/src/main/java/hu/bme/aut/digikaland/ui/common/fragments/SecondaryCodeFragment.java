@@ -28,6 +28,7 @@ public class SecondaryCodeFragment extends Fragment {
         // Required empty public constructor
     }
 
+    // TODO: refactor to bundle-like
     public static SecondaryCodeFragment newInstance(String name) {
         SecondaryCodeFragment fragment = new SecondaryCodeFragment();
         fragment.raceName = name;

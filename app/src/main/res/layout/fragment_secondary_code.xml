@@ -13,7 +13,7 @@
         tools:text="RaceTitle"
         android:id="@+id/SecondaryRaceTitle"
         android:gravity="center"
-        style="@style/StringFormatTitle"/>
+        style="@style/StringFormatMainTitle"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -42,11 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/send"
-        android:paddingLeft="50dp"
-        android:paddingRight="50dp"
         android:id="@+id/secondarySend"
-        style="@style/ButtonStyle"
-        android:textSize="20sp"
-        android:layout_gravity="center_horizontal"/>
+        style="@style/ButtonStyle.Center"/>
 
 </LinearLayout>

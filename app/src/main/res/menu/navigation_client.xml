@@ -6,6 +6,9 @@
     <item android:title="@string/map"
         android:id="@+id/clientMap"
         />
+    <item android:title="@string/stations"
+        android:id="@+id/clientStations"
+        />
     <item android:title="@string/status"
         android:id="@+id/clientStatus"
         />

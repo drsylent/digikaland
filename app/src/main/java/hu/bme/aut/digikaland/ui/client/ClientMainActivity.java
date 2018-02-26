@@ -14,20 +14,35 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientActualFragment;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientStatusFragment;
 
-public class ClientMainActivity extends AppCompatActivity {
+public class ClientMainActivity extends AppCompatActivity implements ClientActualFragment.ClientActualMainListener {
 
     Toolbar toolbar;
     DrawerLayout drawerLayout;
     MenuItem activeItem;
     LinearLayout mainLayout;
 
+    @Override
+    public void mapActivation() {
+        setMap();
+    }
+
+    @Override
+    public void helpActivation() {
+        showSnackBarMessage("Help");
+    }
+
     private enum ViewState{
         Actual,
         Map,
+        Stations,
         Status
     }
 
@@ -54,6 +69,9 @@ public class ClientMainActivity extends AppCompatActivity {
                         break;
                     case R.id.clientMap:
                         setMap();
+                        break;
+                    case R.id.clientStations:
+                        setStations();
                         break;
                     case R.id.clientStatus:
                         setStatus();
@@ -82,11 +100,24 @@ public class ClientMainActivity extends AppCompatActivity {
     void setActual(){
         state = ViewState.Actual;
         toolbar.setTitle(R.string.actual);
-        getSupportFragmentManager().beginTransaction().replace(R.id.clientContent, ClientActualFragment.newInstance("", "")).commit();
+        Bundle bundle = new Bundle();
+        bundle.putString(ClientActualFragment.ARG_LOCATION, "Ez itt egy cím lesz");
+        bundle.putString(ClientActualFragment.ARG_SUBLOCATION, "Ez itt a cím pontosítása lesz");
+        bundle.putInt(ClientActualFragment.ARG_STATIONS, 10);
+        bundle.putInt(ClientActualFragment.ARG_STATION_NUMBER, 7);
+        Calendar c = new GregorianCalendar();
+        c.set(2018,2,26,19,48);
+        Date testTime = c.getTime();
+        bundle.putLong(ClientActualFragment.ARG_TIME, testTime.getTime());
+        getSupportFragmentManager().beginTransaction().replace(R.id.clientContent, ClientActualFragment.newInstance(bundle)).commit();
     }
 
     void setMap(){
         showSnackBarMessage("Map Active");
+    }
+
+    void setStations(){
+
     }
 
     void setStatus(){
