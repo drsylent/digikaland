@@ -1,5 +1,6 @@
 package hu.bme.aut.digikaland.ui.client;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -21,6 +22,7 @@ import java.util.GregorianCalendar;
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientActualFragment;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientStatusFragment;
+import hu.bme.aut.digikaland.ui.common.activities.MapsActivity;
 
 public class ClientMainActivity extends AppCompatActivity implements ClientActualFragment.ClientActualMainListener {
 
@@ -113,7 +115,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     }
 
     void setMap(){
-        showSnackBarMessage("Map Active");
+        startActivity(new Intent(ClientMainActivity.this, MapsActivity.class));
     }
 
     void setStations(){
