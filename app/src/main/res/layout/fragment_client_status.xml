@@ -1,13 +1,70 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="hu.bme.aut.digikaland.ui.client.fragments.ClientStatusFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Status" />
+        android:layout_height="wrap_content"
+        android:text="Jelenlegi versenyed:"
+        style="@style/StringFormatTitle"/>
 
-</FrameLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/clientStatusRaceName"
+        android:text="Teszt verseny"
+        style="@style/StringFormatInformation.Center"/>
+    
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Csapatod neve:"
+        android:layout_marginTop="25dp"
+        style="@style/StringFormatTitle"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/clientStatusTeamName"
+        android:text="Piros csapat"
+        style="@style/StringFormatInformation.Center"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:text="Teljesített állomások:"
+        style="@style/StringFormatTitle"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/clientStatusStations"
+        android:text="2/6"
+        style="@style/StringFormatInformation.Center"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:text="A csapatkapitányod:"
+        style="@style/StringFormatTitle"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/clientStatusCaptain"
+        android:text="Kapitány Gergő"
+        style="@style/StringFormatInformation.Center"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/clientStatusPhone"
+        android:text="+36 36 363 3636"
+        style="@style/StringFormatInformation.Center"/>
+
+</LinearLayout>

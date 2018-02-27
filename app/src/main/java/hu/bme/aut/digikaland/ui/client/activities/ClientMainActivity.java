@@ -30,7 +30,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     public static final String ARGS_LONGITUDE = "arg2";
     public static final String MARKER_LOCATIONS = "arg3";
 
-
+    NavigationView nav;
     Toolbar toolbar;
     DrawerLayout drawerLayout;
     MenuItem activeItem;
@@ -61,7 +61,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         setContentView(R.layout.activity_client_main);
         mainLayout = findViewById(R.id.clientContent);
         drawerLayout = findViewById(R.id.clientDrawer);
-        NavigationView nav = findViewById(R.id.clientNavigation);
+        nav = findViewById(R.id.clientNavigation);
         nav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -87,6 +87,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
             }
         });
         setupToolbar();
+        activeItem = nav.getMenu().getItem(0);
         setActual();
 //        int active;
 //        if(subjectsAvailable()){
@@ -97,9 +98,6 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
 //            setSubjectMode();
 //            active = 2;
 //        }
-        activeItem = nav.getMenu().getItem(0);
-        activeItem.setChecked(true);
-
     }
 
     void setActiveItem(MenuItem item){
@@ -111,6 +109,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     }
 
     void setActual(){
+        setActiveItem(nav.getMenu().getItem(0));
         state = ViewState.Actual;
         toolbar.setTitle(R.string.actual);
         Bundle bundle = new Bundle();
@@ -144,12 +143,19 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     void setStatus(){
         state = ViewState.Status;
         toolbar.setTitle(R.string.status);
-        getSupportFragmentManager().beginTransaction().replace(R.id.clientContent, ClientStatusFragment.newInstance("", "")).commit();
+        Bundle bundle = new Bundle();
+        bundle.putString(ClientStatusFragment.ARG_RACENAME, "Ez a verseny neve");
+        bundle.putString(ClientStatusFragment.ARG_TEAMNAME, "Ez a csapat neve");
+        bundle.putString(ClientStatusFragment.ARG_CAPTAIN, "Ez a kapitány neve");
+        bundle.putString(ClientStatusFragment.ARG_STATIONS, "Állomás: 5/7");
+        bundle.putString(ClientStatusFragment.ARG_PHONE, "+50 50 505 5555");
+        getSupportFragmentManager().beginTransaction().replace(R.id.clientContent, ClientStatusFragment.newInstance(bundle)).commit();
     }
 
     @Override
     public void onBackPressed() {
         if(drawerLayout.isDrawerOpen(findViewById(R.id.clientNavigation))) drawerLayout.closeDrawers();
+        else if(state == ViewState.Status) setActual();
         else super.onBackPressed();
     }
 
@@ -205,6 +211,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         drawerLayout.addDrawerListener(toggler);
     }
 
+    // TODO: jelenleg csak placeholder megjelenítésre
     private void showSnackBarMessage(String message) {
         Snackbar.make(mainLayout, message, Snackbar.LENGTH_LONG).show();
     }

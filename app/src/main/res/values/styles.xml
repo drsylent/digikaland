@@ -65,7 +65,16 @@
 
     <style name="StringFormatSubLocation">
         <item name="android:textStyle">italic</item>
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">19sp</item>
+    </style>
+
+    <style name="StringFormatInformation">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="StringFormatInformation.Center" parent="StringFormatInformation">
+        <item name="android:gravity">center_horizontal</item>
     </style>
 
 </resources>
