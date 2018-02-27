@@ -7,7 +7,7 @@ import android.os.Bundle;
 
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.ui.admin.AdminMainActivity;
-import hu.bme.aut.digikaland.ui.client.ClientMainActivity;
+import hu.bme.aut.digikaland.ui.client.activities.ClientMainActivity;
 import hu.bme.aut.digikaland.ui.common.fragments.PrimaryCodeFragment;
 import hu.bme.aut.digikaland.ui.common.fragments.SecondaryCodeFragment;
 

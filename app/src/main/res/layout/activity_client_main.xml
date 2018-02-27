@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/clientDrawer"
-    tools:context="hu.bme.aut.digikaland.ui.client.ClientMainActivity">
+    tools:context="hu.bme.aut.digikaland.ui.client.activities.ClientMainActivity">
 
     <LinearLayout
         android:id="@+id/clientContent"

@@ -30,7 +30,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ui.admin.AdminMainActivity" />
         <activity
-            android:name=".ui.client.ClientMainActivity"
+            android:name=".ui.client.activities.ClientMainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -49,7 +49,7 @@
             android:label="@string/title_activity_maps">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="hu.bme.aut.digikaland.ui.client.ClientMainActivity" />
+                android:value="hu.bme.aut.digikaland.ui.client.activities.ClientMainActivity" />
         </activity>
     </application>
 

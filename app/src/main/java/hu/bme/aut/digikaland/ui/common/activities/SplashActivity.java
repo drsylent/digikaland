@@ -8,7 +8,7 @@ import android.widget.Button;
 
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.ui.admin.AdminMainActivity;
-import hu.bme.aut.digikaland.ui.client.ClientMainActivity;
+import hu.bme.aut.digikaland.ui.client.activities.ClientMainActivity;
 
 public class SplashActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package hu.bme.aut.digikaland.ui.client;
+package hu.bme.aut.digikaland.ui.client.activities;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -25,6 +25,11 @@ import hu.bme.aut.digikaland.ui.client.fragments.ClientStatusFragment;
 import hu.bme.aut.digikaland.ui.common.activities.MapsActivity;
 
 public class ClientMainActivity extends AppCompatActivity implements ClientActualFragment.ClientActualMainListener {
+
+    public static final String ARGS_LATITUDE = "arg1";
+    public static final String ARGS_LONGITUDE = "arg2";
+    public static final String MARKER_LOCATIONS = "arg3";
+
 
     Toolbar toolbar;
     DrawerLayout drawerLayout;
@@ -62,9 +67,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 drawerLayout.closeDrawers();
                 if(activeItem == item) return false;
-                activeItem.setChecked(false);
-                activeItem = item;
-                activeItem.setChecked(true);
+                setActiveItem(item);
                 switch(item.getItemId()){
                     case R.id.clientActual:
                         setActual();
@@ -99,6 +102,14 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
 
     }
 
+    void setActiveItem(MenuItem item){
+        if(item.getItemId() == R.id.clientMap)
+            return;
+        activeItem.setChecked(false);
+        activeItem = item;
+        activeItem.setChecked(true);
+    }
+
     void setActual(){
         state = ViewState.Actual;
         toolbar.setTitle(R.string.actual);
@@ -115,11 +126,19 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     }
 
     void setMap(){
-        startActivity(new Intent(ClientMainActivity.this, MapsActivity.class));
+        Intent i = new Intent(ClientMainActivity.this, MapsActivity.class);
+        Bundle locationData = new Bundle();
+        double latitudes[] = {47.473372 };
+        double longitudes[] = {19.059731};
+        locationData.putDoubleArray(ARGS_LATITUDE, latitudes);
+        locationData.putDoubleArray(ARGS_LONGITUDE, longitudes);
+        i.putExtra(MARKER_LOCATIONS, locationData);
+        startActivity(i);
     }
 
     void setStations(){
-
+        state = ViewState.Stations;
+        toolbar.setTitle(R.string.stations);
     }
 
     void setStatus(){
