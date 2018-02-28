@@ -24,12 +24,13 @@ import java.util.List;
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.entities.Station;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientActualFragment;
+import hu.bme.aut.digikaland.ui.client.fragments.ClientObjectiveFragment;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientStatusFragment;
 import hu.bme.aut.digikaland.ui.common.activities.MapsActivity;
 
 import static hu.bme.aut.digikaland.R.color.colorBlack;
 
-public class ClientMainActivity extends AppCompatActivity implements ClientActualFragment.ClientActualMainListener {
+public class ClientMainActivity extends AppCompatActivity implements ClientActualFragment.ClientActualMainListener, ClientObjectiveFragment.ClientActiveObjectiveListener {
 
     NavigationView nav;
     Toolbar toolbar;
@@ -45,6 +46,11 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     @Override
     public void helpActivation() {
         showSnackBarMessage("Help");
+    }
+
+    @Override
+    public void onActiveObjectiveOpen() {
+        showSnackBarMessage("Objective show");
     }
 
     private enum ViewState{
@@ -102,7 +108,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     }
 
     void setActiveItem(MenuItem item){
-        if(item.getItemId() == R.id.clientMap)
+        if(item.getItemId() == R.id.clientMap || item.getItemId() == R.id.clientStations)
             return;
         activeItem.setChecked(false);
         activeItem = item;
@@ -180,33 +186,25 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         return true;
     }
 
+    boolean objectiveOn = false;
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         showSnackBarMessage("REFRESH");
-//        switch(item.getItemId()){
-//            case R.id.add_subject:
-//                new SubjectCreatorDialogFragment().show(getSupportFragmentManager(), getString(R.string.tag_subject_create));
-//                break;
-//            case R.id.add_objective:
-//                if(subjectsAvailable()){
-//                    new ObjectiveCreatorDialogFragment().show(getSupportFragmentManager(), getString(R.string.tag_objective_create));
-//                }
-//                break;
-//            case R.id.add_lesson:
-//                if(subjectsAvailable()){
-//                    new LessonCreatorDialogFragment().show(getSupportFragmentManager(), getString(R.string.tag_lesson_create));
-//                }
-//                break;
-//            case R.id.remove_objectives:
-//                RemoveDoneDialogFragment.newInstance().show(getSupportFragmentManager(), getString(R.string.tag_objective_done_remove));
-//                break;
-//            case R.id.export_button:
-//                getExportFragment().sendToCalendar(getContentResolver());
-//                break;
-//            case R.id.filter_objectives:
-//                FilterDialogFragment.newInstance(getObjectiveFragment().getFilter()).show(getSupportFragmentManager(), getString(R.string.tag_objective_filter));
-//        }
+        switch(item.getItemId()) {
+            case R.id.menu_refresh:
+                // TODO: ne itt tortenjen meg, Actualra valtaskor latszodjon!
+                if (state == ViewState.Actual) {
+                    objectiveOn = !objectiveOn;
+                    if (objectiveOn) setObjective();
+                    else setActual();
+                }
+        }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setObjective(){
+        getSupportFragmentManager().beginTransaction().replace(R.id.clientContent, ClientObjectiveFragment.newInstance(2, 6, 3723)).commit();
     }
 
     private void setupToolbar(){

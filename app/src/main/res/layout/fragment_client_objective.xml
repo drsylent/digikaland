@@ -1,0 +1,45 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="hu.bme.aut.digikaland.ui.client.fragments.ClientObjectiveFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Feladat folyamatban:"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="15dp"
+        style="@style/StringFormatTitle"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/clientObjectiveStation"
+        android:text="Állomás: 2/5"
+        android:layout_marginBottom="30dp"
+        style="@style/StringFormatInformation.Center"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/clientObjectiveOpen"
+        android:text="Megnyitás"
+        android:layout_marginBottom="40dp"
+        style="@style/ButtonStyle.Center"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hátralévő idő:"
+        style="@style/StringFormatSubTitle"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="23:23:23"
+        android:id="@+id/clientObjectiveCounter"
+        style="@style/StringFormatCounter"/>
+
+</LinearLayout>

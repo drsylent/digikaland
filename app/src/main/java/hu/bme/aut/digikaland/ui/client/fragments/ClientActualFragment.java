@@ -12,6 +12,7 @@ import android.widget.TextView;
 import java.util.Date;
 
 import hu.bme.aut.digikaland.R;
+import hu.bme.aut.digikaland.utility.TimeWriter;
 
 public class ClientActualFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -77,8 +78,7 @@ public class ClientActualFragment extends Fragment {
         tvstation.setText(getStationString());
         tvlocation.setText(location);
         tvsublocation.setText(subLocation);
-        // TODO: idő formázása a kiírásnál
-        tvtime.setText(time.toString());
+        tvtime.setText(TimeWriter.dateFormat(time));
         return root;
     }
 
