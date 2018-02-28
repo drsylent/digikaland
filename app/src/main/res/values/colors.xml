@@ -8,5 +8,5 @@
     <color name="colorWhite">#ffffff</color>
     <color name="colorDone">#00c853</color>
     <color name="colorCurrently">#ffea00</color>
-    <color name="colorNot">#d50000</color>
+    <color name="colorNot">#ef5350</color>
 </resources>

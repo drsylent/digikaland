@@ -15,20 +15,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import hu.bme.aut.digikaland.R;
+import hu.bme.aut.digikaland.entities.Station;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientActualFragment;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientStatusFragment;
 import hu.bme.aut.digikaland.ui.common.activities.MapsActivity;
 
-public class ClientMainActivity extends AppCompatActivity implements ClientActualFragment.ClientActualMainListener {
+import static hu.bme.aut.digikaland.R.color.colorBlack;
 
-    public static final String ARGS_LATITUDE = "arg1";
-    public static final String ARGS_LONGITUDE = "arg2";
-    public static final String MARKER_LOCATIONS = "arg3";
+public class ClientMainActivity extends AppCompatActivity implements ClientActualFragment.ClientActualMainListener {
 
     NavigationView nav;
     Toolbar toolbar;
@@ -129,15 +130,29 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         Bundle locationData = new Bundle();
         double latitudes[] = {47.473372 };
         double longitudes[] = {19.059731};
-        locationData.putDoubleArray(ARGS_LATITUDE, latitudes);
-        locationData.putDoubleArray(ARGS_LONGITUDE, longitudes);
-        i.putExtra(MARKER_LOCATIONS, locationData);
+        locationData.putDoubleArray(MapsActivity.ARGS_LATITUDE, latitudes);
+        locationData.putDoubleArray(MapsActivity.ARGS_LONGITUDE, longitudes);
+        i.putExtra(MapsActivity.MARKER_LOCATIONS, locationData);
         startActivity(i);
     }
 
     void setStations(){
-        state = ViewState.Stations;
-        toolbar.setTitle(R.string.stations);
+        //state = ViewState.Stations;
+        Intent i = new Intent(ClientMainActivity.this, ClientStationsActivity.class);
+        Bundle stationData = new Bundle();
+        stationData.putSerializable(ClientStationsActivity.ARGS_STATIONS , tempCreator());
+        i.putExtra(ClientStationsActivity.ARGS_STATIONS, stationData);
+        startActivity(i);
+    }
+
+    private ArrayList<Station> tempCreator(){
+        ArrayList<Station> list = new ArrayList<>();
+        list.add(new Station(0, 0, Station.Status.Started));
+        list.add(new Station(2, 1, Station.Status.Done));
+        list.add(new Station(4, 2, Station.Status.Done));
+        list.add(new Station(1, 3, Station.Status.Started));
+        list.add(new Station(3, 4, Station.Status.NotStarted));
+        return list;
     }
 
     void setStatus(){
@@ -196,16 +211,15 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
 
     private void setupToolbar(){
         toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitleTextColor(getResources().getColor(R.color.colorWhite));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener(){
-
             @Override
             public void onClick(View view) {
                 drawerLayout.openDrawer(GravityCompat.START);
             }
         });
-
         ActionBarDrawerToggle toggler = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
         toggler.syncState();
         drawerLayout.addDrawerListener(toggler);

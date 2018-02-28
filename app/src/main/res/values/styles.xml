@@ -57,6 +57,11 @@
         <item name="android:textColor">@color/colorBlack</item>
     </style>
 
+    <style name="StringFormatTitle.Small" parent="StringFormatTitle">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="StringFormatLocation">
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">20sp</item>

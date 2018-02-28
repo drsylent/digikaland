@@ -23,9 +23,12 @@ import com.google.android.gms.tasks.Task;
 import java.util.ArrayList;
 
 import hu.bme.aut.digikaland.R;
-import hu.bme.aut.digikaland.ui.client.activities.ClientMainActivity;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+
+    public static final String ARGS_LATITUDE = "latitude";
+    public static final String ARGS_LONGITUDE = "longitude";
+    public static final String MARKER_LOCATIONS = "markerloc";
 
     private GoogleMap mMap;
     private final LatLng bme = new LatLng(47.473372, 19.059731);
@@ -34,9 +37,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle starter = getIntent().getBundleExtra(ClientMainActivity.MARKER_LOCATIONS);
-        double latitudes[] = starter.getDoubleArray(ClientMainActivity.ARGS_LATITUDE);
-        double longitudes[] = starter.getDoubleArray(ClientMainActivity.ARGS_LONGITUDE);
+        Bundle starter = getIntent().getBundleExtra(MARKER_LOCATIONS);
+        double latitudes[] = starter.getDoubleArray(ARGS_LATITUDE);
+        double longitudes[] = starter.getDoubleArray(ARGS_LONGITUDE);
         if(latitudes != null && longitudes != null)
         for(int i = 0; i < latitudes.length; i++){
             coordinates.add(new LatLng(latitudes[i], longitudes[i]));
