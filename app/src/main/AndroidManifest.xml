@@ -51,7 +51,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="hu.bme.aut.digikaland.ui.client.activities.ClientMainActivity" />
         </activity>
-        <activity android:name=".ui.client.activities.ClientStationsActivity"></activity>
+        <activity android:name=".ui.client.activities.ClientStationsActivity" />
+        <activity android:name=".ui.client.activities.ClientHelpActivity"></activity>
     </application>
 
 </manifest>

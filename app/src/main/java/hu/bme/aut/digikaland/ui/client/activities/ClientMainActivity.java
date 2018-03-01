@@ -27,6 +27,7 @@ import hu.bme.aut.digikaland.ui.client.fragments.ClientActualFragment;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientObjectiveFragment;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientStatusFragment;
 import hu.bme.aut.digikaland.ui.common.activities.MapsActivity;
+import hu.bme.aut.digikaland.ui.common.fragments.ContactFragment;
 
 import static hu.bme.aut.digikaland.R.color.colorBlack;
 
@@ -45,7 +46,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
 
     @Override
     public void helpActivation() {
-        showSnackBarMessage("Help");
+        setHelp();
     }
 
     @Override
@@ -171,6 +172,45 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         bundle.putString(ClientStatusFragment.ARG_STATIONS, "Állomás: 5/7");
         bundle.putString(ClientStatusFragment.ARG_PHONE, "+50 50 505 5555");
         getSupportFragmentManager().beginTransaction().replace(R.id.clientContent, ClientStatusFragment.newInstance(bundle)).commit();
+    }
+
+    void setHelp(){
+        Intent i = new Intent(ClientMainActivity.this, ClientHelpActivity.class);
+        i.putStringArrayListExtra(ClientHelpActivity.ARGS_OBJADMINS, objectiveAdminNameGenerator());
+        i.putStringArrayListExtra(ClientHelpActivity.ARGS_TOTADMINS, totalAdminNameGenerator());
+        i.putStringArrayListExtra(ClientHelpActivity.ARGS_OBJADMINSPHONE, objectiveAdminPhoneGenerator());
+        i.putStringArrayListExtra(ClientHelpActivity.ARGS_TOTADMINSPHONE, totalAdminPhoneGenerator());
+        startActivity(i);
+    }
+
+    ArrayList<String> objectiveAdminNameGenerator(){
+        ArrayList<String> list = new ArrayList<>();
+        list.add("Alice Aladár");
+        list.add("Bob Béla");
+        return list;
+    }
+
+    ArrayList<String> totalAdminNameGenerator(){
+        ArrayList<String> list = new ArrayList<>();
+        list.add("Cinege Cecil");
+        list.add("Dínom Dánom");
+        list.add("Erik Elemér");
+        return list;
+    }
+
+    ArrayList<String> objectiveAdminPhoneGenerator(){
+        ArrayList<String> list = new ArrayList<>();
+        list.add("+01 11 111 1111");
+        list.add("+12 22 222 2222");
+        return list;
+    }
+
+    ArrayList<String> totalAdminPhoneGenerator(){
+        ArrayList<String> list = new ArrayList<>();
+        list.add("+33 33 333 3333");
+        list.add("+44 44 444 4444");
+        list.add("+55 55 555 5555");
+        return list;
     }
 
     @Override
