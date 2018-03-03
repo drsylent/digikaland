@@ -27,11 +27,14 @@ import hu.bme.aut.digikaland.ui.client.fragments.ClientActualFragment;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientObjectiveFragment;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientStatusFragment;
 import hu.bme.aut.digikaland.ui.common.activities.MapsActivity;
+import hu.bme.aut.digikaland.ui.common.activities.SplashActivity;
 import hu.bme.aut.digikaland.ui.common.fragments.ContactFragment;
+import hu.bme.aut.digikaland.ui.common.fragments.ResultsFragment;
 
 import static hu.bme.aut.digikaland.R.color.colorBlack;
 
-public class ClientMainActivity extends AppCompatActivity implements ClientActualFragment.ClientActualMainListener, ClientObjectiveFragment.ClientActiveObjectiveListener {
+public class ClientMainActivity extends AppCompatActivity implements ClientActualFragment.ClientActualMainListener, ClientObjectiveFragment.ClientActiveObjectiveListener,
+        ResultsFragment.ResultsFragmentListener {
 
     NavigationView nav;
     Toolbar toolbar;
@@ -52,6 +55,11 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     @Override
     public void onActiveObjectiveOpen() {
         showSnackBarMessage("Objective show");
+    }
+
+    @Override
+    public void onNewRaceStart() {
+        startActivity(new Intent(ClientMainActivity.this, SplashActivity.class));
     }
 
     private enum ViewState{
@@ -226,7 +234,13 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         return true;
     }
 
-    boolean objectiveOn = false;
+    enum ActualStatus{
+        normal,
+        objective,
+        results
+    }
+
+    ActualStatus actualStatus;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -234,17 +248,33 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         switch(item.getItemId()) {
             case R.id.menu_refresh:
                 // TODO: ne itt tortenjen meg, Actualra valtaskor latszodjon!
-                if (state == ViewState.Actual) {
-                    objectiveOn = !objectiveOn;
-                    if (objectiveOn) setObjective();
-                    else setActual();
+                switch(actualStatus) {
+                    case normal:
+                        actualStatus = ActualStatus.objective;
+                        setObjective();
+                        break;
+                    case objective:
+                        actualStatus = ActualStatus.results;
+                        setResults();
+                        break;
+                    case results:
+                        actualStatus = ActualStatus.normal;
+                        setActual();
+                        break;
                 }
         }
         return super.onOptionsItemSelected(item);
     }
 
     private void setObjective(){
+        // feladatot itt nem kell majd atadni, mert azt callbackkel intezzuk
         getSupportFragmentManager().beginTransaction().replace(R.id.clientContent, ClientObjectiveFragment.newInstance(2, 6, 3723)).commit();
+    }
+
+    private void setResults(){
+        String[] teams = {"Narancs csapat", "Zöld csapat", "Piros csapat", "Kék csapat", "Sárga csapat", "Hupikék csapat"};
+        int[] points = {64, 23, 18, 12, 6, 2};
+        getSupportFragmentManager().beginTransaction().replace(R.id.clientContent, ResultsFragment.newInstance(teams, points)).commit();
     }
 
     private void setupToolbar(){

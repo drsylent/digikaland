@@ -1,0 +1,36 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:weightSum="10"
+    tools:context="hu.bme.aut.digikaland.ui.common.fragments.ResultsElementFragment">
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="end"
+        android:id="@+id/resultsPosition"
+        style="@style/StringFormatInformation"
+        android:text="12." />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        style="@style/StringFormatInformation"
+        android:id="@+id/resultsTeamName"
+        android:paddingLeft="8dp"
+        android:layout_weight="8"
+        android:gravity="start"
+        android:text="Teszt csapat"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:id="@+id/resultsPoint"
+        style="@style/StringFormatInformation"
+        android:layout_weight="1"
+        android:gravity="end"
+        android:text="20p"/>
+
+</LinearLayout>
