@@ -263,7 +263,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         results
     }
 
-    ActualStatus actualStatus;
+    ActualStatus actualStatus = ActualStatus.normal;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
