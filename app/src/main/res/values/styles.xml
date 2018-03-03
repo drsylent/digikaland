@@ -85,6 +85,12 @@
         <item name="android:textStyle">normal</item>
     </style>
 
+    <style name="StringFormatQuestion">
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/colorBlack</item>
+    </style>
+
     <style name="StringFormatInformation.Center" parent="StringFormatInformation">
         <item name="android:gravity">center_horizontal</item>
     </style>

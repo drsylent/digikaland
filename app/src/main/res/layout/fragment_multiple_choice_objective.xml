@@ -1,0 +1,44 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginTop="5dp"
+    tools:context="hu.bme.aut.digikaland.ui.common.objectives.MultipleChoiceObjectiveFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ez itt egy lehetőségválasztásos feladat."
+        android:id="@+id/multipleChoiceQuestion"
+        android:layout_marginLeft="5dp"
+        style="@style/StringFormatQuestion"/>
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/multipleChoiceAnswer">
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/multipleChoice0"
+            android:text="Ez egy válasz."/>
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/multipleChoice1"
+            android:text="Ez is egy válasz."/>
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/multipleChoice2"
+            android:text="Ez meg egy másik válasz."/>
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/multipleChoice3"
+            android:text="Ez itten egy negyedik válasz."/>
+
+    </RadioGroup>
+
+</LinearLayout>

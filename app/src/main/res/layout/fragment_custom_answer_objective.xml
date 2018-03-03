@@ -1,0 +1,25 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="5dp"
+    android:orientation="vertical"
+    tools:context="hu.bme.aut.digikaland.ui.common.objectives.CustomAnswerObjectiveFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Erre a kérdésre saját választ kell adni."
+        android:layout_marginLeft="5dp"
+        android:id="@+id/customQuestion"
+        style="@style/StringFormatQuestion"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="5dp"
+        android:id="@+id/customAnswer"
+        android:inputType="text"
+        android:hint="Ide írd a választ."/>
+
+</LinearLayout>

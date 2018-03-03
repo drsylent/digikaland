@@ -1,0 +1,25 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:weightSum="10"
+    android:layout_marginLeft="5dp"
+    android:layout_marginTop="5dp"
+    tools:context="hu.bme.aut.digikaland.ui.common.objectives.TrueFalseObjectiveFragment">
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_weight="9"
+        android:layout_height="wrap_content"
+        style="@style/StringFormatQuestion"
+        android:id="@+id/trueFalseQuestion"
+        android:text="Ez itt egy iszonyatosan nagyon hosszú kérdés, hogy le legyen tördelve több sorba, érted?" />
+
+    <CheckBox
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:id="@+id/trueFalseCheckBox"/>
+
+</LinearLayout>

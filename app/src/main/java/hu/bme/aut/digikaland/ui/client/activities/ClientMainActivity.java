@@ -23,6 +23,12 @@ import java.util.List;
 
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.entities.Station;
+import hu.bme.aut.digikaland.entities.objectives.CustomAnswerObjective;
+import hu.bme.aut.digikaland.entities.objectives.MultipleChoiceObjective;
+import hu.bme.aut.digikaland.entities.objectives.Objective;
+import hu.bme.aut.digikaland.entities.objectives.PhysicalObjective;
+import hu.bme.aut.digikaland.entities.objectives.PictureObjective;
+import hu.bme.aut.digikaland.entities.objectives.TrueFalseObjective;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientActualFragment;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientObjectiveFragment;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientStatusFragment;
@@ -54,7 +60,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
 
     @Override
     public void onActiveObjectiveOpen() {
-        showSnackBarMessage("Objective show");
+        goToObjective();
     }
 
     @Override
@@ -158,6 +164,23 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         stationData.putSerializable(ClientStationsActivity.ARGS_STATIONS , tempCreator());
         i.putExtra(ClientStationsActivity.ARGS_STATIONS, stationData);
         startActivity(i);
+    }
+
+    void goToObjective(){
+        Intent i = new Intent(ClientMainActivity.this, ClientObjectiveActivity.class);
+        i.putExtra(ClientObjectiveActivity.ARGS_OBJECTIVES, mockObjectiveGenerator());
+        startActivity(i);
+    }
+
+    ArrayList<Objective> mockObjectiveGenerator(){
+        ArrayList<Objective> objectives = new ArrayList<>();
+        objectives.add(new TrueFalseObjective("A BME-t 1782-ben alapították. Igaz vagy hamis?"));
+        String answers[] = {"6", "7", "8", "9"};
+        objectives.add(new MultipleChoiceObjective("Hány kar található a BME-n?", answers));
+        objectives.add(new CustomAnswerObjective("Mikor alapították a VIK-et?"));
+        objectives.add(new PictureObjective("Készítsetek egy szelfit és egy képet a környezetről!", 2));
+        objectives.add(new PhysicalObjective("Fogj kezet a feladat felügyelőjével!"));
+        return objectives;
     }
 
     private ArrayList<Station> tempCreator(){

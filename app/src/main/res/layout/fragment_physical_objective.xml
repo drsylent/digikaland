@@ -1,0 +1,23 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginLeft="5dp"
+    android:layout_marginTop="5dp"
+    tools:context="hu.bme.aut.digikaland.ui.common.objectives.PhysicalObjectiveFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ez itt egy fizikai feladat, amit nem telefonnal kell megoldani."
+        android:id="@+id/physicalQuestion"
+        style="@style/StringFormatQuestion"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ezt a feladatot nem a telefonodon kell megoldani."
+        style="@style/StringFormatSubLocation"/>
+
+</LinearLayout>
