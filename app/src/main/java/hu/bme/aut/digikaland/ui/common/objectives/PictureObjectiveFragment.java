@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.entities.objectives.PictureObjective;
+import hu.bme.aut.digikaland.ui.common.fragments.PictureFragment;
 
 public class PictureObjectiveFragment extends ObjectiveFragment {
 
@@ -46,7 +47,8 @@ public class PictureObjectiveFragment extends ObjectiveFragment {
         tvQuestion.setText(getObjective().getQuestion());
         int numberOfPictures = ((PictureObjective) getObjective()).getMaxPictures();
         for(int i = 0; i < numberOfPictures; i++){
-            // TODO: megfelelo szamu kep placeholder elhelyezese
+            // TODO: képek frissítése, ha történt beillesztés
+            getChildFragmentManager().beginTransaction().add(R.id.pictureAnswer, PictureFragment.newInstance()).commit();
         }
         Button bCamera = root.findViewById(R.id.pictureCameraButton);
         bCamera.setOnClickListener(new View.OnClickListener() {

@@ -1,0 +1,8 @@
+<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="70dp"
+    android:layout_height="70dp"
+    android:id="@+id/picturePlace"
+    android:background="@color/colorBlack"
+    tools:context="hu.bme.aut.digikaland.ui.common.fragments.PictureFragment">
+</ImageView>

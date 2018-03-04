@@ -17,10 +17,11 @@ import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.entities.objectives.Objective;
 import hu.bme.aut.digikaland.entities.objectives.PictureObjective;
 import hu.bme.aut.digikaland.ui.common.fragments.ContactFragment;
+import hu.bme.aut.digikaland.ui.common.fragments.PictureFragment;
 import hu.bme.aut.digikaland.ui.common.objectives.ObjectiveFragment;
 import hu.bme.aut.digikaland.ui.common.objectives.PictureObjectiveFragment;
 
-public class ClientObjectiveActivity extends AppCompatActivity implements PictureObjectiveFragment.PictureObjectiveListener {
+public class ClientObjectiveActivity extends AppCompatActivity implements PictureObjectiveFragment.PictureObjectiveListener, PictureFragment.PictureFragmentListener {
     public final static String ARGS_OBJECTIVES = "objectives";
     ArrayList<ObjectiveFragment> fragments = new ArrayList<>();
     LinearLayout mainLayout;
@@ -79,5 +80,10 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
     // TODO: jelenleg csak placeholder megjelenítésre
     private void showSnackBarMessage(String message) {
         Snackbar.make(mainLayout, message, Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onExistingPictureClicked() {
+        showSnackBarMessage("Picture clicked");
     }
 }
