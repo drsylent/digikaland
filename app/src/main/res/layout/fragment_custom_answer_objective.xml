@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="5dp"
+    android:layout_marginLeft="5dp"
     android:orientation="vertical"
     tools:context="hu.bme.aut.digikaland.ui.common.objectives.CustomAnswerObjectiveFragment">
 
@@ -10,7 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Erre a kérdésre saját választ kell adni."
-        android:layout_marginLeft="5dp"
         android:id="@+id/customQuestion"
         style="@style/StringFormatQuestion"/>
 

@@ -3,6 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:layout_marginLeft="5dp"
+    android:layout_marginTop="5dp"
     tools:context="hu.bme.aut.digikaland.ui.common.objectives.PictureObjectiveFragment">
 
     <TextView
@@ -16,6 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginBottom="10dp"
         android:id="@+id/pictureAnswer">
     </LinearLayout>
 
