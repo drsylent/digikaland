@@ -102,6 +102,11 @@ public class PictureObjectiveFragment extends ObjectiveFragment {
         if(pf!= null) pf.setPicture(imageBitmap);
     }
 
+    public void givePicture(String path){
+        PictureFragment pf = getFirstFreeFragment();
+        if(pf!= null) pf.setPicture(path);
+    }
+
     public boolean isFreePicture(){
         return getFirstFreeFragment() != null;
     }
