@@ -1,10 +1,14 @@
 package hu.bme.aut.digikaland.ui.client.activities;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +30,15 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
     ArrayList<ObjectiveFragment> fragments = new ArrayList<>();
     LinearLayout mainLayout;
 
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +52,7 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
         for(Objective o : objectives){
             ObjectiveFragment fragment = o.createFragment();
             fragments.add(fragment);
-            getSupportFragmentManager().beginTransaction().add(R.id.clientQuestionContent, fragment).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.clientQuestionContent, fragment, ObjectiveFragment.generateTag()).commit();
         }
         Button send = findViewById(R.id.clientQuestionSend);
         send.setOnClickListener(new View.OnClickListener() {
@@ -62,13 +75,28 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
         }
     }
 
+    PictureObjectiveFragment givePicture = null;
+
     @Override
-    public void activateCamera() {
-        showSnackBarMessage("Kamera");
+    public void activateCamera(String tag) {
+        givePicture = (PictureObjectiveFragment) getSupportFragmentManager().findFragmentByTag(tag);
+        if(givePicture.isFreePicture())
+            dispatchTakePictureIntent();
+        else{
+            givePicture = null;
+            showSnackBarMessage("Előbb törölnöd kell egy már meglévő képet.");
+        }
     }
 
     @Override
-    public void activateGallery() {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            givePicture.givePicture(data.getExtras());
+        }
+    }
+
+    @Override
+    public void activateGallery(String tag) {
         showSnackBarMessage("Galéria");
     }
 
@@ -83,7 +111,9 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
     }
 
     @Override
-    public void onExistingPictureClicked() {
-        showSnackBarMessage("Picture clicked");
+    public void onExistingPictureClicked(String parentTag, String tag) {
+        PictureFragment pf = (PictureFragment) getSupportFragmentManager().findFragmentByTag(parentTag).getChildFragmentManager().findFragmentByTag(tag);
+        // TODO: ne töröljünk egyből, hanem egy preview-t jelenítsünk meg a képről, és itt lehessen törölni, ha nem kérjük
+        pf.deletePicture();
     }
 }

@@ -1,9 +1,11 @@
 package hu.bme.aut.digikaland.ui.common.fragments;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +15,17 @@ import hu.bme.aut.digikaland.R;
 
 public class PictureFragment extends Fragment {
     private static final String ARG_PICTURE = "picture";
+    private static final String ARG_PARENTTAG = "parentTag";
     ImageView imageView;
+    private boolean empty = true;
+    private String parentTag;
+    private static int tagNumber = 0;
+
+    public static String generateTag(){
+        String tag = "PictureFragmentTag" + tagNumber;
+        tagNumber++;
+        return tag;
+    }
 
     // TODO: Kép típusa és kezelése
 
@@ -23,20 +35,24 @@ public class PictureFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static PictureFragment newInstance() {
+    public boolean isEmpty(){
+        return empty;
+    }
+
+    public static PictureFragment newInstance(String tag) {
         PictureFragment fragment = new PictureFragment();
-//        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        fragment.setArguments(args);
+        Bundle args = new Bundle();
+        args.putString(ARG_PARENTTAG, tag);
+        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//        }
+        if (getArguments() != null) {
+            parentTag = getArguments().getString(ARG_PARENTTAG);
+        }
     }
 
     @Override
@@ -50,7 +66,7 @@ public class PictureFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 // TODO: csak ha van kép
-                listener.onExistingPictureClicked();
+                listener.onExistingPictureClicked(parentTag, getTag());
             }
         });
         return root;
@@ -73,7 +89,17 @@ public class PictureFragment extends Fragment {
         listener = null;
     }
 
+    public void setPicture(Bitmap bmp){
+        empty = false;
+        imageView.setImageBitmap(bmp);
+    }
+
+    public void deletePicture(){
+        empty = true;
+        imageView.setImageBitmap(null);
+    }
+
     public interface PictureFragmentListener {
-        void onExistingPictureClicked();
+        void onExistingPictureClicked(String parentTag, String tag);
     }
 }
