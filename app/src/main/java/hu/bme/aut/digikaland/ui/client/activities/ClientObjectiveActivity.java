@@ -42,6 +42,7 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // TODO: elfektetéskor rengeteg újracsatolás van... ha sIS null, akkor kell csak
         setContentView(R.layout.activity_client_objective);
         ArrayList<Objective> objectives = (ArrayList<Objective>) getIntent().getSerializableExtra(ARGS_OBJECTIVES);
         ActionBar toolbar = getSupportActionBar();
