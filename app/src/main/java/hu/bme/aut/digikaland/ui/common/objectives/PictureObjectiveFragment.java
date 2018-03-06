@@ -49,7 +49,7 @@ public class PictureObjectiveFragment extends ObjectiveFragment {
         View root = inflater.inflate(R.layout.fragment_picture_objective, container, false);
         TextView tvQuestion = root.findViewById(R.id.pictureQuestion);
         tvQuestion.setText(getObjective().getQuestion());
-        int numberOfPictures = ((PictureObjective) getObjective()).getMaxPictures();
+        int numberOfPictures = getMaxNumberOfPictres();
         for(int i = 0; i < numberOfPictures; i++){
             // TODO: képek frissítése, ha történt beillesztés
             PictureFragment fragment = PictureFragment.newInstance(getTag());
@@ -78,6 +78,18 @@ public class PictureObjectiveFragment extends ObjectiveFragment {
 
     }
 
+    private int getMaxNumberOfPictres(){
+        return ((PictureObjective) getObjective()).getMaxPictures();
+    }
+
+    public int getRemainingNumberOfPictures(){
+        int free = 0;
+        for(PictureFragment f : fragments){
+            if(f.isEmpty()) free++;
+        }
+        return free;
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -100,6 +112,11 @@ public class PictureObjectiveFragment extends ObjectiveFragment {
         Bitmap imageBitmap = (Bitmap) bundle.get("data");
         PictureFragment pf = getFirstFreeFragment();
         if(pf!= null) pf.setPicture(imageBitmap);
+    }
+
+    public void givePicture(Uri uri){
+        PictureFragment pf = getFirstFreeFragment();
+        if(pf != null) pf.setPicture(uri.getPath());
     }
 
     public void givePicture(String path){

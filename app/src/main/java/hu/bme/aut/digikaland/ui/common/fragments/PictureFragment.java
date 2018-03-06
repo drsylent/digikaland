@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import hu.bme.aut.digikaland.R;
+import hu.bme.aut.digikaland.entities.Picture;
 
 public class PictureFragment extends Fragment {
     private static final String ARG_PICTURE = "picture";
@@ -21,6 +22,7 @@ public class PictureFragment extends Fragment {
     private boolean empty = true;
     private String parentTag;
     private static int tagNumber = 0;
+    private Picture picture = null;
 
     public static String generateTag(){
         String tag = "PictureFragmentTag" + tagNumber;
@@ -66,8 +68,16 @@ public class PictureFragment extends Fragment {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: csak ha van kép
-                listener.onExistingPictureClicked(parentTag, getTag());
+                if(!empty)
+                    listener.onExistingPictureClicked(parentTag, getTag());
+            }
+        });
+        imageView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if(!empty)
+                    listener.onExistingPictureLongClicked(parentTag, getTag());
+                return true;
             }
         });
         return root;
@@ -97,34 +107,24 @@ public class PictureFragment extends Fragment {
 
     public void deletePicture(){
         empty = true;
+        picture = null;
         imageView.setImageBitmap(null);
     }
 
+    public String getPicturePath(){
+        if(picture != null)
+            return picture.getPath();
+        else return null;
+    }
+
     public void setPicture(String mCurrentPhotoPath) {
-        // Get the dimensions of the View
-        int targetW = imageView.getWidth();
-        int targetH = imageView.getHeight();
-
-        // Get the dimensions of the bitmap
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-        // Determine how much to scale down the image
-        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
-
-        // Decode the image file into a Bitmap sized to fill the View
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-        bmOptions.inPurgeable = true;
-
-        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-        setPicture(bitmap);
+        picture = new Picture(mCurrentPhotoPath);
+        Bitmap bmp = picture.openSmall(imageView.getWidth(), imageView.getHeight());
+        setPicture(bmp);
     }
 
     public interface PictureFragmentListener {
         void onExistingPictureClicked(String parentTag, String tag);
+        void onExistingPictureLongClicked(String parentTag, String tag);
     }
 }
