@@ -1,6 +1,9 @@
 package hu.bme.aut.digikaland.ui.client.activities;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
@@ -77,16 +80,15 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
         }
     }
 
-    PictureObjectiveFragment givePicture = null;
+    PictureObjectiveFragment pictureObjective = null;
 
     @Override
     public void activateCamera(String tag) {
-        givePicture = (PictureObjectiveFragment) getSupportFragmentManager().findFragmentByTag(tag);
-        if(givePicture.isFreePicture())
-            //dispatchTakePictureIntent();
+        pictureObjective = (PictureObjectiveFragment) getSupportFragmentManager().findFragmentByTag(tag);
+        if(pictureObjective.isFreePicture())
             ClientObjectiveActivityPermissionsDispatcher.dispatchTakePictureIntentWithPermissionCheck(this);
         else{
-            givePicture = null;
+            pictureObjective = null;
             showSnackBarMessage("Előbb törölnöd kell egy már meglévő képet.");
         }
     }
@@ -100,37 +102,59 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE)
+        if (requestCode == REQUEST_TAKE_PHOTO)
             if(resultCode == RESULT_OK) {
-                givePicture.givePicture(mCurrentPhotoPath);
+                galleryAddPic();
+                pictureObjective.givePicture(photoUri);
+
             }
             // ha visszavonták a képcsinálást, az ideiglenes fájlt törölni kell, hogy ne maradjon szemét
             else{
-                File toDelete = new File(mCurrentPhotoPath);
+                File toDelete = new File(photoPath);
                 toDelete.delete();
             }
-        if(requestCode == REQUEST_IMAGE_FROM_GALLERY)
+        if(requestCode == REQUEST_MULTIPLE_IMAGES_FROM_GALLERY)
             if(resultCode == RESULT_OK){
-                givePicture.givePicture(data.getData());
+                ClipData datas = data.getClipData();
+                if(datas == null){
+                    pictureObjective.givePicture(data.getData());
+                }
+                else{
+                    int number = pictureObjective.getRemainingNumberOfPictures();
+                    if(datas.getItemCount() > number) showSnackBarMessage("Túl sok képet jelöltél ki");
+                    else{
+                        for(int i = 0; i < datas.getItemCount(); i++){
+                            pictureObjective.givePicture(datas.getItemAt(i).getUri());
+                        }
+                    }
+                }
             }
+        photoPath = null;
+        photoUri = null;
     }
 
-    static final int REQUEST_IMAGE_FROM_GALLERY = 2;
+    private void galleryAddPic() {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        mediaScanIntent.setData(photoUri);
+        this.sendBroadcast(mediaScanIntent);
+    }
+
+    static final int REQUEST_MULTIPLE_IMAGES_FROM_GALLERY = 3;
 
     @Override
     public void activateGallery(String tag) {
-        givePicture = (PictureObjectiveFragment) getSupportFragmentManager().findFragmentByTag(tag);
-        int number = givePicture.getRemainingNumberOfPictures();
+        pictureObjective = (PictureObjectiveFragment) getSupportFragmentManager().findFragmentByTag(tag);
+        int number = pictureObjective.getRemainingNumberOfPictures();
         if(number == 0){
             showSnackBarMessage("Előbb törölnöd kell képet, hogy újat nyithass meg");
             return;
         }
-        Intent getPicture = new Intent(Intent.ACTION_PICK,
+        Intent getPicture = new Intent(Intent.ACTION_GET_CONTENT,
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        getPicture.setType("image/*");
-        // TODO: allow multiple? SDK emelés?
-        //if(number > 1) getPicture.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        startActivityForResult(getPicture, REQUEST_IMAGE_FROM_GALLERY);
+        getPicture.setType("image/jpeg");
+        getPicture.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        startActivityForResult(getPicture, REQUEST_MULTIPLE_IMAGES_FROM_GALLERY);
+
     }
 
     public void sendSolution(){
@@ -146,30 +170,41 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
     @Override
     public void onExistingPictureClicked(String parentTag, String tag) {
         PictureFragment pf = (PictureFragment) getSupportFragmentManager().findFragmentByTag(parentTag).getChildFragmentManager().findFragmentByTag(tag);
-        String path = pf.getPicturePath();
+        Uri path = pf.getPictureUri();
         if(path == null) return;
         showGallery(path);
     }
 
     @Override
     public void onExistingPictureLongClicked(String parentTag, String tag) {
-        // TODO: dialógus feldobása, hogy biztos törölni akarod-e
-        PictureFragment pf = (PictureFragment) getSupportFragmentManager().findFragmentByTag(parentTag).getChildFragmentManager().findFragmentByTag(tag);
-        pf.deletePicture();
+        final PictureFragment pf = (PictureFragment) getSupportFragmentManager().findFragmentByTag(parentTag).getChildFragmentManager().findFragmentByTag(tag);
+        new AlertDialog.Builder(this).setTitle("Kép törlése").setMessage("Biztosan törölni szeretnéd ezt a képet?")
+                .setNegativeButton("Mégse", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                })
+                .setPositiveButton("Törlés", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        pf.deletePicture();
+                    }
+                }).create().show();
     }
 
-    private void showGallery(String path){
+    private void showGallery(Uri path){
+        // TODO: galériából törölhető a kép!!!!
+        // fájl megnyitó uri: content://com.android.providers.media.documents/document/image%3A30449
+        // galéria uri: content://media/external/images/media/30094
         Intent showPicture = new Intent(Intent.ACTION_VIEW);
-        Uri photoURI = FileProvider.getUriForFile(this,
-                "hu.bme.aut.digikaland.fileprovider",
-                new File(path));
-        showPicture.setDataAndType(photoURI, "image/jpeg");
+        showPicture.setDataAndType(path, "image/jpeg");
         showPicture.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//        showPicture.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(showPicture);
     }
 
-    String mCurrentPhotoPath;
+    Uri photoUri;
+    String photoPath;
 
 
     private File createImageFile() throws IOException {
@@ -177,7 +212,6 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         String pathName = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/Digikaland";
-        // TODO: ennél specifikusabb helyre menjen...
         File storageDir = new File(pathName);
         if(!storageDir.exists()) storageDir.mkdir();
         File image = File.createTempFile(
@@ -185,20 +219,13 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
                 ".jpg",         /* suffix */
                 storageDir      /* directory */
         );
-
+        photoPath = image.getAbsolutePath();
         // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = image.getAbsolutePath();
+        photoUri = FileProvider.getUriForFile(this,
+                "hu.bme.aut.digikaland.fileprovider",
+                image);
         return image;
     }
-
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-
-//    private void dispatchTakePictureIntent() {
-//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-//            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-//        }
-//    }
 
     static final int REQUEST_TAKE_PHOTO = 1;
 
@@ -217,10 +244,7 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(this,
-                        "hu.bme.aut.digikaland.fileprovider",
-                        photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
             }
         }

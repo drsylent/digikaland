@@ -111,15 +111,15 @@ public class PictureFragment extends Fragment {
         imageView.setImageBitmap(null);
     }
 
-    public String getPicturePath(){
+    public Uri getPictureUri(){
         if(picture != null)
-            return picture.getPath();
+            return picture.getUri();
         else return null;
     }
 
-    public void setPicture(String mCurrentPhotoPath) {
-        picture = new Picture(mCurrentPhotoPath);
-        Bitmap bmp = picture.openSmall(imageView.getWidth(), imageView.getHeight());
+    public void setPicture(Uri uri){
+        picture = new Picture(uri);
+        Bitmap bmp = picture.openSmall(imageView.getWidth(), imageView.getHeight(), getActivity().getContentResolver());
         setPicture(bmp);
     }
 

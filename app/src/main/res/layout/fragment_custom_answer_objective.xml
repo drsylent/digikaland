@@ -4,9 +4,10 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="5dp"
     android:layout_marginLeft="5dp"
+    android:focusableInTouchMode="true"
     android:orientation="vertical"
     tools:context="hu.bme.aut.digikaland.ui.common.objectives.CustomAnswerObjectiveFragment">
-
+    <!--a focusableintouchmode egy workaround, így nem kapja meg a fókuszt az edittext automatikusan-->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

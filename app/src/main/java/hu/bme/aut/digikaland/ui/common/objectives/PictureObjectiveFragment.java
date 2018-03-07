@@ -108,20 +108,9 @@ public class PictureObjectiveFragment extends ObjectiveFragment {
         return null;
     }
 
-    public void givePicture(Bundle bundle){
-        Bitmap imageBitmap = (Bitmap) bundle.get("data");
-        PictureFragment pf = getFirstFreeFragment();
-        if(pf!= null) pf.setPicture(imageBitmap);
-    }
-
     public void givePicture(Uri uri){
         PictureFragment pf = getFirstFreeFragment();
-        if(pf != null) pf.setPicture(uri.getPath());
-    }
-
-    public void givePicture(String path){
-        PictureFragment pf = getFirstFreeFragment();
-        if(pf!= null) pf.setPicture(path);
+        if(pf != null) pf.setPicture(uri);
     }
 
     public boolean isFreePicture(){
