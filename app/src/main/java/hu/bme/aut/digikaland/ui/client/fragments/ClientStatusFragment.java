@@ -7,9 +7,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import hu.bme.aut.digikaland.R;
+import hu.bme.aut.digikaland.ui.common.fragments.ContactFragment;
 
 public class ClientStatusFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -57,13 +59,10 @@ public class ClientStatusFragment extends Fragment {
         TextView tvRaceName = root.findViewById(R.id.clientStatusRaceName);
         TextView tvTeamName = root.findViewById(R.id.clientStatusTeamName);
         TextView tvStations = root.findViewById(R.id.clientStatusStations);
-        TextView tvCaptain = root.findViewById(R.id.clientStatusCaptain);
-        TextView tvPhone = root.findViewById(R.id.clientStatusPhone);
+        getChildFragmentManager().beginTransaction().add(R.id.clientStatusContent, ContactFragment.newInstance(captain, phone, true)).commit();
         tvRaceName.setText(raceName);
         tvTeamName.setText(teamName);
         tvStations.setText(stations);
-        tvCaptain.setText(captain);
-        tvPhone.setText(phone);
         return root;
     }
 

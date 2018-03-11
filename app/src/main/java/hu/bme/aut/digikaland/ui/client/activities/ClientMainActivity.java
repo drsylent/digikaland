@@ -1,6 +1,7 @@
 package hu.bme.aut.digikaland.ui.client.activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -36,11 +37,12 @@ import hu.bme.aut.digikaland.ui.common.activities.MapsActivity;
 import hu.bme.aut.digikaland.ui.common.activities.SplashActivity;
 import hu.bme.aut.digikaland.ui.common.fragments.ContactFragment;
 import hu.bme.aut.digikaland.ui.common.fragments.ResultsFragment;
+import hu.bme.aut.digikaland.utility.PhoneDial;
 
 import static hu.bme.aut.digikaland.R.color.colorBlack;
 
 public class ClientMainActivity extends AppCompatActivity implements ClientActualFragment.ClientActualMainListener, ClientObjectiveFragment.ClientActiveObjectiveListener,
-        ResultsFragment.ResultsFragmentListener {
+        ResultsFragment.ResultsFragmentListener, ContactFragment.ClientHelpListener {
 
     NavigationView nav;
     Toolbar toolbar;
@@ -66,6 +68,11 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     @Override
     public void onNewRaceStart() {
         startActivity(new Intent(ClientMainActivity.this, SplashActivity.class));
+    }
+
+    @Override
+    public void phoneDial(String phoneNumber) {
+        startActivity(PhoneDial.dial(phoneNumber));
     }
 
     private enum ViewState{
@@ -201,7 +208,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         bundle.putString(ClientStatusFragment.ARG_TEAMNAME, "Ez a csapat neve");
         bundle.putString(ClientStatusFragment.ARG_CAPTAIN, "Ez a kapitány neve");
         bundle.putString(ClientStatusFragment.ARG_STATIONS, "Állomás: 5/7");
-        bundle.putString(ClientStatusFragment.ARG_PHONE, "+50 50 505 5555");
+        bundle.putString(ClientStatusFragment.ARG_PHONE, "+36 30 371 7378");
         getSupportFragmentManager().beginTransaction().replace(R.id.clientContent, ClientStatusFragment.newInstance(bundle)).commit();
     }
 

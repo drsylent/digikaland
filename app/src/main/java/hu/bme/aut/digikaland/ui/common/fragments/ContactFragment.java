@@ -3,6 +3,7 @@ package hu.bme.aut.digikaland.ui.common.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +15,11 @@ import hu.bme.aut.digikaland.R;
 public class ContactFragment extends Fragment {
     private static final String ARG_NAME = "name";
     private static final String ARG_PHONE = "phone";
+    private static final String ARG_CENTER = "center";
 
     private String name;
     private String phone;
+    private boolean center;
 
     private ClientHelpListener clientHelp;
 
@@ -24,11 +27,12 @@ public class ContactFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static ContactFragment newInstance(String param1, String param2) {
+    public static ContactFragment newInstance(String param1, String param2, boolean center) {
         ContactFragment fragment = new ContactFragment();
         Bundle args = new Bundle();
         args.putString(ARG_NAME, param1);
         args.putString(ARG_PHONE, param2);
+        args.putBoolean(ARG_CENTER, center);
         fragment.setArguments(args);
         return fragment;
     }
@@ -39,6 +43,7 @@ public class ContactFragment extends Fragment {
         if (getArguments() != null) {
             name = getArguments().getString(ARG_NAME);
             phone = getArguments().getString(ARG_PHONE);
+            center = getArguments().getBoolean(ARG_CENTER);
         }
     }
 
@@ -50,6 +55,10 @@ public class ContactFragment extends Fragment {
         TextView tvPhone = root.findViewById(R.id.contactPhone);
         tvName.setText(name);
         tvPhone.setText(phone);
+        if(center){
+            tvName.setGravity(Gravity.CENTER_HORIZONTAL);
+            tvPhone.setGravity(Gravity.CENTER_HORIZONTAL);
+        }
         LinearLayout content = root.findViewById(R.id.contactContent);
         content.setOnClickListener(new View.OnClickListener() {
             @Override

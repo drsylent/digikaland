@@ -12,6 +12,7 @@ import java.util.List;
 
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.ui.common.fragments.ContactFragment;
+import hu.bme.aut.digikaland.utility.PhoneDial;
 
 public class ClientHelpActivity extends AppCompatActivity implements ContactFragment.ClientHelpListener {
     public final static String ARGS_OBJADMINS = "objadmins";
@@ -37,11 +38,11 @@ public class ClientHelpActivity extends AppCompatActivity implements ContactFrag
         List<String> totalAdminPhones = getIntent().getStringArrayListExtra(ARGS_TOTADMINSPHONE);
 
         for(int i = 0; i < objectAdminNames.size(); i++){
-            getSupportFragmentManager().beginTransaction().add(R.id.clientHelpObjectiveAdminContent, ContactFragment.newInstance(objectAdminNames.get(i), objectAdminPhones.get(i))).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.clientHelpObjectiveAdminContent, ContactFragment.newInstance(objectAdminNames.get(i), objectAdminPhones.get(i), false)).commit();
         }
 
         for(int i = 0; i < totalAdminNames.size(); i++){
-            getSupportFragmentManager().beginTransaction().add(R.id.clientHelpTotalAdminContent, ContactFragment.newInstance(totalAdminNames.get(i), totalAdminPhones.get(i))).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.clientHelpTotalAdminContent, ContactFragment.newInstance(totalAdminNames.get(i), totalAdminPhones.get(i), false)).commit();
         }
 
     }
@@ -65,8 +66,7 @@ public class ClientHelpActivity extends AppCompatActivity implements ContactFrag
 
     @Override
     public void phoneDial(String phoneNumber) {
-        // TODO: Telefon megnyitása
-        showSnackBarMessage("Dialing: " + phoneNumber);
+        startActivity(PhoneDial.dial(phoneNumber));
     }
 
     // TODO: jelenleg csak placeholder megjelenítésre
