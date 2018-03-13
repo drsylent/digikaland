@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import hu.bme.aut.digikaland.R;
+import hu.bme.aut.digikaland.utility.PhoneDial;
 
 public class ContactFragment extends Fragment {
     private static final String ARG_NAME = "name";
@@ -63,7 +64,7 @@ public class ContactFragment extends Fragment {
         content.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                clientHelp.phoneDial(phone);
+                startActivity(PhoneDial.dial(phone));
             }
         });
         return root;

@@ -54,6 +54,12 @@ public class ClientObjectiveFragment extends Fragment {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putLong(ARG_TIME, timeLeft);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_client_objective, container, false);
@@ -69,6 +75,7 @@ public class ClientObjectiveFragment extends Fragment {
         TextView stationSummary = root.findViewById(R.id.clientObjectiveStation);
         stationSummary.setText("Állomás: " + stationNow + "/" + stationSum);
         countdown = root.findViewById(R.id.clientObjectiveCounter);
+        if(savedInstanceState != null) timeLeft = savedInstanceState.getLong(ARG_TIME);
         countdown.setText(TimeWriter.countdownFormat(timeLeft));
         timer = new CountDownTimer(timeLeft*1000, 1000) {
 

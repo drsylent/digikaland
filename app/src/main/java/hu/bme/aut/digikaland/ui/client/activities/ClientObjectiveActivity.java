@@ -54,6 +54,7 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
             toolbar.setDisplayHomeAsUpEnabled(true);
             toolbar.setTitle("Feladat");
         }
+        if(savedInstanceState == null)
         for(Objective o : objectives){
             ObjectiveFragment fragment = o.createFragment();
             fragments.add(fragment);

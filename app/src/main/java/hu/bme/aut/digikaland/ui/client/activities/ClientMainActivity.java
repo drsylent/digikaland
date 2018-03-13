@@ -47,7 +47,6 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     NavigationView nav;
     Toolbar toolbar;
     DrawerLayout drawerLayout;
-    MenuItem activeItem;
     LinearLayout mainLayout;
 
     @Override
@@ -77,9 +76,23 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
 
     private enum ViewState{
         Actual,
-        Map,
-        Stations,
         Status
+    }
+
+    private MenuItem getActiveItem(){
+        switch (state){
+            case Actual:
+                return nav.getMenu().getItem(0);
+            case Status:
+                return nav.getMenu().getItem(3);
+        }
+        return nav.getMenu().getItem(0);
+    }
+
+    private void changeState(ViewState to){
+        getActiveItem().setChecked(false);
+        state = to;
+        getActiveItem().setChecked(true);
     }
 
     ViewState state;
@@ -95,8 +108,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 drawerLayout.closeDrawers();
-                if(activeItem == item) return false;
-                setActiveItem(item);
+                if(getActiveItem() == item) return false;
                 switch(item.getItemId()){
                     case R.id.clientActual:
                         setActual();
@@ -116,30 +128,36 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
             }
         });
         setupToolbar();
-        activeItem = nav.getMenu().getItem(0);
-        setActual();
-//        int active;
-//        if(subjectsAvailable()){
-//            setTimeTableMode();
-//            active = 0;
-//        }
-//        else {
-//            setSubjectMode();
-//            active = 2;
-//        }
+
+        if(savedInstanceState == null) {
+            state = ViewState.Actual;
+            actualStatus = ActualStatus.normal;
+            setActual();
+        }
+        else{
+            state = ViewState.valueOf(savedInstanceState.getString(ARG_VIEWSTATE));
+            actualStatus = ActualStatus.valueOf(savedInstanceState.getString(ARG_ACTUALSTATE));
+            getActiveItem().setChecked(true);
+        }
     }
 
-    void setActiveItem(MenuItem item){
-        if(item.getItemId() == R.id.clientMap || item.getItemId() == R.id.clientStations)
-            return;
-        activeItem.setChecked(false);
-        activeItem = item;
-        activeItem.setChecked(true);
+    private static final String ARG_VIEWSTATE = "state";
+    private static final String ARG_ACTUALSTATE = "actuals";
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(ARG_VIEWSTATE, state.name());
+        outState.putString(ARG_ACTUALSTATE, actualStatus.name());
+    }
+
+    void setActualMain(){
+        changeState(ViewState.Actual);
     }
 
     void setActual(){
-        setActiveItem(nav.getMenu().getItem(0));
-        state = ViewState.Actual;
+        setActualMain();
+        actualStatus = ActualStatus.normal;
         toolbar.setTitle(R.string.actual);
         Bundle bundle = new Bundle();
         bundle.putString(ClientActualFragment.ARG_LOCATION, "Ez itt egy cím lesz");
@@ -165,7 +183,6 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     }
 
     void setStations(){
-        //state = ViewState.Stations;
         Intent i = new Intent(ClientMainActivity.this, ClientStationsActivity.class);
         Bundle stationData = new Bundle();
         stationData.putSerializable(ClientStationsActivity.ARGS_STATIONS , tempCreator());
@@ -179,7 +196,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         startActivity(i);
     }
 
-    ArrayList<Objective> mockObjectiveGenerator(){
+    public ArrayList<Objective> mockObjectiveGenerator(){
         ArrayList<Objective> objectives = new ArrayList<>();
         objectives.add(new TrueFalseObjective("A BME-t 1782-ben alapították. Igaz vagy hamis?"));
         String answers[] = {"6", "7", "8", "9"};
@@ -190,18 +207,24 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         return objectives;
     }
 
+    public ArrayList<Objective> miniMockObjectiveGenerator(){
+        ArrayList<Objective> objectives = new ArrayList<>();
+        objectives.add(new PhysicalObjective("Ez csak egy picit kérdéssorozat."));
+        return objectives;
+    }
+
     private ArrayList<Station> tempCreator(){
         ArrayList<Station> list = new ArrayList<>();
-        list.add(new Station(0, 0, Station.Status.Started));
+        list.add(new Station(0, 0, Station.Status.Started, miniMockObjectiveGenerator()));
         list.add(new Station(2, 1, Station.Status.Done));
         list.add(new Station(4, 2, Station.Status.Done));
-        list.add(new Station(1, 3, Station.Status.Started));
+        list.add(new Station(1, 3, Station.Status.Started, mockObjectiveGenerator()));
         list.add(new Station(3, 4, Station.Status.NotStarted));
         return list;
     }
 
     void setStatus(){
-        state = ViewState.Status;
+        changeState(ViewState.Status);
         toolbar.setTitle(R.string.status);
         Bundle bundle = new Bundle();
         bundle.putString(ClientStatusFragment.ARG_RACENAME, "Ez a verseny neve");
@@ -275,20 +298,17 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         showSnackBarMessage("REFRESH");
+        if(state == ViewState.Actual)
         switch(item.getItemId()) {
             case R.id.menu_refresh:
-                // TODO: ne itt tortenjen meg, Actualra valtaskor latszodjon!
                 switch(actualStatus) {
                     case normal:
-                        actualStatus = ActualStatus.objective;
                         setObjective();
                         break;
                     case objective:
-                        actualStatus = ActualStatus.results;
                         setResults();
                         break;
                     case results:
-                        actualStatus = ActualStatus.normal;
                         setActual();
                         break;
                 }
@@ -297,11 +317,15 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     }
 
     private void setObjective(){
+        setActualMain();
+        actualStatus = ActualStatus.objective;
         // feladatot itt nem kell majd atadni, mert azt callbackkel intezzuk
         getSupportFragmentManager().beginTransaction().replace(R.id.clientContent, ClientObjectiveFragment.newInstance(2, 6, 3723)).commit();
     }
 
     private void setResults(){
+        setActualMain();
+        actualStatus = ActualStatus.results;
         String[] teams = {"Narancs csapat", "Zöld csapat", "Piros csapat", "Kék csapat", "Sárga csapat", "Hupikék csapat"};
         int[] points = {64, 23, 18, 12, 6, 2};
         getSupportFragmentManager().beginTransaction().replace(R.id.clientContent, ResultsFragment.newInstance(teams, points)).commit();

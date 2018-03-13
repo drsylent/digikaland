@@ -18,6 +18,8 @@ import hu.bme.aut.digikaland.entities.Picture;
 public class PictureFragment extends Fragment {
     private static final String ARG_PICTURE = "picture";
     private static final String ARG_PARENTTAG = "parentTag";
+    private static final String ARG_HEIGHT = "he";
+    private static final String ARG_WIDTH = "wi";
     ImageView imageView;
     private boolean empty = true;
     private String parentTag;
@@ -63,7 +65,9 @@ public class PictureFragment extends Fragment {
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_picture, container, false);
         imageView = root.findViewById(R.id.picturePlace);
-        // TODO: kép beállítása, ha van
+        if(savedInstanceState != null && savedInstanceState.getString(ARG_PICTURE) != null){
+            setPicture(Uri.parse(savedInstanceState.getString(ARG_PICTURE)), savedInstanceState.getInt(ARG_WIDTH), savedInstanceState.getInt(ARG_HEIGHT));
+        }
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,6 +85,16 @@ public class PictureFragment extends Fragment {
             }
         });
         return root;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(picture != null){
+            outState.putString(ARG_PICTURE, picture.getUri().toString());
+            outState.putInt(ARG_HEIGHT, imageView.getHeight());
+            outState.putInt(ARG_WIDTH, imageView.getWidth());
+        }
     }
 
     @Override
@@ -118,8 +132,12 @@ public class PictureFragment extends Fragment {
     }
 
     public void setPicture(Uri uri){
+        setPicture(uri, imageView.getWidth(), imageView.getHeight());
+    }
+
+    public void setPicture(Uri uri, int width, int height){
         picture = new Picture(uri);
-        Bitmap bmp = picture.openSmall(imageView.getWidth(), imageView.getHeight(), getActivity().getContentResolver());
+        Bitmap bmp = picture.openSmall(width, height, getActivity().getContentResolver());
         setPicture(bmp);
     }
 

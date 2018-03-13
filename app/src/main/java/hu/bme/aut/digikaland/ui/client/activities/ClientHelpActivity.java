@@ -32,18 +32,21 @@ public class ClientHelpActivity extends AppCompatActivity implements ContactFrag
             toolbar.setDisplayHomeAsUpEnabled(true);
             toolbar.setTitle("Segítség");
         }
-        List<String> objectAdminNames = getIntent().getStringArrayListExtra(ARGS_OBJADMINS);
-        List<String> objectAdminPhones = getIntent().getStringArrayListExtra(ARGS_OBJADMINSPHONE);
-        List<String> totalAdminNames = getIntent().getStringArrayListExtra(ARGS_TOTADMINS);
-        List<String> totalAdminPhones = getIntent().getStringArrayListExtra(ARGS_TOTADMINSPHONE);
+        if(savedInstanceState == null){
+            List<String> objectAdminNames = getIntent().getStringArrayListExtra(ARGS_OBJADMINS);
+            List<String> objectAdminPhones = getIntent().getStringArrayListExtra(ARGS_OBJADMINSPHONE);
+            List<String> totalAdminNames = getIntent().getStringArrayListExtra(ARGS_TOTADMINS);
+            List<String> totalAdminPhones = getIntent().getStringArrayListExtra(ARGS_TOTADMINSPHONE);
 
-        for(int i = 0; i < objectAdminNames.size(); i++){
-            getSupportFragmentManager().beginTransaction().add(R.id.clientHelpObjectiveAdminContent, ContactFragment.newInstance(objectAdminNames.get(i), objectAdminPhones.get(i), false)).commit();
+            for(int i = 0; i < objectAdminNames.size(); i++){
+                getSupportFragmentManager().beginTransaction().add(R.id.clientHelpObjectiveAdminContent, ContactFragment.newInstance(objectAdminNames.get(i), objectAdminPhones.get(i), false)).commit();
+            }
+
+            for(int i = 0; i < totalAdminNames.size(); i++){
+                getSupportFragmentManager().beginTransaction().add(R.id.clientHelpTotalAdminContent, ContactFragment.newInstance(totalAdminNames.get(i), totalAdminPhones.get(i), false)).commit();
+            }
         }
 
-        for(int i = 0; i < totalAdminNames.size(); i++){
-            getSupportFragmentManager().beginTransaction().add(R.id.clientHelpTotalAdminContent, ContactFragment.newInstance(totalAdminNames.get(i), totalAdminPhones.get(i), false)).commit();
-        }
 
     }
 

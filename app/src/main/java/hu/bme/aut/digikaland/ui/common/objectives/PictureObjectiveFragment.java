@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.entities.objectives.PictureObjective;
 import hu.bme.aut.digikaland.ui.common.fragments.PictureFragment;
+import hu.bme.aut.digikaland.utility.FragmentListSaver;
 
 public class PictureObjectiveFragment extends ObjectiveFragment {
     private PictureObjectiveListener objectiveActivity;
@@ -50,11 +51,16 @@ public class PictureObjectiveFragment extends ObjectiveFragment {
         TextView tvQuestion = root.findViewById(R.id.pictureQuestion);
         tvQuestion.setText(getObjective().getQuestion());
         int numberOfPictures = getMaxNumberOfPictres();
+        if(savedInstanceState == null)
         for(int i = 0; i < numberOfPictures; i++){
-            // TODO: képek frissítése, ha történt beillesztés
             PictureFragment fragment = PictureFragment.newInstance(getTag());
             fragments.add(fragment);
             getChildFragmentManager().beginTransaction().add(R.id.pictureAnswer, fragment, PictureFragment.generateTag()).commit();
+        }
+        else{
+            ArrayList<String> tags = savedInstanceState.getStringArrayList(ARG_PICFRAGMENTS);
+            FragmentListSaver<PictureFragment> load = new FragmentListSaver<>();
+            fragments = load.fragmentTagLoad(tags, getChildFragmentManager(), PictureFragment.class);
         }
         Button bCamera = root.findViewById(R.id.pictureCameraButton);
         bCamera.setOnClickListener(new View.OnClickListener() {
@@ -76,6 +82,15 @@ public class PictureObjectiveFragment extends ObjectiveFragment {
     public void refreshPictures(){
         // TODO: ha megvan a kép, akkor az összes fragmentet eldobjuk, és újra hozzáadjuk őket
 
+    }
+
+    private static final String ARG_PICFRAGMENTS = "pics";
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        FragmentListSaver<PictureFragment> save = new FragmentListSaver<>();
+        outState.putStringArrayList(ARG_PICFRAGMENTS, save.fragmentTagSave((fragments)));
     }
 
     private int getMaxNumberOfPictres(){

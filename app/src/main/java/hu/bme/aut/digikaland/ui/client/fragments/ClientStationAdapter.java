@@ -1,5 +1,6 @@
 package hu.bme.aut.digikaland.ui.client.fragments;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ public class ClientStationAdapter extends RecyclerView.Adapter<ClientStationAdap
     private int colorDone;
     private int colorNotStarted;
     private int colorStarted;
+    private ClientStationListener activity;
 
     public ClientStationAdapter(List<Station> s){
         stations = s;
@@ -23,11 +25,21 @@ public class ClientStationAdapter extends RecyclerView.Adapter<ClientStationAdap
 
     @Override
     public ClientStationViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        onAttach(parent.getContext());
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_client_station, parent, false);
         colorDone = parent.getResources().getColor(R.color.colorDone);
         colorNotStarted = parent.getResources().getColor(R.color.colorNot);
         colorStarted = parent.getResources().getColor(R.color.colorCurrently);
         return new ClientStationViewHolder(itemView);
+    }
+
+    public void onAttach(Context context) {
+        if (context instanceof ClientStationListener) {
+            activity = (ClientStationListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement ClientStationListener");
+        }
     }
 
     @Override
@@ -41,7 +53,12 @@ public class ClientStationAdapter extends RecyclerView.Adapter<ClientStationAdap
                 break;
             case Started:
                 color = colorStarted;
-                // TODO: feladat activityre lépés
+                holder.station.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        activity.onStartedStationClick(item);
+                    }
+                });
                 break;
             case NotStarted:
                 color = colorNotStarted;
@@ -65,5 +82,9 @@ public class ClientStationAdapter extends RecyclerView.Adapter<ClientStationAdap
             super(itemView);
             station = itemView.findViewById(R.id.clientStationItem);
         }
+    }
+
+    public interface ClientStationListener{
+        public void onStartedStationClick(Station station);
     }
 }

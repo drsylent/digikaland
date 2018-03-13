@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
@@ -48,10 +49,18 @@ public class ResultsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_results, container, false);
+        if(savedInstanceState == null)
         for(int i = 0; i < teamList.length; i++){
             ResultsElementFragment element = ResultsElementFragment.newInstance(i+1, teamList[i], pointList[i]);
             getChildFragmentManager().beginTransaction().add(R.id.resultsContent, element).commit();
         }
+        Button newRace = root.findViewById(R.id.clientResultsNewRace);
+        newRace.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                activity.onNewRaceStart();
+            }
+        });
         return root;
     }
 

@@ -36,6 +36,17 @@ public class CustomAnswerObjectiveFragment extends ObjectiveFragment {
         obj.upload(etAnswer.getText().toString());
     }
 
+    // TODO: minden Androidnál elmenti pl ezt a szöveget?
+    /*
+    private static final String ARG_ANSWER = "ans";
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(ARG_ANSWER, etAnswer.getText().toString());
+    }
+    */
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

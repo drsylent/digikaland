@@ -1,5 +1,6 @@
 package hu.bme.aut.digikaland.ui.client.activities;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,7 +16,7 @@ import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.entities.Station;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientStationAdapter;
 
-public class ClientStationsActivity extends AppCompatActivity {
+public class ClientStationsActivity extends AppCompatActivity implements ClientStationAdapter.ClientStationListener {
     public final static String ARGS_STATIONS = "stations";
 
     @Override
@@ -27,7 +28,7 @@ public class ClientStationsActivity extends AppCompatActivity {
             toolbar.setDisplayHomeAsUpEnabled(true);
             toolbar.setTitle(R.string.stations);
         }
-        List<Station> stations = (ArrayList<Station>) getIntent().getBundleExtra(ARGS_STATIONS).getSerializable(ARGS_STATIONS);
+        ArrayList<Station> stations = (ArrayList<Station>) getIntent().getBundleExtra(ARGS_STATIONS).getSerializable(ARGS_STATIONS);
         RecyclerView list = findViewById(R.id.clientStationList);
         list.setLayoutManager(new LinearLayoutManager(this));
         list.setAdapter(new ClientStationAdapter(stations));
@@ -48,6 +49,13 @@ public class ClientStationsActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onStartedStationClick(Station station) {
+        Intent i = new Intent(ClientStationsActivity.this, ClientObjectiveActivity.class);
+        i.putExtra(ClientObjectiveActivity.ARGS_OBJECTIVES, station.objective);
+        startActivity(i);
     }
 }
 
