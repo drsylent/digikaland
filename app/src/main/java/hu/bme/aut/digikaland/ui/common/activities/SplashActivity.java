@@ -1,5 +1,7 @@
 package hu.bme.aut.digikaland.ui.common.activities;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,8 +10,11 @@ import android.widget.Button;
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.ui.admin.AdminMainActivity;
 import hu.bme.aut.digikaland.ui.client.activities.ClientMainActivity;
+import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
 public class SplashActivity extends AppCompatActivity {
+
+    private static int milestoneVersion = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,5 +91,18 @@ public class SplashActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        if(milestoneVersion == 1){
+            adminTotal.setEnabled(false);
+            adminSimple.setEnabled(false);
+            clientSimple.setEnabled(false);
+            final Context that = this;
+            MockGenerator.introDialog(this, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    MockGenerator.milestoneOneDialog(that).show();
+                }
+            }).show();
+        }
     }
 }
