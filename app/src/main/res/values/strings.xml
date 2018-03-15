@@ -1,14 +1,14 @@
 <resources>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="app_name">Digikaland</string>
     <string name="title_activity_startup">StartupActivity</string>
     <string name="welcome">Üdvözöllek a Digikalandban!</string>
-    <string name="racecode">Add meg a versenykódot, mellyel csatlakozhatsz a versenyhez!</string>
+    <string name="racecode_description">Add meg a versenykódot, mellyel csatlakozhatsz a versenyhez!</string>
     <string name="racecode_hint">Kód</string>
     <string name="send">Beküldés</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="rolecode">Add meg a szerepkódod, mellyel a megfelelő csapathoz csatlakozhatsz!</string>
+    <string name="rolecode_description">Add meg a szerepkódod, mellyel a megfelelő csapathoz csatlakozhatsz!</string>
     <string name="actual">Aktuális</string>
     <string name="map">Térkép</string>
     <string name="status">Státusz</string>
@@ -18,4 +18,34 @@
     <string name="drawer_close">Drawer Close</string>
     <string name="refresh">Frissítés</string>
     <string name="title_activity_maps">Térkép</string>
+    <string name="client_help_next_admin">Következő feladat felügyelői:</string>
+    <string name="client_help_total_admin">A verseny felügyelői:</string>
+    <string name="next_goal">Következő cél:</string>
+    <string name="help">Segítség</string>
+    <string name="objective_progress">Feladat folyamatban:</string>
+    <string name="open">Megnyitás</string>
+    <string name="time_left">Hátralévő idő:</string>
+    <string name="current_race">Jelenlegi versenyed:</string>
+    <string name="team_name">Csapatod neve:</string>
+    <string name="completed_stations">Teljesített állomások:</string>
+    <string name="team_captain">A csapatkapitányod:</string>
+    <string name="custom_answer_description">Erre a kérdésre saját választ kell adni.</string>
+    <string name="answer_hint">Ide írd a választ.</string>
+    <string name="physical_answer_hint">Ezt a feladatot nem a telefonodon kell megoldani.</string>
+    <string name="camera">Kamera</string>
+    <string name="gallery">Galéria</string>
+    <string name="end_results">Végeredmény:</string>
+    <string name="new_race">Új verseny</string>
+    <string name="objective">Feladat</string>
+    <string name="delete_picture_first">Előbb törölnöd kell egy már meglévő képet.</string>
+    <string name="too_many_pictures">Túl sok képet jelöltél ki</string>
+    <string name="delete_picture">Kép törlése</string>
+    <string name="sure_to_delete">Biztosan törölni szeretnéd ezt a képet?</string>
+    <string name="cancel">Mégse</string>
+    <string name="delete">Törlés</string>
+    <string name="starting_place">Kezdő gyülekezőhely</string>
+    <string name="station_status">Állomás: %1$d/%2$d</string>
+    <string name="station_show">%1$d. állomás (%2$d id)</string>
+    <string name="position_number">%1$d.</string>
+    <string name="point_number">%1$dp</string>
 </resources>

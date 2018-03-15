@@ -192,7 +192,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        showSnackBarMessage("REFRESH");
+        showSnackBarMessage(getResources().getString(R.string.refresh));
         if(state == ViewState.Actual)
         switch(item.getItemId()) {
             case R.id.menu_refresh:

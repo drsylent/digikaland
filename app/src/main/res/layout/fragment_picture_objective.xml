@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_marginLeft="5dp"
-    android:layout_marginTop="5dp"
+    android:layout_marginStart="@dimen/xs_margin"
+    android:layout_marginTop="@dimen/xs_margin"
     tools:context="hu.bme.aut.digikaland.ui.common.objectives.PictureObjectiveFragment">
 
     <TextView
@@ -12,15 +12,19 @@
         android:layout_height="wrap_content"
         android:id="@+id/pictureQuestion"
         style="@style/StringFormatQuestion"
-        android:text="Ide majd képet kell feltölteni ehhez a feladathoz." />
+        tools:text="Ide majd képet kell feltölteni ehhez a feladathoz." />
 
-    <LinearLayout
+    <HorizontalScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="10dp"
-        android:id="@+id/pictureAnswer">
-    </LinearLayout>
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="@dimen/s_margin"
+            android:id="@+id/pictureAnswer">
+        </LinearLayout>
+    </HorizontalScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,23 +32,23 @@
         android:weightSum="2"
         android:orientation="horizontal">
         <Button
-            android:layout_width="0dp"
+            android:layout_width="@dimen/zero"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
+            android:layout_marginLeft="@dimen/xxl_margin"
+            android:layout_marginRight="@dimen/xxl_margin"
             style="@style/ButtonStyle"
-            android:text="Kamera"
+            android:text="@string/camera"
             android:id="@+id/pictureCameraButton"/>
         <Button
-            android:layout_width="0dp"
+            android:layout_width="@dimen/zero"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
+            android:layout_marginLeft="@dimen/xxl_margin"
+            android:layout_marginRight="@dimen/xxl_margin"
             style="@style/ButtonStyle"
-            android:text="Galéria"
+            android:text="@string/gallery"
             android:id="@+id/pictureGalleryButton"/>
     </LinearLayout>
 

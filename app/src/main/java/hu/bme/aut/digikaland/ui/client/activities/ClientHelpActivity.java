@@ -28,7 +28,7 @@ public class ClientHelpActivity extends AppCompatActivity{
         ActionBar toolbar = getSupportActionBar();
         if(toolbar != null){
             toolbar.setDisplayHomeAsUpEnabled(true);
-            toolbar.setTitle("Segítség");
+            toolbar.setTitle(R.string.help);
         }
         if(savedInstanceState == null){
             Bundle bundle = getIntent().getBundleExtra(ARG_HELPDATA);

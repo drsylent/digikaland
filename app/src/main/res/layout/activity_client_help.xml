@@ -1,30 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="hu.bme.aut.digikaland.ui.client.activities.ClientHelpActivity">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
+        android:layout_marginStart="@dimen/side_margin"
         android:id="@+id/clientHelp"
         android:orientation="vertical"
         android:layout_height="wrap_content">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Következő feladat felügyelői:"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
+            android:text="@string/client_help_next_admin"
+            android:layout_marginBottom="@dimen/s_margin"
+            android:layout_marginTop="@dimen/s_margin"
             style="@style/StringFormatLocation"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="@dimen/next_stage_margin"
             android:id="@+id/clientHelpObjectiveAdminContent">
 
         </LinearLayout>
@@ -32,7 +30,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="A verseny felügyelői:"
+            android:text="@string/client_help_total_admin"
             style="@style/StringFormatLocation"/>
 
         <LinearLayout

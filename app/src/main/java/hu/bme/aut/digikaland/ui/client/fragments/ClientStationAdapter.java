@@ -43,7 +43,7 @@ public class ClientStationAdapter extends RecyclerView.Adapter<ClientStationAdap
     @Override
     public void onBindViewHolder(ClientStationViewHolder holder, int position) {
         final Station item = stations.get(position);
-        holder.station.setText(item.number + ". állomás (" + item.id + " id)");
+        holder.station.setText( ((Context) activity).getString(R.string.station_show, item.number, item.id) );
         int color;
         switch (item.status){
             case Done:

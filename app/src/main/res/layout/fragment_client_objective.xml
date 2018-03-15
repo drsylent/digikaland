@@ -1,5 +1,4 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
@@ -12,37 +11,37 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Feladat folyamatban:"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="15dp"
+            android:text="@string/objective_progress"
+            android:layout_marginTop="@dimen/s_margin"
+            android:layout_marginBottom="@dimen/m_margin"
             style="@style/StringFormatTitle"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/clientObjectiveStation"
-            android:text="Állomás: 2/5"
-            android:layout_marginBottom="30dp"
+            tools:text="Állomás: 2/5"
+            android:layout_marginBottom="@dimen/xl_margin"
             style="@style/StringFormatInformation.Center"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/clientObjectiveOpen"
-            android:text="Megnyitás"
-            android:layout_marginBottom="40dp"
+            android:text="@string/open"
+            android:layout_marginBottom="@dimen/xxl_margin"
             style="@style/ButtonStyle.Center"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Hátralévő idő:"
+            android:text="@string/time_left"
             style="@style/StringFormatSubTitle"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="23:23:23"
+            tools:text="23:23:23"
             android:id="@+id/clientObjectiveCounter"
             style="@style/StringFormatCounter"/>
 

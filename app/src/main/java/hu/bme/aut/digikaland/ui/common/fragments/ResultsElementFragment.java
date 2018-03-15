@@ -46,11 +46,11 @@ public class ResultsElementFragment extends Fragment {
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_results_element, container, false);
         TextView tvPosition = root.findViewById(R.id.resultsPosition);
-        tvPosition.setText(position + ".");
+        tvPosition.setText(getString(R.string.position_number, position));
         TextView tvName = root.findViewById(R.id.resultsTeamName);
         tvName.setText(teamName);
         TextView tvPoints = root.findViewById(R.id.resultsPoint);
-        tvPoints.setText(points + "p");
+        tvPoints.setText(getString(R.string.point_number, points));
         return root;
     }
 }

@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/clientStationItem"
-    android:text="1. állomás (azonosító: 5)"
+    tools:text="1. állomás (azonosító: 5)"
     style="@style/StringFormatTitle.Small"
     android:background="@color/colorWhite"
-    android:paddingBottom="10dp"
-    android:paddingTop="10dp"
-    android:layout_marginBottom="10dp"
+    android:paddingBottom="@dimen/s_margin"
+    android:paddingTop="@dimen/s_margin"
+    android:layout_marginBottom="@dimen/s_margin"
     >
 
 </TextView>

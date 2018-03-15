@@ -6,31 +6,31 @@
     tools:context="hu.bme.aut.digikaland.ui.common.fragments.ResultsElementFragment">
 
     <TextView
-        android:layout_width="0dp"
+        android:layout_width="@dimen/zero"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="end"
         android:id="@+id/resultsPosition"
         style="@style/StringFormatInformation"
-        android:text="12." />
+        tools:text="12." />
 
     <TextView
-        android:layout_width="0dp"
+        android:layout_width="@dimen/zero"
         android:layout_height="match_parent"
         style="@style/StringFormatInformation"
         android:id="@+id/resultsTeamName"
-        android:paddingLeft="5dp"
+        android:paddingStart="@dimen/xs_margin"
         android:layout_weight="8"
         android:gravity="start"
-        android:text="Teszt csapat"/>
+        tools:text="Teszt csapat"/>
 
     <TextView
-        android:layout_width="0dp"
+        android:layout_width="@dimen/zero"
         android:layout_height="match_parent"
         android:id="@+id/resultsPoint"
         style="@style/StringFormatInformation"
         android:layout_weight="1"
         android:gravity="end"
-        android:text="20p"/>
+        tools:text="20p"/>
 
 </LinearLayout>

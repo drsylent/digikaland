@@ -47,7 +47,7 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
         ActionBar toolbar = getSupportActionBar();
         if(toolbar != null){
             toolbar.setDisplayHomeAsUpEnabled(true);
-            toolbar.setTitle("Feladat");
+            toolbar.setTitle(R.string.objective);
         }
         if(savedInstanceState == null)
         for(Objective o : objectives){
@@ -93,7 +93,7 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
             ClientObjectiveActivityPermissionsDispatcher.dispatchTakePictureIntentWithPermissionCheck(this);
         else{
             pictureObjective = null;
-            showSnackBarMessage("Előbb törölnöd kell egy már meglévő képet.");
+            showSnackBarMessage(getString(R.string.delete_picture_first));
         }
     }
 
@@ -127,7 +127,7 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
                 }
                 else{
                     int number = pictureObjective.getRemainingNumberOfPictures();
-                    if(datas.getItemCount() > number) showSnackBarMessage("Túl sok képet jelöltél ki");
+                    if(datas.getItemCount() > number) showSnackBarMessage(getString(R.string.too_many_pictures));
                     else{
                         for(int i = 0; i < datas.getItemCount(); i++){
                             pictureObjective.givePicture(datas.getItemAt(i).getUri());
@@ -149,7 +149,7 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
     public void activateGallery(String tag) {
         pictureObjective = pictureObjectiveFragmentSearch(tag);
         if(!pictureObjective.isFreePicture()){
-            showSnackBarMessage("Előbb törölnöd kell képet, hogy újat nyithass meg");
+            showSnackBarMessage(getString(R.string.delete_picture_first));
             return;
         }
         Intent getPicture = new Intent(Intent.ACTION_GET_CONTENT,
@@ -162,7 +162,7 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
 
     public void sendSolution(){
         // itt küldi el a megoldást majd
-        showSnackBarMessage("Elküldés");
+        showSnackBarMessage(getString(R.string.send));
     }
 
     // TODO: jelenleg csak placeholder megjelenítésre
@@ -181,14 +181,13 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
     @Override
     public void onExistingPictureLongClicked(String parentTag, String tag) {
         final PictureFragment pf = pictureFragmentSearch(parentTag, tag);
-        new AlertDialog.Builder(this).setTitle("Kép törlése").setMessage("Biztosan törölni szeretnéd ezt a képet?")
-                .setNegativeButton("Mégse", new DialogInterface.OnClickListener() {
+        new AlertDialog.Builder(this).setTitle(R.string.delete_picture).setMessage(getString(R.string.sure_to_delete))
+                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-
                     }
                 })
-                .setPositiveButton("Törlés", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.delete), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         pf.deletePicture();

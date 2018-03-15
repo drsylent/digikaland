@@ -1,5 +1,4 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
@@ -12,7 +11,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Végeredmény:"
+            android:text="@string/end_results"
             style="@style/StringFormatTitle"/>
 
         <LinearLayout
@@ -20,7 +19,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:id="@+id/resultsContent"
-            android:layout_marginBottom="50dp">
+            android:layout_marginBottom="@dimen/h_margin">
 
 
         </LinearLayout>
@@ -30,7 +29,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/clientResultsNewRace"
             style="@style/ButtonStyle.Center"
-            android:text="Új verseny"/>
+            android:text="@string/new_race"/>
 
     </LinearLayout>
 </ScrollView>

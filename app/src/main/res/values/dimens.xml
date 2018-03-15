@@ -1,3 +1,18 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="side_margin">20dp</dimen>
+    <dimen name="next_stage_margin">20dp</dimen>
+    <dimen name="picture_size">100dp</dimen>
+    <dimen name="large_input">200dp</dimen>
+
+    <dimen name="zero">0dp</dimen>
+    <dimen name="xs_margin">5dp</dimen>
+    <dimen name="s_margin">10dp</dimen>
+    <dimen name="m_margin">15dp</dimen>
+    <dimen name="l_margin">20dp</dimen>
+    <dimen name="xl_margin">30dp</dimen>
+    <dimen name="xxl_margin">40dp</dimen>
+    <dimen name="h_margin">50dp</dimen>
+
+
 </resources>

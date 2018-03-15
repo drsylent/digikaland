@@ -79,9 +79,9 @@ public class ClientActualFragment extends Fragment {
     }
 
     private String getStationString(){
-        if(stationNumber == 0) return "Kezdő gyülekezőhely";
-        if(stationNumber <= stationSum) return "Állomás: " + stationNumber + "/" + stationSum;
-        else return "Eredményhirdetés";
+        if(stationNumber == 0) return getString(R.string.starting_place);
+        if(stationNumber <= stationSum) return getString(R.string.station_status, stationNumber, stationSum);
+        else return getString(R.string.end_results);
     }
 
     @Override

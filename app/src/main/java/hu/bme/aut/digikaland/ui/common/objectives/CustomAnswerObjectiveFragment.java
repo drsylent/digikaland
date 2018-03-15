@@ -28,6 +28,7 @@ public class CustomAnswerObjectiveFragment extends ObjectiveFragment {
     @Override
     public void upload() {
         CustomAnswerObjective obj = (CustomAnswerObjective) getObjective();
+        // TODO: Input validation
         obj.upload(etAnswer.getText().toString());
     }
 

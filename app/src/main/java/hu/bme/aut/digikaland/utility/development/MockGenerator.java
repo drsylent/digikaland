@@ -34,8 +34,8 @@ public class MockGenerator {
 
     public static Bundle mockMapData(){
         Bundle locationData = new Bundle();
-        double latitudes[] = {47.473372 };
-        double longitudes[] = {19.059731};
+        double latitudes[] = {47.473372, 52.546739, 46.538830 };
+        double longitudes[] = {19.059731, 13.218779, 24.558987 };
         locationData.putDoubleArray(MapsActivity.ARGS_LATITUDE, latitudes);
         locationData.putDoubleArray(MapsActivity.ARGS_LONGITUDE, longitudes);
         return locationData;
@@ -50,6 +50,7 @@ public class MockGenerator {
     public static ArrayList<Objective> mockMiniObjectiveList(){
         ArrayList<Objective> objectives = new ArrayList<>();
         objectives.add(new PhysicalObjective("Ez csak egy picit kérdéssorozat."));
+        objectives.add(new PictureObjective("Kevés kép kell csak ide.", 2));
         return objectives;
     }
 
@@ -59,7 +60,7 @@ public class MockGenerator {
         String answers[] = {"6", "7", "8", "9"};
         objectives.add(new MultipleChoiceObjective("Hány kar található a BME-n?", answers));
         objectives.add(new CustomAnswerObjective("Mikor alapították a VIK-et?"));
-        objectives.add(new PictureObjective("Készítsetek egy szelfit és egy képet a környezetről!", 2));
+        objectives.add(new PictureObjective("Készítsetek egy szelfit és egy képet a környezetről!", 6));
         objectives.add(new PhysicalObjective("Fogj kezet a feladat felügyelőjével!"));
         return objectives;
     }
@@ -80,7 +81,7 @@ public class MockGenerator {
         bundle.putString(ClientStatusFragment.ARG_TEAMNAME, "Ez a csapat neve");
         bundle.putString(ClientStatusFragment.ARG_CAPTAIN, "Ez a kapitány neve");
         bundle.putString(ClientStatusFragment.ARG_STATIONS, "Állomás: 5/7");
-        bundle.putString(ClientStatusFragment.ARG_PHONE, "+36 30 371 7378");
+        bundle.putString(ClientStatusFragment.ARG_PHONE, "+11 11 111 1111");
         return bundle;
     }
 

@@ -1,5 +1,4 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
@@ -12,23 +11,23 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Következő cél:"
-            android:layout_marginTop="10dp"
+            android:text="@string/next_goal"
+            android:layout_marginTop="@dimen/s_margin"
             style="@style/StringFormatTitle"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Állomás 1/5:"
-            android:layout_marginTop="30dp"
+            tools:text="Állomás 1/5:"
+            android:layout_marginTop="@dimen/xl_margin"
             android:id="@+id/clientStationText"
             style="@style/StringFormatSubTitle.Actual"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Cím teljesen"
-            android:layout_marginTop="15dp"
+            tools:text="Cím teljesen"
+            android:layout_marginTop="@dimen/m_margin"
             android:id="@+id/clientStationLocation"
             android:gravity="center_horizontal"
             style="@style/StringFormatLocation"/>
@@ -36,17 +35,17 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Cím pontosítás"
+            tools:text="Cím pontosítás"
             android:id="@+id/clientStationSubLocation"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="@dimen/xs_margin"
             android:gravity="center_horizontal"
             style="@style/StringFormatSubLocation"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="2018.02.26. 18:29"
-            android:layout_marginTop="15dp"
+            tools:text="2018.02.26. 18:29"
+            android:layout_marginTop="@dimen/m_margin"
             android:id="@+id/clientStationTime"
             android:gravity="center_horizontal"
             style="@style/StringFormatLocation"/>
@@ -56,16 +55,16 @@
             android:layout_height="wrap_content"
             style="@style/ButtonStyle.Center"
             android:id="@+id/clientActualMap"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="@dimen/h_margin"
             android:text="@string/map"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/ButtonStyle.Center"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="@dimen/xl_margin"
             android:id="@+id/clientActualHelp"
-            android:text="Segítség"/>
+            android:text="@string/help"/>
 
     </LinearLayout>
 </ScrollView>

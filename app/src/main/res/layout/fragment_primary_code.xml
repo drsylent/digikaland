@@ -7,7 +7,7 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="@dimen/zero"
         android:layout_weight="1"
         android:text="@string/welcome"
         android:gravity="center"
@@ -15,15 +15,15 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="@dimen/zero"
         android:layout_weight="1"
-        android:text="@string/racecode"
+        android:text="@string/racecode_description"
         android:gravity="center"
         style="@style/StringFormatSubTitle"/>
 
     <EditText
-        android:layout_width="200dp"
-        android:layout_height="0dp"
+        android:layout_width="@dimen/large_input"
+        android:layout_height="@dimen/zero"
         android:layout_weight="1"
         android:maxLength="8"
         android:hint="@string/racecode_hint"

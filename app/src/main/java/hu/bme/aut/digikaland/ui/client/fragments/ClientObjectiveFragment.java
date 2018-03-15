@@ -69,7 +69,7 @@ public class ClientObjectiveFragment extends Fragment {
             }
         });
         TextView stationSummary = root.findViewById(R.id.clientObjectiveStation);
-        stationSummary.setText("Állomás: " + stationNow + "/" + stationSum);
+        stationSummary.setText(getString(R.string.station_status, stationNow, stationSum));
         countdown = root.findViewById(R.id.clientObjectiveCounter);
         if(savedInstanceState != null) timeLeft = savedInstanceState.getLong(ARG_TIME);
         countdown.setText(TimeWriter.countdownFormat(timeLeft));
