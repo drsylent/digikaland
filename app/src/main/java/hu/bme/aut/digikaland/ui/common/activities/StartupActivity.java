@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.ui.admin.AdminMainActivity;
 import hu.bme.aut.digikaland.ui.client.activities.ClientMainActivity;
@@ -22,7 +21,7 @@ public class StartupActivity extends AppCompatActivity implements PrimaryCodeFra
         ft.commit();
     }
 
-    String RC;
+    String raceCode;
 
     @Override
     public void onPrimaryCodeHit(String raceCode) {
@@ -32,7 +31,7 @@ public class StartupActivity extends AppCompatActivity implements PrimaryCodeFra
         // itt tortenik az adatbazishoz csatlakozas
         // megkeresni a versenyt, ami ezzel a koddal van
         // ha nincs, jelezzuk a felhasznalonak
-        RC = raceCode;
+        this.raceCode = raceCode;
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.startupLayout, SecondaryCodeFragment.newInstance("RaceTitle"));
         ft.addToBackStack(null);
@@ -43,7 +42,7 @@ public class StartupActivity extends AppCompatActivity implements PrimaryCodeFra
     @Override
     public void onSecondaryCodeHit(String roleCode) {
         Intent intent;
-        if(RC.toUpperCase().equals("ADMIN")){
+        if(raceCode.toUpperCase().equals("ADMIN")){
             if(roleCode.toUpperCase().equals("TOTAL")){
                 intent = new Intent(StartupActivity.this, AdminMainActivity.class);
             }

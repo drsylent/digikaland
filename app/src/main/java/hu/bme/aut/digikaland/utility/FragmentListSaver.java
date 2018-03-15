@@ -2,12 +2,7 @@ package hu.bme.aut.digikaland.utility;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-
 import java.util.ArrayList;
-
-/**
- * Created by Sylent on 2018. 03. 11..
- */
 
 public class FragmentListSaver<T extends Fragment> {
 

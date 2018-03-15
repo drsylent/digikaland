@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.ui.admin.AdminMainActivity;
 import hu.bme.aut.digikaland.ui.client.activities.ClientMainActivity;

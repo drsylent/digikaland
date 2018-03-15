@@ -1,16 +1,12 @@
 package hu.bme.aut.digikaland.ui.common.objectives;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -21,14 +17,13 @@ import hu.bme.aut.digikaland.ui.common.fragments.PictureFragment;
 import hu.bme.aut.digikaland.utility.FragmentListSaver;
 
 public class PictureObjectiveFragment extends ObjectiveFragment {
+    private static final String ARG_PICTUREFRAGMENTS = "pics";
     private PictureObjectiveListener objectiveActivity;
     private ArrayList<PictureFragment> fragments = new ArrayList<>();
 
     public PictureObjectiveFragment() {
         // Required empty public constructor
     }
-
-    LinearLayout pictures;
 
     @Override
     public void upload() {
@@ -50,7 +45,7 @@ public class PictureObjectiveFragment extends ObjectiveFragment {
         View root = inflater.inflate(R.layout.fragment_picture_objective, container, false);
         TextView tvQuestion = root.findViewById(R.id.pictureQuestion);
         tvQuestion.setText(getObjective().getQuestion());
-        int numberOfPictures = getMaxNumberOfPictres();
+        int numberOfPictures = getMaxNumberOfPictures();
         if(savedInstanceState == null)
         for(int i = 0; i < numberOfPictures; i++){
             PictureFragment fragment = PictureFragment.newInstance(getTag());
@@ -58,7 +53,7 @@ public class PictureObjectiveFragment extends ObjectiveFragment {
             getChildFragmentManager().beginTransaction().add(R.id.pictureAnswer, fragment, PictureFragment.generateTag()).commit();
         }
         else{
-            ArrayList<String> tags = savedInstanceState.getStringArrayList(ARG_PICFRAGMENTS);
+            ArrayList<String> tags = savedInstanceState.getStringArrayList(ARG_PICTUREFRAGMENTS);
             FragmentListSaver<PictureFragment> load = new FragmentListSaver<>();
             fragments = load.fragmentTagLoad(tags, getChildFragmentManager(), PictureFragment.class);
         }
@@ -79,21 +74,14 @@ public class PictureObjectiveFragment extends ObjectiveFragment {
         return root;
     }
 
-    public void refreshPictures(){
-        // TODO: ha megvan a kép, akkor az összes fragmentet eldobjuk, és újra hozzáadjuk őket
-
-    }
-
-    private static final String ARG_PICFRAGMENTS = "pics";
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         FragmentListSaver<PictureFragment> save = new FragmentListSaver<>();
-        outState.putStringArrayList(ARG_PICFRAGMENTS, save.fragmentTagSave((fragments)));
+        outState.putStringArrayList(ARG_PICTUREFRAGMENTS, save.fragmentTagSave((fragments)));
     }
 
-    private int getMaxNumberOfPictres(){
+    private int getMaxNumberOfPictures(){
         return ((PictureObjective) getObjective()).getMaxPictures();
     }
 

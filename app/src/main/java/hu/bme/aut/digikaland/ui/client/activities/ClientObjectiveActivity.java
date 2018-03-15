@@ -19,13 +19,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.entities.objectives.Objective;
 import hu.bme.aut.digikaland.ui.common.fragments.PictureFragment;
@@ -33,7 +31,6 @@ import hu.bme.aut.digikaland.ui.common.objectives.ObjectiveFragment;
 import hu.bme.aut.digikaland.ui.common.objectives.PictureObjectiveFragment;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;
-
 import static android.os.Environment.getExternalStoragePublicDirectory;
 
 @RuntimePermissions
@@ -42,11 +39,9 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
     ArrayList<ObjectiveFragment> fragments = new ArrayList<>();
     LinearLayout mainLayout;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // TODO: elfektetéskor rengeteg újracsatolás van... ha sIS null, akkor kell csak
         setContentView(R.layout.activity_client_objective);
         ArrayList<Objective> objectives = (ArrayList<Objective>) getIntent().getSerializableExtra(ARGS_OBJECTIVES);
         ActionBar toolbar = getSupportActionBar();
@@ -81,11 +76,19 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
         }
     }
 
+    private PictureObjectiveFragment pictureObjectiveFragmentSearch(String tag){
+        return (PictureObjectiveFragment) getSupportFragmentManager().findFragmentByTag(tag);
+    }
+
+    private PictureFragment pictureFragmentSearch(String parentTag, String tag){
+        return (PictureFragment) getSupportFragmentManager().findFragmentByTag(parentTag).getChildFragmentManager().findFragmentByTag(tag);
+    }
+
     PictureObjectiveFragment pictureObjective = null;
 
     @Override
     public void activateCamera(String tag) {
-        pictureObjective = (PictureObjectiveFragment) getSupportFragmentManager().findFragmentByTag(tag);
+        pictureObjective = pictureObjectiveFragmentSearch(tag);
         if(pictureObjective.isFreePicture())
             ClientObjectiveActivityPermissionsDispatcher.dispatchTakePictureIntentWithPermissionCheck(this);
         else{
@@ -101,13 +104,15 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
         ClientObjectiveActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 
+    private static final int REQUEST_TAKE_PHOTO = 1;
+    private static final int REQUEST_MULTIPLE_IMAGES_FROM_GALLERY = 3;
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_TAKE_PHOTO)
             if(resultCode == RESULT_OK) {
                 galleryAddPic();
                 pictureObjective.givePicture(photoUri);
-
             }
             // ha visszavonták a képcsinálást, az ideiglenes fájlt törölni kell, hogy ne maradjon szemét
             else{
@@ -140,13 +145,10 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
         this.sendBroadcast(mediaScanIntent);
     }
 
-    static final int REQUEST_MULTIPLE_IMAGES_FROM_GALLERY = 3;
-
     @Override
     public void activateGallery(String tag) {
-        pictureObjective = (PictureObjectiveFragment) getSupportFragmentManager().findFragmentByTag(tag);
-        int number = pictureObjective.getRemainingNumberOfPictures();
-        if(number == 0){
+        pictureObjective = pictureObjectiveFragmentSearch(tag);
+        if(!pictureObjective.isFreePicture()){
             showSnackBarMessage("Előbb törölnöd kell képet, hogy újat nyithass meg");
             return;
         }
@@ -170,7 +172,7 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
 
     @Override
     public void onExistingPictureClicked(String parentTag, String tag) {
-        PictureFragment pf = (PictureFragment) getSupportFragmentManager().findFragmentByTag(parentTag).getChildFragmentManager().findFragmentByTag(tag);
+        PictureFragment pf = pictureFragmentSearch(parentTag, tag);
         Uri path = pf.getPictureUri();
         if(path == null) return;
         showGallery(path);
@@ -178,7 +180,7 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
 
     @Override
     public void onExistingPictureLongClicked(String parentTag, String tag) {
-        final PictureFragment pf = (PictureFragment) getSupportFragmentManager().findFragmentByTag(parentTag).getChildFragmentManager().findFragmentByTag(tag);
+        final PictureFragment pf = pictureFragmentSearch(parentTag, tag);
         new AlertDialog.Builder(this).setTitle("Kép törlése").setMessage("Biztosan törölni szeretnéd ezt a képet?")
                 .setNegativeButton("Mégse", new DialogInterface.OnClickListener() {
                     @Override
@@ -207,7 +209,6 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
     Uri photoUri;
     String photoPath;
 
-
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -227,8 +228,6 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
                 image);
         return image;
     }
-
-    static final int REQUEST_TAKE_PHOTO = 1;
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     public void dispatchTakePictureIntent() {

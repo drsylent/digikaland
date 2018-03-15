@@ -4,9 +4,8 @@ import hu.bme.aut.digikaland.ui.common.objectives.CustomAnswerObjectiveFragment;
 import hu.bme.aut.digikaland.ui.common.objectives.ObjectiveFragment;
 
 /**
- * Created by Sylent on 2018. 03. 03..
+ * Olyan feladatot reprezentáló osztály, melyre egy saját, szöveges választ kell adni.
  */
-
 public class CustomAnswerObjective extends Objective {
 
     public CustomAnswerObjective(String q){

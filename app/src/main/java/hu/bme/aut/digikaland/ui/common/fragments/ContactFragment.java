@@ -1,6 +1,5 @@
 package hu.bme.aut.digikaland.ui.common.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.Gravity;
@@ -9,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.utility.PhoneDial;
 
@@ -22,17 +20,19 @@ public class ContactFragment extends Fragment {
     private String phone;
     private boolean center;
 
-    private ClientHelpListener clientHelp;
-
     public ContactFragment() {
         // Required empty public constructor
     }
 
-    public static ContactFragment newInstance(String param1, String param2, boolean center) {
+    public static ContactFragment newInstance(String contactName, String contactPhone) {
+        return newInstance(contactName, contactPhone, false);
+    }
+
+    public static ContactFragment newInstance(String contactName, String contactPhone, boolean center) {
         ContactFragment fragment = new ContactFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_NAME, param1);
-        args.putString(ARG_PHONE, param2);
+        args.putString(ARG_NAME, contactName);
+        args.putString(ARG_PHONE, contactPhone);
         args.putBoolean(ARG_CENTER, center);
         fragment.setArguments(args);
         return fragment;
@@ -68,27 +68,5 @@ public class ContactFragment extends Fragment {
             }
         });
         return root;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof ClientHelpListener) {
-            clientHelp = (ClientHelpListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement ClientHelpListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        clientHelp = null;
-    }
-
-
-    public interface ClientHelpListener {
-        void phoneDial(String phoneNumber);
     }
 }

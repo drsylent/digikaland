@@ -1,17 +1,9 @@
 package hu.bme.aut.digikaland.entities;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
-
 import hu.bme.aut.digikaland.entities.objectives.Objective;
-
-/**
- * Created by Sylent on 2018. 02. 28..
- */
 
 public class Station implements Serializable {
     public int id;

@@ -1,34 +1,27 @@
 package hu.bme.aut.digikaland.ui.client.fragments;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.ui.common.fragments.ContactFragment;
 
 public class ClientStatusFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    public static final String ARG_RACENAME = "param1";
-    public static final String ARG_TEAMNAME = "param2";
-    public static final String ARG_STATIONS = "param3";
-    public static final String ARG_CAPTAIN = "param4";
-    public static final String ARG_PHONE = "param5";
+    public static final String ARG_RACENAME = "racename";
+    public static final String ARG_TEAMNAME = "teamname";
+    public static final String ARG_STATIONS = "stationname";
+    public static final String ARG_CAPTAIN = "captainname";
+    public static final String ARG_PHONE = "phonenumber";
 
-    // TODO: Rename and change types of parameters
     private String raceName;
     private String teamName;
     private String stations;
     private String captain;
     private String phone;
-
 
     public ClientStatusFragment() {
         // Required empty public constructor

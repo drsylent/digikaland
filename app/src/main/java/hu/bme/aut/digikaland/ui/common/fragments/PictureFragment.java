@@ -2,16 +2,13 @@ package hu.bme.aut.digikaland.ui.common.fragments;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.entities.Picture;
 
@@ -32,8 +29,6 @@ public class PictureFragment extends Fragment {
         return tag;
     }
 
-    // TODO: Kép típusa és kezelése
-
     private PictureFragmentListener listener;
 
     public PictureFragment() {
@@ -44,10 +39,10 @@ public class PictureFragment extends Fragment {
         return empty;
     }
 
-    public static PictureFragment newInstance(String tag) {
+    public static PictureFragment newInstance(String parentTag) {
         PictureFragment fragment = new PictureFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARENTTAG, tag);
+        args.putString(ARG_PARENTTAG, parentTag);
         fragment.setArguments(args);
         return fragment;
     }

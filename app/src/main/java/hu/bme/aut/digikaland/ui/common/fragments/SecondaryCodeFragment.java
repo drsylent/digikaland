@@ -15,6 +15,7 @@ import android.widget.TextView;
 import hu.bme.aut.digikaland.R;
 
 public class SecondaryCodeFragment extends Fragment {
+    private static final String ARG_RACENAME = "racename";
 
     private SecondaryCodeReady startupActivity;
     private EditText secondaryHolder;
@@ -28,16 +29,20 @@ public class SecondaryCodeFragment extends Fragment {
         // Required empty public constructor
     }
 
-    // TODO: refactor to bundle-like
     public static SecondaryCodeFragment newInstance(String name) {
         SecondaryCodeFragment fragment = new SecondaryCodeFragment();
-        fragment.raceName = name;
+        Bundle args = new Bundle();
+        args.putString(ARG_RACENAME, name);
+        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            raceName = getArguments().getString(ARG_RACENAME);
+        }
     }
 
     @Override

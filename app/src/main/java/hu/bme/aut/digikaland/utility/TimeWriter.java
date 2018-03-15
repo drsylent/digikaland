@@ -1,11 +1,6 @@
 package hu.bme.aut.digikaland.utility;
 
 import java.util.Date;
-import java.util.Formatter;
-
-/**
- * Created by Sylent on 2018. 02. 28..
- */
 
 public class TimeWriter {
     public static String countdownFormat(long inputSeconds){

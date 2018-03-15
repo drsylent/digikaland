@@ -1,16 +1,12 @@
 package hu.bme.aut.digikaland.ui.common.fragments;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
-
-import java.util.ArrayList;
 
 import hu.bme.aut.digikaland.R;
 
@@ -82,7 +78,7 @@ public class ResultsFragment extends Fragment {
     }
 
     public interface ResultsFragmentListener{
-        public void onNewRaceStart();
+        void onNewRaceStart();
     }
 
 }

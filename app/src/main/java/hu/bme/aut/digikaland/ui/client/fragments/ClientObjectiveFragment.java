@@ -1,7 +1,6 @@
 package hu.bme.aut.digikaland.ui.client.fragments;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
@@ -10,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.utility.TimeWriter;
 
@@ -24,21 +22,19 @@ public class ClientObjectiveFragment extends Fragment {
     private int stationNow;
     private int stationSum;
     private long timeLeft;
-
     private TextView countdown;
-
     private ClientActiveObjectiveListener ClientActivity;
 
     public ClientObjectiveFragment() {
         // Required empty public constructor
     }
 
-    public static ClientObjectiveFragment newInstance(int now, int sum, long left) {
+    public static ClientObjectiveFragment newInstance(int currentNumber, int sumNumber, long timeLeft) {
         ClientObjectiveFragment fragment = new ClientObjectiveFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_STATIONCURRENT, now);
-        args.putLong(ARG_TIME, left);
-        args.putInt(ARG_STATIONNUMBER, sum);
+        args.putInt(ARG_STATIONCURRENT, currentNumber);
+        args.putLong(ARG_TIME, timeLeft);
+        args.putInt(ARG_STATIONNUMBER, sumNumber);
         fragment.setArguments(args);
         return fragment;
     }

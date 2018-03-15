@@ -3,10 +3,6 @@ package hu.bme.aut.digikaland.entities.objectives;
 import hu.bme.aut.digikaland.ui.common.objectives.MultipleChoiceObjectiveFragment;
 import hu.bme.aut.digikaland.ui.common.objectives.ObjectiveFragment;
 
-/**
- * Created by Sylent on 2018. 03. 03..
- */
-
 public class MultipleChoiceObjective extends Objective {
     private String answer[];
 

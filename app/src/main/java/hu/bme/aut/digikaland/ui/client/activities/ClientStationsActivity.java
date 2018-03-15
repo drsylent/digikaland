@@ -8,10 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import java.util.ArrayList;
-import java.util.List;
-
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.entities.Station;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientStationAdapter;

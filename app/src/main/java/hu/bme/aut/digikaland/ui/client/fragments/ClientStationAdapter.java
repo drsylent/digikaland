@@ -6,9 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import java.util.List;
-
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.entities.Station;
 
@@ -33,7 +31,7 @@ public class ClientStationAdapter extends RecyclerView.Adapter<ClientStationAdap
         return new ClientStationViewHolder(itemView);
     }
 
-    public void onAttach(Context context) {
+    private void onAttach(Context context) {
         if (context instanceof ClientStationListener) {
             activity = (ClientStationListener) context;
         } else {
@@ -85,6 +83,6 @@ public class ClientStationAdapter extends RecyclerView.Adapter<ClientStationAdap
     }
 
     public interface ClientStationListener{
-        public void onStartedStationClick(Station station);
+        void onStartedStationClick(Station station);
     }
 }

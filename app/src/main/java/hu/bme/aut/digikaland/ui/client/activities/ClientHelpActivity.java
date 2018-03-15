@@ -1,24 +1,22 @@
 package hu.bme.aut.digikaland.ui.client.activities;
 
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
-
 import java.util.List;
-
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.ui.common.fragments.ContactFragment;
 import hu.bme.aut.digikaland.utility.PhoneDial;
 
-public class ClientHelpActivity extends AppCompatActivity implements ContactFragment.ClientHelpListener {
-    public final static String ARGS_OBJADMINS = "objadmins";
-    public final static String ARGS_OBJADMINSPHONE = "objadminsphone";
-    public final static String ARGS_TOTADMINS = "totadmins";
-    public final static String ARGS_TOTADMINSPHONE = "totadminsphone";
+public class ClientHelpActivity extends AppCompatActivity{
+    public final static String ARG_HELPDATA = "help";
+    public final static String ARG_OBJECTADMINS = "objadmins";
+    public final static String ARG_OBJECTADMINPHONES = "objadminsphone";
+    public final static String ARG_TOTALADMINS = "totadmins";
+    public final static String ARG_TOTALADMINPHONES = "totadminsphone";
 
     LinearLayout mainLayout;
 
@@ -33,21 +31,20 @@ public class ClientHelpActivity extends AppCompatActivity implements ContactFrag
             toolbar.setTitle("Segítség");
         }
         if(savedInstanceState == null){
-            List<String> objectAdminNames = getIntent().getStringArrayListExtra(ARGS_OBJADMINS);
-            List<String> objectAdminPhones = getIntent().getStringArrayListExtra(ARGS_OBJADMINSPHONE);
-            List<String> totalAdminNames = getIntent().getStringArrayListExtra(ARGS_TOTADMINS);
-            List<String> totalAdminPhones = getIntent().getStringArrayListExtra(ARGS_TOTADMINSPHONE);
-
+            Bundle bundle = getIntent().getBundleExtra(ARG_HELPDATA);
+            List<String> objectAdminNames = bundle.getStringArrayList(ARG_OBJECTADMINS);
+            List<String> objectAdminPhones = bundle.getStringArrayList(ARG_OBJECTADMINPHONES);
+            List<String> totalAdminNames = bundle.getStringArrayList(ARG_TOTALADMINS);
+            List<String> totalAdminPhones = bundle.getStringArrayList(ARG_TOTALADMINPHONES);
+            if(objectAdminNames != null && objectAdminPhones != null)
             for(int i = 0; i < objectAdminNames.size(); i++){
-                getSupportFragmentManager().beginTransaction().add(R.id.clientHelpObjectiveAdminContent, ContactFragment.newInstance(objectAdminNames.get(i), objectAdminPhones.get(i), false)).commit();
+                getSupportFragmentManager().beginTransaction().add(R.id.clientHelpObjectiveAdminContent, ContactFragment.newInstance(objectAdminNames.get(i), objectAdminPhones.get(i))).commit();
             }
-
+            if(totalAdminNames != null && totalAdminPhones != null)
             for(int i = 0; i < totalAdminNames.size(); i++){
-                getSupportFragmentManager().beginTransaction().add(R.id.clientHelpTotalAdminContent, ContactFragment.newInstance(totalAdminNames.get(i), totalAdminPhones.get(i), false)).commit();
+                getSupportFragmentManager().beginTransaction().add(R.id.clientHelpTotalAdminContent, ContactFragment.newInstance(totalAdminNames.get(i), totalAdminPhones.get(i))).commit();
             }
         }
-
-
     }
 
     @Override
@@ -67,13 +64,4 @@ public class ClientHelpActivity extends AppCompatActivity implements ContactFrag
         }
     }
 
-    @Override
-    public void phoneDial(String phoneNumber) {
-        startActivity(PhoneDial.dial(phoneNumber));
-    }
-
-    // TODO: jelenleg csak placeholder megjelenítésre
-    private void showSnackBarMessage(String message) {
-        Snackbar.make(mainLayout, message, Snackbar.LENGTH_LONG).show();
-    }
 }

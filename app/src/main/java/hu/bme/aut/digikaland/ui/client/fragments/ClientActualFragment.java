@@ -8,26 +8,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-
 import java.util.Date;
-
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.utility.TimeWriter;
 
 public class ClientActualFragment extends Fragment {
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    public static final String ARG_STATIONS = "param1";
-    public static final String ARG_STATION_NUMBER = "param2";
-    public static final String ARG_LOCATION = "param3";
-    public static final String ARG_SUBLOCATION = "param4";
-    public static final String ARG_TIME = "param5";
+    public static final String ARG_STATIONS = "stations";
+    public static final String ARG_STATION_NUMBER = "stationnumber";
+    public static final String ARG_LOCATION = "location";
+    public static final String ARG_SUBLOCATION = "detailedlocation";
+    public static final String ARG_TIME = "time";
 
     private int stationSum;
     private int stationNumber;
     private String location;
     private String subLocation;
     private Date time;
-
 
     private ClientActualMainListener clientActual;
 
@@ -71,14 +67,14 @@ public class ClientActualFragment extends Fragment {
                 clientActual.helpActivation();
             }
         });
-        TextView tvstation = root.findViewById(R.id.clientStationText);
-        TextView tvlocation = root.findViewById(R.id.clientStationLocation);
-        TextView tvsublocation = root.findViewById(R.id.clientStationSubLocation);
-        TextView tvtime = root.findViewById(R.id.clientStationTime);
-        tvstation.setText(getStationString());
-        tvlocation.setText(location);
-        tvsublocation.setText(subLocation);
-        tvtime.setText(TimeWriter.dateFormat(time));
+        TextView tvStation = root.findViewById(R.id.clientStationText);
+        TextView tvLocation = root.findViewById(R.id.clientStationLocation);
+        TextView tvSubLocation = root.findViewById(R.id.clientStationSubLocation);
+        TextView tvTime = root.findViewById(R.id.clientStationTime);
+        tvStation.setText(getStationString());
+        tvLocation.setText(location);
+        tvSubLocation.setText(subLocation);
+        tvTime.setText(TimeWriter.dateFormat(time));
         return root;
     }
 
