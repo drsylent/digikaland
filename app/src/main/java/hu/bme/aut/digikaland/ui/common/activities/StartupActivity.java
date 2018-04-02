@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.ui.admin.AdminMainActivity;
+import hu.bme.aut.digikaland.ui.admin.station.activities.AdminStationMainActivity;
 import hu.bme.aut.digikaland.ui.client.activities.ClientMainActivity;
 import hu.bme.aut.digikaland.ui.common.fragments.PrimaryCodeFragment;
 import hu.bme.aut.digikaland.ui.common.fragments.SecondaryCodeFragment;
@@ -69,7 +70,7 @@ public class StartupActivity extends AppCompatActivity implements PrimaryCodeFra
                 intent = new Intent(StartupActivity.this, AdminMainActivity.class);
             }
             else{
-                intent = new Intent(StartupActivity.this, AdminMainActivity.class);
+                intent = new Intent(StartupActivity.this, AdminStationMainActivity.class);
             }
         }
         else{

@@ -45,6 +45,7 @@
     <string name="delete">Törlés</string>
     <string name="starting_place">Kezdő gyülekezőhely</string>
     <string name="station_status">Állomás: %1$d/%2$d</string>
+    <string name="tri_status">%1$d/%2$d/%3$d</string>
     <string name="station_show">%1$d. állomás (%2$d id)</string>
     <string name="position_number">%1$d.</string>
     <string name="point_number">%1$dp</string>

@@ -9,12 +9,13 @@ import android.view.View;
 import android.widget.Button;
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.ui.admin.AdminMainActivity;
+import hu.bme.aut.digikaland.ui.admin.station.activities.AdminStationMainActivity;
 import hu.bme.aut.digikaland.ui.client.activities.ClientMainActivity;
 import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private static int milestoneVersion = 1;
+    private static int milestoneVersion = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,8 +67,8 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // mintha feladat admin lenne
-                Intent intent = new Intent(SplashActivity.this, AdminMainActivity.class);
-                // TODO: feladat adminsag
+                Intent intent = new Intent(SplashActivity.this, AdminStationMainActivity.class);
+                // TODO: feladat adminsag - átadni, hogy melyik feladatnak az adminja!
                 startActivity(intent);
             }
         });

@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+
+import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.entities.Station;
 import hu.bme.aut.digikaland.entities.objectives.CustomAnswerObjective;
 import hu.bme.aut.digikaland.entities.objectives.MultipleChoiceObjective;
@@ -169,5 +171,27 @@ public class MockGenerator {
     public static int[] mockResultPoints(){
         int[] points = {64, 23, 18, 12, 6, 2};
         return points;
+    }
+
+    private static int adminStationCycle = 1;
+
+    public static void adminStationCycleStep(){
+        adminStationCycle++;
+    }
+
+    public static boolean adminStationIsEnding(){
+        return adminStationCycle % 3 == 0;
+    }
+
+    public static String adminStationGetNextTeamName(){
+        return adminStationCycle % 2 == 0 ? "Narancs csapat" : "Kék csapat";
+    }
+
+    public static Contact adminStationGetNextContact(){
+        return adminStationCycle % 2 == 0 ? new Contact("Farkas Flórián", "+00000000") : new Contact("Gézengúz Géza", "+111111111");
+    }
+
+    public static boolean adminStationIsToEvaluate(){
+        return !(adminStationCycle % 4 == 0);
     }
 }

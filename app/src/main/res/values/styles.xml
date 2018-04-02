@@ -50,6 +50,10 @@
         <item name="android:textSize">20sp</item>
     </style>
 
+    <style name="ButtonStyle.Center.Denied" parent="ButtonStyle.Center">
+        <item name="android:background">@color/colorNot</item>
+    </style>
+
     <style name="StringFormatCounter">
         <item name="android:gravity">center_horizontal</item>
         <item name="android:textStyle">bold</item>
@@ -89,6 +93,13 @@
         <item name="android:textStyle">normal</item>
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">@color/colorBlack</item>
+    </style>
+
+    <style name="StringFormatMiniTitle">
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:gravity">center_horizontal</item>
     </style>
 
     <style name="StringFormatInformation.Center" parent="StringFormatInformation">

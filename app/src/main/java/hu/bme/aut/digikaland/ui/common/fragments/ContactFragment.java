@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import hu.bme.aut.digikaland.R;
+import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.utility.PhoneDial;
 
 public class ContactFragment extends Fragment {
@@ -22,6 +23,14 @@ public class ContactFragment extends Fragment {
 
     public ContactFragment() {
         // Required empty public constructor
+    }
+
+    public static ContactFragment newInstance(Contact contact){
+        return newInstance(contact.getName(), contact.getPhone(), false);
+    }
+
+    public static ContactFragment newInstance(Contact contact, boolean center){
+        return newInstance(contact.getName(), contact.getPhone(), center);
     }
 
     public static ContactFragment newInstance(String contactName, String contactPhone) {

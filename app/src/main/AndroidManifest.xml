@@ -35,6 +35,9 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ui.admin.AdminMainActivity" />
         <activity
+            android:name=".ui.admin.station.activities.AdminStationMainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".ui.client.activities.ClientMainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <!--
@@ -69,7 +72,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
     </application>
 
 </manifest>
