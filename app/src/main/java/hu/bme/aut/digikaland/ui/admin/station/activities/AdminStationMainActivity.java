@@ -20,6 +20,7 @@ import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.ui.admin.common.AdminHelpActivity;
 import hu.bme.aut.digikaland.ui.admin.station.fragments.AdminStationActualFragment;
 import hu.bme.aut.digikaland.ui.client.activities.ClientObjectiveActivity;
+import hu.bme.aut.digikaland.ui.common.activities.MapsActivity;
 import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
 public class AdminStationMainActivity extends AppCompatActivity implements AdminStationActualFragment.AdminActivityInterface {
@@ -43,8 +44,7 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
                 drawerLayout.closeDrawers();
                 switch(item.getItemId()){
                     case R.id.adminMap:
-                        showSnackBarMessage("Map");
-                        //setMap();
+                        startMap();
                         break;
                     case R.id.adminStations:
                         showSnackBarMessage("Station");
@@ -99,6 +99,12 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
 //                    }
 //            }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void startMap(){
+        Intent i = new Intent(AdminStationMainActivity.this, MapsActivity.class);
+        i.putExtra(MapsActivity.MARKER_LOCATIONS, MockGenerator.mockMapBigData());
+        startActivity(i);
     }
 
     private void setupToolbar(){

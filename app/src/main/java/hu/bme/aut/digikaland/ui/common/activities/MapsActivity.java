@@ -1,6 +1,7 @@
 package hu.bme.aut.digikaland.ui.common.activities;
 
 import android.Manifest;
+import android.content.Intent;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
@@ -12,11 +13,15 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import java.util.ArrayList;
+import java.util.List;
+
 import hu.bme.aut.digikaland.R;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnPermissionDenied;
@@ -28,10 +33,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public static final String ARGS_LATITUDE = "latitude";
     public static final String ARGS_LONGITUDE = "longitude";
     public static final String MARKER_LOCATIONS = "markerlocations";
+    public static final String MARKER_SPECIAL = "indexofspecial";
+    public static final String MARKER_NAMES = "markernames";
+    public static final String MARKER_IDS = "markerids";
 
     private GoogleMap mMap;
     private final LatLng bme = new LatLng(47.473372, 19.059731);
     private ArrayList<LatLng> coordinates = new ArrayList<>();
+    int specialindex;
+    private ArrayList<String> markerNames = null;
+    private ArrayList<Integer> markerIds = null;
+    private boolean interactive = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +51,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Bundle starter = getIntent().getBundleExtra(MARKER_LOCATIONS);
         double latitudes[] = starter.getDoubleArray(ARGS_LATITUDE);
         double longitudes[] = starter.getDoubleArray(ARGS_LONGITUDE);
+        markerNames = starter.getStringArrayList(MARKER_NAMES);
+        markerIds = starter.getIntegerArrayList(MARKER_IDS);
+        if(markerIds != null) interactive = true;
         if(latitudes != null && longitudes != null)
         for(int i = 0; i < latitudes.length; i++){
             coordinates.add(new LatLng(latitudes[i], longitudes[i]));
         }
+        specialindex = starter.getInt(MARKER_SPECIAL);
         setContentView(R.layout.activity_maps);
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -64,8 +80,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        for(LatLng l : coordinates){
-            mMap.addMarker(new MarkerOptions().position(l).title("Bundle Test"));
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                if(interactive){
+                    int id = (int) marker.getTag();
+                    // TODO: megfelelő állomás összesítő activityre ugrani
+                    Log.e("ID AMIRE UGRANI KELL", Integer.toString(id));
+                }
+                else Log.e("NINCS HOVA UGRANI", "NINCS");
+                return false;
+            }
+        });
+        for(int i = 0; i < coordinates.size(); i++){
+            MarkerOptions options = new MarkerOptions();
+            String name = markerNames == null ? "Bundle test" : markerNames.get(i);
+            options.position(coordinates.get(i)).title(name);
+            if(i == specialindex) {
+                options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                options.zIndex(1.0f);
+            }
+            int id = markerIds == null ? 0 : markerIds.get(i);
+            mMap.addMarker(options).setTag(id);
         }
         mMap.setMinZoomPreference(13.0f);
         MapsActivityPermissionsDispatcher.startupWithPermissionCheck(this);
