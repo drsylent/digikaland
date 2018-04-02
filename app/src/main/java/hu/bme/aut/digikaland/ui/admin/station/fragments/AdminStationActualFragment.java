@@ -13,6 +13,7 @@ import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.ui.common.fragments.ContactFragment;
 import hu.bme.aut.digikaland.ui.common.fragments.TextFragment;
+import hu.bme.aut.digikaland.ui.common.fragments.TitleContactFragment;
 
 public class AdminStationActualFragment extends Fragment {
     private static final String ARG_LOCATION = "location";
@@ -59,8 +60,7 @@ public class AdminStationActualFragment extends Fragment {
         if(!activity.isEnding()){
             String nextTeam = activity.getNextTeamName();
             Contact nextContact = activity.getNextTeamContact();
-            getChildFragmentManager().beginTransaction().replace(R.id.adminStationNextTeamContent, TextFragment.newInstance(nextTeam, true)).commit();
-            getChildFragmentManager().beginTransaction().add(R.id.adminStationNextTeamContent, ContactFragment.newInstance(nextContact, true)).commit();
+            getChildFragmentManager().beginTransaction().replace(R.id.adminStationNextTeamContent, TitleContactFragment.newInstance(nextTeam, nextContact, true)).commit();
         }
         else{
             getChildFragmentManager().beginTransaction().replace(R.id.adminStationNextTeamContent, TextFragment.newInstance("Nincs több csapat!", true)).commit();

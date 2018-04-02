@@ -18,13 +18,10 @@ public class ClientHelpActivity extends AppCompatActivity{
     public final static String ARG_TOTALADMINS = "totadmins";
     public final static String ARG_TOTALADMINPHONES = "totadminsphone";
 
-    LinearLayout mainLayout;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_client_help);
-        mainLayout = findViewById(R.id.clientHelp);
         ActionBar toolbar = getSupportActionBar();
         if(toolbar != null){
             toolbar.setDisplayHomeAsUpEnabled(true);

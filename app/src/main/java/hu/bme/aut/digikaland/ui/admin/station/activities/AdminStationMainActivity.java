@@ -1,5 +1,6 @@
 package hu.bme.aut.digikaland.ui.admin.station.activities;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -16,7 +17,9 @@ import android.widget.LinearLayout;
 
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.entities.Contact;
+import hu.bme.aut.digikaland.ui.admin.common.AdminHelpActivity;
 import hu.bme.aut.digikaland.ui.admin.station.fragments.AdminStationActualFragment;
+import hu.bme.aut.digikaland.ui.client.activities.ClientObjectiveActivity;
 import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
 public class AdminStationMainActivity extends AppCompatActivity implements AdminStationActualFragment.AdminActivityInterface {
@@ -159,12 +162,17 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
 
     @Override
     public void onObjectivesActivation() {
-        showSnackBarMessage("Objectives");
+        // TODO: egy egyszerűsített nézet lenne ide jobb, nem a teljes
+        Intent i = new Intent(AdminStationMainActivity.this, ClientObjectiveActivity.class);
+        i.putExtra(ClientObjectiveActivity.ARGS_OBJECTIVES, MockGenerator.mockBigObjectiveList());
+        startActivity(i);
     }
 
     @Override
     public void onHelpActivation() {
-        showSnackBarMessage("Help");
+        Intent i = new Intent(AdminStationMainActivity.this, AdminHelpActivity.class);
+        i.putExtra(AdminHelpActivity.ARG_HELPDATA, MockGenerator.mockAdminHelpData());
+        startActivity(i);
     }
 
     @Override

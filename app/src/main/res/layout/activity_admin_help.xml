@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="hu.bme.aut.digikaland.ui.admin.common.AdminHelpActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_marginStart="@dimen/side_margin"
+        android:id="@+id/adminHelp"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Teljes Adminok:"
+            android:layout_marginBottom="@dimen/s_margin"
+            android:layout_marginTop="@dimen/s_margin"
+            style="@style/StringFormatLocation"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="@dimen/next_stage_margin"
+            android:id="@+id/adminHelpTotalAdminContent">
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Feladat adminok:"
+            android:layout_marginBottom="@dimen/s_margin"
+            style="@style/StringFormatLocation"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="@dimen/next_stage_margin"
+            android:id="@+id/adminHelpStationAdminContent">
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Csapatok és kapitányaik:"
+            android:layout_marginBottom="@dimen/s_margin"
+            style="@style/StringFormatLocation"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/adminHelpTeamsContent">
+
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,16 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/titleContactContent"
+    android:orientation="vertical"
+    tools:context="hu.bme.aut.digikaland.ui.common.fragments.TitleContactFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/titleContactTitle"
+        style="@style/StringFormatQuestion"
+        tools:text="Ide jön egy címszerűség a kapcsolathoz" />
+
+</LinearLayout>

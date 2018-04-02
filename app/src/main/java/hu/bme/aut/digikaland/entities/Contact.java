@@ -1,6 +1,8 @@
 package hu.bme.aut.digikaland.entities;
 
-public class Contact {
+import java.io.Serializable;
+
+public class Contact implements Serializable {
     public Contact(String name, String phone){
         this.name = name;
         this.phone = phone;

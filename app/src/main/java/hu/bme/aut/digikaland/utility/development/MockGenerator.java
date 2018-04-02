@@ -18,6 +18,7 @@ import hu.bme.aut.digikaland.entities.objectives.Objective;
 import hu.bme.aut.digikaland.entities.objectives.PhysicalObjective;
 import hu.bme.aut.digikaland.entities.objectives.PictureObjective;
 import hu.bme.aut.digikaland.entities.objectives.TrueFalseObjective;
+import hu.bme.aut.digikaland.ui.admin.common.AdminHelpActivity;
 import hu.bme.aut.digikaland.ui.client.activities.ClientHelpActivity;
 import hu.bme.aut.digikaland.ui.client.activities.ClientStationsActivity;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientActualFragment;
@@ -133,6 +134,47 @@ public class MockGenerator {
         return i;
     }
 
+    public static Bundle mockAdminHelpData(){
+        Bundle i = new Bundle();
+        i.putStringArrayList(AdminHelpActivity.ARG_OBJECTADMINS, objectiveAdminNameGenerator());
+        i.putStringArrayList(AdminHelpActivity.ARG_TOTALADMINS, totalAdminNameGenerator());
+        i.putStringArrayList(AdminHelpActivity.ARG_OBJECTADMINPHONES, objectiveAdminPhoneGenerator());
+        i.putStringArrayList(AdminHelpActivity.ARG_TOTALADMINPHONES, totalAdminPhoneGenerator());
+        i.putStringArrayList(AdminHelpActivity.ARG_OBJECTIVENAMES, objectiveNameGenerator());
+        i.putStringArrayList(AdminHelpActivity.ARG_TEAMNAMES, teamNameGenerator());
+        i.putStringArrayList(AdminHelpActivity.ARG_CAPTAINPHONES, captainPhoneGenerator());
+        i.putStringArrayList(AdminHelpActivity.ARG_CAPTAINS, captainNameGenerator());
+        return i;
+    }
+
+    private static ArrayList<String> teamNameGenerator(){
+        ArrayList<String> list = new ArrayList<>();
+        list.add("Narancs csapat");
+        list.add("Kék csapat");
+        return list;
+    }
+
+    private static ArrayList<String> captainNameGenerator(){
+        ArrayList<String> list = new ArrayList<>();
+        list.add("Farkas Flórián");
+        list.add("Gézengúz Géza");
+        return list;
+    }
+
+    private static ArrayList<String> captainPhoneGenerator(){
+        ArrayList<String> list = new ArrayList<>();
+        list.add("+00 00 000 0000");
+        list.add("+11 11 111 1111");
+        return list;
+    }
+
+    private static ArrayList<String> objectiveNameGenerator(){
+        ArrayList<String> list = new ArrayList<>();
+        list.add("Magyar tudósok körútja 1.");
+        list.add("BME QB309");
+        return list;
+    }
+
     private static ArrayList<String> objectiveAdminNameGenerator(){
         ArrayList<String> list = new ArrayList<>();
         list.add("Alice Aladár");
@@ -188,7 +230,7 @@ public class MockGenerator {
     }
 
     public static Contact adminStationGetNextContact(){
-        return adminStationCycle % 2 == 0 ? new Contact("Farkas Flórián", "+00000000") : new Contact("Gézengúz Géza", "+111111111");
+        return adminStationCycle % 2 == 0 ? new Contact("Farkas Flórián", "+00 00 000 0000") : new Contact("Gézengúz Géza", "+11 11 111 1111");
     }
 
     public static boolean adminStationIsToEvaluate(){
