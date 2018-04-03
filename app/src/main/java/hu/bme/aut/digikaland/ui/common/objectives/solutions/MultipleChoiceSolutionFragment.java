@@ -39,8 +39,9 @@ public class MultipleChoiceSolutionFragment extends SolutionFragment {
         MultipleChoiceObjective objective = (MultipleChoiceObjective) solution.getObjective();
         getChildFragmentManager().beginTransaction().add(R.id.evaluateQuestionContent,
                 MultipleChoiceObjectiveFragment.newInstance(objective, false, solution.getAnswer())).commit();
-        getChildFragmentManager().beginTransaction().add(R.id.evaluatePointContent,
-                PointDisplayFragment.newInstance(currentPoints, maxPoints)).commit();
+        PointDisplayFragment fragment = PointDisplayFragment.newInstance(currentPoints, maxPoints, getTag());
+        setPointHolder(fragment);
+        getChildFragmentManager().beginTransaction().add(R.id.evaluatePointContent, fragment).commit();
         return root;
     }
 }

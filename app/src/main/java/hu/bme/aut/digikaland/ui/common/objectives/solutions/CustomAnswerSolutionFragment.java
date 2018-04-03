@@ -39,8 +39,9 @@ public class CustomAnswerSolutionFragment extends SolutionFragment {
         CustomAnswerObjective objective = (CustomAnswerObjective) solution.getObjective();
         getChildFragmentManager().beginTransaction().add(R.id.evaluateQuestionContent,
                 CustomAnswerObjectiveFragment.newInstance(objective, false, solution.getAnswer())).commit();
-        getChildFragmentManager().beginTransaction().add(R.id.evaluatePointContent,
-                PointDisplayFragment.newInstance(currentPoints, maxPoints)).commit();
+        PointDisplayFragment fragment = PointDisplayFragment.newInstance(currentPoints, maxPoints, getTag());
+        setPointHolder(fragment);
+        getChildFragmentManager().beginTransaction().add(R.id.evaluatePointContent, fragment).commit();
         return root;
     }
 }

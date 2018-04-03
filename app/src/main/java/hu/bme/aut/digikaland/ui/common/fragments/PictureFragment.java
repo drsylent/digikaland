@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ public class PictureFragment extends Fragment {
     private String parentTag;
     private static int tagNumber = 0;
     private Picture picture = null;
+    private String startingUri;
 
     public static String generateTag(){
         String tag = "PictureFragmentTag" + tagNumber;
@@ -40,9 +42,14 @@ public class PictureFragment extends Fragment {
     }
 
     public static PictureFragment newInstance(String parentTag) {
+        return newInstance(parentTag, null);
+    }
+
+    public static PictureFragment newInstance(String parentTag, String pictureUri) {
         PictureFragment fragment = new PictureFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARENTTAG, parentTag);
+        args.putString(ARG_PICTURE, pictureUri);
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,6 +59,7 @@ public class PictureFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             parentTag = getArguments().getString(ARG_PARENTTAG);
+            startingUri = getArguments().getString(ARG_PICTURE);
         }
     }
 
@@ -63,12 +71,15 @@ public class PictureFragment extends Fragment {
         if(savedInstanceState != null && savedInstanceState.getString(ARG_PICTURE) != null){
             setPicture(Uri.parse(savedInstanceState.getString(ARG_PICTURE)), savedInstanceState.getInt(ARG_WIDTH), savedInstanceState.getInt(ARG_HEIGHT));
         }
-
+        int pixelSize = getResources().getDimensionPixelSize(R.dimen.picture_size);
+        if(startingUri != null) setPicture(Uri.parse(startingUri), pixelSize, pixelSize);
+        final PictureFragment that = this;
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(!empty)
-                    listener.onExistingPictureClicked(parentTag, getTag());
+                    //listener.onExistingPictureClicked(parentTag, getTag());
+                    listener.onExistingPictureClicked(that);
             }
         });
         imageView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -87,6 +98,7 @@ public class PictureFragment extends Fragment {
         super.onSaveInstanceState(outState);
         if(picture != null){
             outState.putString(ARG_PICTURE, picture.getUri().toString());
+            // TODO: ez kivehető a pixelSize megoldással
             outState.putInt(ARG_HEIGHT, imageView.getHeight());
             outState.putInt(ARG_WIDTH, imageView.getWidth());
         }
@@ -137,7 +149,9 @@ public class PictureFragment extends Fragment {
     }
 
     public interface PictureFragmentListener {
+        // TODO: egyszerűsítés - tageléseket kukázni
         void onExistingPictureClicked(String parentTag, String tag);
+        void onExistingPictureClicked(PictureFragment frag);
         void onExistingPictureLongClicked(String parentTag, String tag);
     }
 }

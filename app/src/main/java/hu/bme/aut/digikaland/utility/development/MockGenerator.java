@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.net.Uri;
 import android.os.Bundle;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -21,6 +22,7 @@ import hu.bme.aut.digikaland.entities.objectives.TrueFalseObjective;
 import hu.bme.aut.digikaland.entities.objectives.solutions.CustomAnswerSolution;
 import hu.bme.aut.digikaland.entities.objectives.solutions.MultipleChoiceSolution;
 import hu.bme.aut.digikaland.entities.objectives.solutions.PhysicalSolution;
+import hu.bme.aut.digikaland.entities.objectives.solutions.PictureSolution;
 import hu.bme.aut.digikaland.entities.objectives.solutions.Solution;
 import hu.bme.aut.digikaland.entities.objectives.solutions.TrueFalseSolution;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminHelpActivity;
@@ -124,6 +126,10 @@ public class MockGenerator {
         String answers[] = {"6", "7", "8", "9"};
         solutions.add(new MultipleChoiceSolution(new MultipleChoiceObjective("Hány kar található a BME-n?", answers), 0, 2, 2));
         solutions.add(new CustomAnswerSolution(new CustomAnswerObjective("Mikor alapították a VIK-et?"), 0, 2, "1923"));
+        ArrayList<String> uris = new ArrayList<>();
+        uris.add("file:///storage/emulated/0/Pictures/Digikaland/JPEG_20180403_155745_998781543.jpg");
+        uris.add("file:///storage/emulated/0/Pictures/Digikaland/JPEG_20180329_161625_582596023.jpg");
+        solutions.add(new PictureSolution(new PictureObjective("Készítsetek egy szelfit és egy képet a környezetről!", 6), 0, 3, uris));
         solutions.add(new PhysicalSolution(new PhysicalObjective("Fogj kezet!"), 0, 2));
         return solutions;
     }

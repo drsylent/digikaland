@@ -14,21 +14,25 @@ import hu.bme.aut.digikaland.R;
 public class PointDisplayFragment extends Fragment {
     private static final String ARG_CURRENT = "current";
     private static final String ARG_MAX = "max";
+    private static final String ARG_HOST = "hosttag";
 
     private int currentPoints;
     private int maxPoints;
+    private Button button;
+    private String hostTag;
 
-    private OnFragmentInteractionListener mListener;
+    private PointHandleActivity mListener;
 
     public PointDisplayFragment() {
         // Required empty public constructor
     }
 
-    public static PointDisplayFragment newInstance(int current, int max) {
+    public static PointDisplayFragment newInstance(int current, int max, String hostTag) {
         PointDisplayFragment fragment = new PointDisplayFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_CURRENT, current);
         args.putInt(ARG_MAX, max);
+        args.putString(ARG_HOST, hostTag);
         fragment.setArguments(args);
         return fragment;
     }
@@ -39,6 +43,7 @@ public class PointDisplayFragment extends Fragment {
         if (getArguments() != null) {
             currentPoints = getArguments().getInt(ARG_CURRENT);
             maxPoints = getArguments().getInt(ARG_MAX);
+            hostTag = getArguments().getString(ARG_HOST);
         }
     }
 
@@ -46,33 +51,37 @@ public class PointDisplayFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_point_display, container, false);
-        Button button = root.findViewById(R.id.pointDisplay);
-        button.setText(getResources().getString(R.string.point_status, currentPoints, maxPoints));
+        button = root.findViewById(R.id.pointDisplay);
+        setPoints(currentPoints);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                onButtonPressed();
             }
         });
         return root;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+    public void onButtonPressed() {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.settingPoint(hostTag, currentPoints, maxPoints);
         }
+    }
+
+    public void setPoints(int points){
+        currentPoints = points;
+        button.setText(getResources().getString(R.string.point_status, currentPoints, maxPoints));
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
+        if (context instanceof PointHandleActivity) {
+            mListener = (PointHandleActivity) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement PointHandleActivity");
+        }
     }
 
     @Override
@@ -81,8 +90,8 @@ public class PointDisplayFragment extends Fragment {
         mListener = null;
     }
 
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    public interface PointHandleActivity {
+        // TODO: Kommunikáció a pontszámról
+        void settingPoint(String hostTag, int current, int max);
     }
 }

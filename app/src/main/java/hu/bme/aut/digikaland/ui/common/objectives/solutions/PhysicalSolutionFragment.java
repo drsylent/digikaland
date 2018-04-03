@@ -14,13 +14,13 @@ import hu.bme.aut.digikaland.ui.common.objectives.PhysicalObjectiveFragment;
  * Created by Sylent on 2018. 04. 03..
  */
 
-public class PhysicalObjectiveSolutionFragment extends SolutionFragment {
-    public PhysicalObjectiveSolutionFragment() {
+public class PhysicalSolutionFragment extends SolutionFragment {
+    public PhysicalSolutionFragment() {
         // Required empty public constructor
     }
 
-    public static PhysicalObjectiveSolutionFragment newInstance(PhysicalSolution sol, int current, int max) {
-        PhysicalObjectiveSolutionFragment fragment = new PhysicalObjectiveSolutionFragment();
+    public static PhysicalSolutionFragment newInstance(PhysicalSolution sol, int current, int max) {
+        PhysicalSolutionFragment fragment = new PhysicalSolutionFragment();
         fragment.setArguments(createBundle(sol, current, max));
         return fragment;
     }
@@ -38,8 +38,9 @@ public class PhysicalObjectiveSolutionFragment extends SolutionFragment {
         PhysicalObjective objective = (PhysicalObjective) solution.getObjective();
         getChildFragmentManager().beginTransaction().add(R.id.evaluateQuestionContent,
                 PhysicalObjectiveFragment.newInstance(objective)).commit();
-        getChildFragmentManager().beginTransaction().add(R.id.evaluatePointContent,
-                PointDisplayFragment.newInstance(currentPoints, maxPoints)).commit();
+        PointDisplayFragment fragment = PointDisplayFragment.newInstance(currentPoints, maxPoints, getTag());
+        setPointHolder(fragment);
+        getChildFragmentManager().beginTransaction().add(R.id.evaluatePointContent, fragment).commit();
         return root;
     }
 }

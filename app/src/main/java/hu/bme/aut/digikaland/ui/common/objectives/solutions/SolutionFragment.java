@@ -12,6 +12,7 @@ public abstract class SolutionFragment extends Fragment {
     protected static final String ARG_CURRENTPOINTS = "cur";
     protected static final String ARG_MAXPOINTS = "max";
     private static int tagNumber = 0;
+    private PointDisplayFragment pointHolder;
 
     public static String generateTag(){
         String tag = "SolutionFragmentTag" + tagNumber;
@@ -45,9 +46,16 @@ public abstract class SolutionFragment extends Fragment {
         }
     }
 
+    protected void setPointHolder(PointDisplayFragment frag){
+        pointHolder = frag;
+    }
+
     public Solution getSolution(){
         return solution;
     }
 
     public abstract void upload();
+    public void setPoint(int points){
+        pointHolder.setPoints(points);
+    }
 }

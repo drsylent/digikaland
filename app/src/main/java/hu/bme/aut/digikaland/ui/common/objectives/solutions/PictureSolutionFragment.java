@@ -1,23 +1,26 @@
 package hu.bme.aut.digikaland.ui.common.objectives.solutions;
 
+import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import hu.bme.aut.digikaland.R;
-import hu.bme.aut.digikaland.entities.objectives.TrueFalseObjective;
-import hu.bme.aut.digikaland.entities.objectives.solutions.TrueFalseSolution;
-import hu.bme.aut.digikaland.ui.common.objectives.TrueFalseObjectiveFragment;
+import hu.bme.aut.digikaland.entities.objectives.PictureObjective;
+import hu.bme.aut.digikaland.entities.objectives.solutions.PictureSolution;
+import hu.bme.aut.digikaland.ui.common.objectives.PictureObjectiveFragment;
 
-public class TrueFalseSolutionFragment extends SolutionFragment {
+public class PictureSolutionFragment extends SolutionFragment {
 
-    public TrueFalseSolutionFragment() {
+    public PictureSolutionFragment() {
         // Required empty public constructor
     }
 
-    public static TrueFalseSolutionFragment newInstance(TrueFalseSolution sol, int current, int max) {
-        TrueFalseSolutionFragment fragment = new TrueFalseSolutionFragment();
+    public static PictureSolutionFragment newInstance(PictureSolution sol, int current, int max) {
+        PictureSolutionFragment fragment = new PictureSolutionFragment();
         fragment.setArguments(createBundle(sol, current, max));
         return fragment;
     }
@@ -31,10 +34,10 @@ public class TrueFalseSolutionFragment extends SolutionFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_evaluate, container, false);
-        TrueFalseSolution solution = (TrueFalseSolution) getSolution();
-        TrueFalseObjective objective = (TrueFalseObjective) solution.getObjective();
+        PictureSolution solution = (PictureSolution) getSolution();
+        PictureObjective objective = (PictureObjective) solution.getObjective();
         getChildFragmentManager().beginTransaction().add(R.id.evaluateQuestionContent,
-                TrueFalseObjectiveFragment.newInstance(objective, false, solution.getAnswer())).commit();
+                PictureEvaluateFragment.newInstance(solution, 0, 3)).commit();
         PointDisplayFragment fragment = PointDisplayFragment.newInstance(currentPoints, maxPoints, getTag());
         setPointHolder(fragment);
         getChildFragmentManager().beginTransaction().add(R.id.evaluatePointContent, fragment).commit();

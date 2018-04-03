@@ -179,6 +179,13 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
     }
 
     @Override
+    public void onExistingPictureClicked(PictureFragment frag) {
+        Uri path = frag.getPictureUri();
+        if(path == null) return;
+        showGallery(path);
+    }
+
+    @Override
     public void onExistingPictureLongClicked(String parentTag, String tag) {
         final PictureFragment pf = pictureFragmentSearch(parentTag, tag);
         new AlertDialog.Builder(this).setTitle(R.string.delete_picture).setMessage(getString(R.string.sure_to_delete))
@@ -221,6 +228,7 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
                 storageDir      /* directory */
         );
         photoPath = image.getAbsolutePath();
+        Log.e("Path for the image", photoPath);
         // Save a file: path for use with ACTION_VIEW intents
         photoUri = FileProvider.getUriForFile(this,
                 "hu.bme.aut.digikaland.fileprovider",
