@@ -21,13 +21,28 @@ public class MultipleChoiceObjectiveFragment extends ObjectiveFragment {
     final int rid1 = R.id.multipleChoice1;
     final int rid2 = R.id.multipleChoice2;
     final int rid3 = R.id.multipleChoice3;
+    private int answerindex;
 
     public static MultipleChoiceObjectiveFragment newInstance(MultipleChoiceObjective obj) {
+        return newInstance(obj, true, -1);
+    }
+
+    public static MultipleChoiceObjectiveFragment newInstance(MultipleChoiceObjective obj, boolean editable, int answerindex) {
         MultipleChoiceObjectiveFragment fragment = new MultipleChoiceObjectiveFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_OBJECTIVE, obj);
+        args.putBoolean(ARG_EDIT, editable);
+        if(!editable) args.putInt(ARG_ANSWER, answerindex);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            if(!editable) answerindex = getArguments().getInt(ARG_ANSWER);
+        }
     }
 
     @Override
@@ -57,14 +72,14 @@ public class MultipleChoiceObjectiveFragment extends ObjectiveFragment {
         tvQuestion.setText(getObjective().getQuestion());
         rgAnswer = root.findViewById(R.id.multipleChoiceAnswer);
         MultipleChoiceObjective obj = (MultipleChoiceObjective) getObjective();
-        RadioButton rbSet = root.findViewById(rid0);
-        rbSet.setText(obj.getAnswer(0));
-        rbSet = root.findViewById(rid1);
-        rbSet.setText(obj.getAnswer(1));
-        rbSet = root.findViewById(rid2);
-        rbSet.setText(obj.getAnswer(2));
-        rbSet = root.findViewById(rid3);
-        rbSet.setText(obj.getAnswer(3));
+        int rid[] = { rid0, rid1, rid2, rid3 };
+        RadioButton rbSet;
+        for(int i = 0; i < rid.length; i++){
+            rbSet = root.findViewById(rid[i]);
+            rbSet.setText(obj.getAnswer(i));
+            if(!editable) rbSet.setEnabled(false);
+        }
+        if(!editable) rgAnswer.check(rid[answerindex]);
         return root;
     }
 }

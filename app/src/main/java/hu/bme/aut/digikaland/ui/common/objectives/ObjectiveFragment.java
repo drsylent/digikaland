@@ -6,6 +6,9 @@ import hu.bme.aut.digikaland.entities.objectives.Objective;
 
 public abstract class ObjectiveFragment extends Fragment {
     protected static final String ARG_OBJECTIVE = "objective";
+    protected static final String ARG_EDIT = "edit";
+    protected static final String ARG_ANSWER = "answer";
+
     private static int tagNumber = 0;
 
     public static String generateTag(){
@@ -15,6 +18,7 @@ public abstract class ObjectiveFragment extends Fragment {
     }
 
     private Objective objective;
+    protected boolean editable;
 
     public ObjectiveFragment() {
         // Required empty public constructor
@@ -25,6 +29,7 @@ public abstract class ObjectiveFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             objective = (Objective) getArguments().getSerializable(ARG_OBJECTIVE);
+            editable = getArguments().getBoolean(ARG_EDIT);
         }
     }
 

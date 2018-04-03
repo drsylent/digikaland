@@ -14,6 +14,7 @@ import hu.bme.aut.digikaland.entities.objectives.TrueFalseObjective;
 public class TrueFalseObjectiveFragment extends ObjectiveFragment {
 
     private CheckBox cbAnswer;
+    private boolean answer;
 
     public TrueFalseObjectiveFragment() {
         // Required empty public constructor
@@ -25,12 +26,26 @@ public class TrueFalseObjectiveFragment extends ObjectiveFragment {
         obj.upload(cbAnswer.isChecked());
     }
 
-    public static TrueFalseObjectiveFragment newInstance(Objective obj) {
+    public static TrueFalseObjectiveFragment newInstance(TrueFalseObjective obj) {
+        return newInstance(obj, true, false);
+    }
+
+    public static TrueFalseObjectiveFragment newInstance(TrueFalseObjective obj, boolean editable, boolean answer) {
         TrueFalseObjectiveFragment fragment = new TrueFalseObjectiveFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_OBJECTIVE, obj);
+        args.putBoolean(ARG_EDIT, editable);
+        args.putBoolean(ARG_ANSWER, answer);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            if(!editable) answer = getArguments().getBoolean(ARG_ANSWER);
+        }
     }
 
     @Override
@@ -40,8 +55,10 @@ public class TrueFalseObjectiveFragment extends ObjectiveFragment {
         TextView tvQuestion = root.findViewById(R.id.trueFalseQuestion);
         tvQuestion.setText(getObjective().getQuestion());
         cbAnswer = root.findViewById(R.id.trueFalseCheckBox);
+        if(!editable) {
+            cbAnswer.setChecked(answer);
+            cbAnswer.setEnabled(false);
+        }
         return root;
     }
-
-
 }

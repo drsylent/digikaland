@@ -1,4 +1,4 @@
-package hu.bme.aut.digikaland.ui.admin.common;
+package hu.bme.aut.digikaland.ui.admin.common.activities;
 
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;

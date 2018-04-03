@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         tools:text="Ez itt egy lehetőségválasztásos feladat."
         android:id="@+id/multipleChoiceQuestion"
-        android:layout_marginEnd="@dimen/xs_margin"
+        android:layout_marginStart="@dimen/xs_margin"
         style="@style/StringFormatQuestion"/>
 
     <RadioGroup

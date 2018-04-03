@@ -18,7 +18,12 @@ import hu.bme.aut.digikaland.entities.objectives.Objective;
 import hu.bme.aut.digikaland.entities.objectives.PhysicalObjective;
 import hu.bme.aut.digikaland.entities.objectives.PictureObjective;
 import hu.bme.aut.digikaland.entities.objectives.TrueFalseObjective;
-import hu.bme.aut.digikaland.ui.admin.common.AdminHelpActivity;
+import hu.bme.aut.digikaland.entities.objectives.solutions.CustomAnswerSolution;
+import hu.bme.aut.digikaland.entities.objectives.solutions.MultipleChoiceSolution;
+import hu.bme.aut.digikaland.entities.objectives.solutions.PhysicalSolution;
+import hu.bme.aut.digikaland.entities.objectives.solutions.Solution;
+import hu.bme.aut.digikaland.entities.objectives.solutions.TrueFalseSolution;
+import hu.bme.aut.digikaland.ui.admin.common.activities.AdminHelpActivity;
 import hu.bme.aut.digikaland.ui.client.activities.ClientHelpActivity;
 import hu.bme.aut.digikaland.ui.client.activities.ClientStationsActivity;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientActualFragment;
@@ -111,6 +116,16 @@ public class MockGenerator {
         objectives.add(new PhysicalObjective("Ez csak egy picit kérdéssorozat."));
         objectives.add(new PictureObjective("Kevés kép kell csak ide.", 2));
         return objectives;
+    }
+
+    public static ArrayList<Solution> mockSolutionList(){
+        ArrayList<Solution> solutions = new ArrayList<>();
+        solutions.add(new TrueFalseSolution(new TrueFalseObjective("A BME-t 1782-ben alapították. Igaz vagy hamis?"), 0, 2, true));
+        String answers[] = {"6", "7", "8", "9"};
+        solutions.add(new MultipleChoiceSolution(new MultipleChoiceObjective("Hány kar található a BME-n?", answers), 0, 2, 2));
+        solutions.add(new CustomAnswerSolution(new CustomAnswerObjective("Mikor alapították a VIK-et?"), 0, 2, "1923"));
+        solutions.add(new PhysicalSolution(new PhysicalObjective("Fogj kezet!"), 0, 2));
+        return solutions;
     }
 
     public static ArrayList<Objective> mockBigObjectiveList(){

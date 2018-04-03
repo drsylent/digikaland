@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="hu.bme.aut.digikaland.ui.admin.common.activities.AdminEvaluateActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/adminEvaluateMain">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/adminEvaluateStation"
+            android:layout_marginStart="@dimen/xs_margin"
+            tools:text="Állomás: 2. állomás"
+            style="@style/StringFormatLocation"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/adminEvaluateTeam"
+            android:layout_marginStart="@dimen/xs_margin"
+            tools:text="Csapat: Teszt csapat"
+            style="@style/StringFormatLocation"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/adminEvaluateTime"
+            android:layout_marginStart="@dimen/xs_margin"
+            tools:text="Beadás ideje: 2018.04.03. 10:25"
+            style="@style/StringFormatLocation"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/adminEvaluatePenalty"
+            android:layout_marginStart="@dimen/xs_margin"
+            tools:text="Büntetés: 0%"
+            style="@style/StringFormatLocation"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/adminEvaluateContent"
+            android:layout_marginTop="@dimen/m_margin"
+            android:layout_marginBottom="@dimen/s_margin"
+            android:orientation="vertical">
+
+        </LinearLayout>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/ButtonStyle.Center"
+            android:id="@+id/adminEvaluateSend"
+            android:text="@string/send"/>
+
+    </LinearLayout>
+</ScrollView>

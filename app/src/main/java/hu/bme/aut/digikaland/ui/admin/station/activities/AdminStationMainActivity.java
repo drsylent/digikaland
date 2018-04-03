@@ -15,9 +15,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import java.util.Date;
+
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.entities.Contact;
-import hu.bme.aut.digikaland.ui.admin.common.AdminHelpActivity;
+import hu.bme.aut.digikaland.ui.admin.common.activities.AdminEvaluateActivity;
+import hu.bme.aut.digikaland.ui.admin.common.activities.AdminHelpActivity;
 import hu.bme.aut.digikaland.ui.admin.station.fragments.AdminStationActualFragment;
 import hu.bme.aut.digikaland.ui.client.activities.ClientObjectiveActivity;
 import hu.bme.aut.digikaland.ui.common.activities.MapsActivity;
@@ -161,7 +164,13 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
     @Override
     public void onEvaluateActivation() {
         if(isToEvaluate()) {
-            showSnackBarMessage("Evaluate");
+            Intent i = new Intent(AdminStationMainActivity.this, AdminEvaluateActivity.class);
+            i.putExtra(AdminEvaluateActivity.ARG_SOLUTIONS, MockGenerator.mockSolutionList());
+            i.putExtra(AdminEvaluateActivity.ARG_STATION, 2);
+            i.putExtra(AdminEvaluateActivity.ARG_TIME, new Date(118, 3, 3).getTime());
+            i.putExtra(AdminEvaluateActivity.ARG_TEAM, "Narancs csapat");
+            i.putExtra(AdminEvaluateActivity.ARG_PENALTY, 23);
+            startActivity(i);
         }
         else showSnackBarMessage("Nincs kiértékelésre váró csapat!");
     }
