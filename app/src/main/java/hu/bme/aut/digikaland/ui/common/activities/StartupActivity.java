@@ -1,7 +1,6 @@
 package hu.bme.aut.digikaland.ui.common.activities;
 
 import android.content.Intent;
-import android.os.PersistableBundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,7 +8,7 @@ import android.os.Bundle;
 import java.util.regex.Pattern;
 
 import hu.bme.aut.digikaland.R;
-import hu.bme.aut.digikaland.ui.admin.AdminMainActivity;
+import hu.bme.aut.digikaland.ui.admin.total.activities.AdminTotalMainActivity;
 import hu.bme.aut.digikaland.ui.admin.station.activities.AdminStationMainActivity;
 import hu.bme.aut.digikaland.ui.client.activities.ClientMainActivity;
 import hu.bme.aut.digikaland.ui.common.fragments.PrimaryCodeFragment;
@@ -67,7 +66,7 @@ public class StartupActivity extends AppCompatActivity implements PrimaryCodeFra
         Intent intent;
         if(raceCode.toUpperCase().equals("ADMIN")){
             if(roleCode.toUpperCase().equals("TOTAL")){
-                intent = new Intent(StartupActivity.this, AdminMainActivity.class);
+                intent = new Intent(StartupActivity.this, AdminTotalMainActivity.class);
             }
             else{
                 intent = new Intent(StartupActivity.this, AdminStationMainActivity.class);

@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import hu.bme.aut.digikaland.R;
-import hu.bme.aut.digikaland.ui.admin.AdminMainActivity;
+import hu.bme.aut.digikaland.ui.admin.total.activities.AdminTotalMainActivity;
 import hu.bme.aut.digikaland.ui.admin.station.activities.AdminStationMainActivity;
 import hu.bme.aut.digikaland.ui.client.activities.ClientMainActivity;
 import hu.bme.aut.digikaland.utility.development.MockGenerator;
@@ -57,7 +57,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // mintha teljes admin lenne aki belep
-                Intent intent = new Intent(SplashActivity.this, AdminMainActivity.class);
+                Intent intent = new Intent(SplashActivity.this, AdminTotalMainActivity.class);
                 // TODO: teljes adminsag
                 startActivity(intent);
             }

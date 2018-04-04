@@ -12,6 +12,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import hu.bme.aut.digikaland.entities.Contact;
+import hu.bme.aut.digikaland.entities.EvaluationStatistics;
+import hu.bme.aut.digikaland.entities.Location;
 import hu.bme.aut.digikaland.entities.Station;
 import hu.bme.aut.digikaland.entities.StationAdminPerspective;
 import hu.bme.aut.digikaland.entities.StationClientPerspective;
@@ -72,6 +74,20 @@ public class MockGenerator {
             public void onClick(DialogInterface dialogInterface, int i) {
             }
         }).create();
+    }
+
+    public static Location mockALocation(){
+        return new Location("Magyar tudósok körútja 1.", "QB309");
+    }
+
+    public static Date mockATime(){
+        Calendar c = new GregorianCalendar();
+        c.set(2018, 4, 1, 12, 47);
+        return c.getTime();
+    }
+
+    public static EvaluationStatistics mockStatistics(){
+        return new EvaluationStatistics(1, 2, 3);
     }
 
     public static Bundle mockActualMain(){

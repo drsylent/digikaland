@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.entities.Contact;
-import hu.bme.aut.digikaland.ui.common.fragments.ContactFragment;
 import hu.bme.aut.digikaland.ui.common.fragments.TextFragment;
 import hu.bme.aut.digikaland.ui.common.fragments.TitleContactFragment;
 
@@ -88,7 +87,7 @@ public class AdminStationActualFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_admin_actual, container, false);
+        View root = inflater.inflate(R.layout.fragment_station_admin_actual, container, false);
         stationStatus = root.findViewById(R.id.adminStationActualStatus);
         TextView stationloc = root.findViewById(R.id.adminStationStationLocation);
         TextView stationsubloc = root.findViewById(R.id.adminStationStationSubLocation);

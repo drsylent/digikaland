@@ -33,7 +33,8 @@
         <activity
             android:name=".ui.common.activities.StartupActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ui.admin.AdminMainActivity" />
+        <activity android:name=".ui.admin.total.activities.AdminTotalMainActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".ui.admin.station.activities.AdminStationMainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
