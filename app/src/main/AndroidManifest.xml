@@ -76,6 +76,7 @@
         <activity android:name=".ui.admin.common.activities.AdminHelpActivity" />
         <activity android:name=".ui.admin.common.activities.AdminEvaluateActivity" />
         <activity android:name=".ui.admin.common.activities.AdminStationSummaryActivity"></activity>
+        <activity android:name=".ui.admin.common.activities.AdminStationsActivity" />
     </application>
 
 </manifest>

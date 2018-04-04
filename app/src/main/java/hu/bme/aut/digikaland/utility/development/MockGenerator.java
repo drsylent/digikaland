@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -14,6 +13,9 @@ import java.util.GregorianCalendar;
 
 import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.entities.Station;
+import hu.bme.aut.digikaland.entities.StationAdminPerspective;
+import hu.bme.aut.digikaland.entities.StationClientPerspective;
+import hu.bme.aut.digikaland.entities.enumeration.StationStatusFromClient;
 import hu.bme.aut.digikaland.entities.objectives.CustomAnswerObjective;
 import hu.bme.aut.digikaland.entities.objectives.MultipleChoiceObjective;
 import hu.bme.aut.digikaland.entities.objectives.Objective;
@@ -28,6 +30,7 @@ import hu.bme.aut.digikaland.entities.objectives.solutions.Solution;
 import hu.bme.aut.digikaland.entities.objectives.solutions.TrueFalseSolution;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminHelpActivity;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminStationSummaryActivity;
+import hu.bme.aut.digikaland.ui.admin.common.activities.AdminStationsActivity;
 import hu.bme.aut.digikaland.ui.client.activities.ClientHelpActivity;
 import hu.bme.aut.digikaland.ui.client.activities.ClientStationsActivity;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientActualFragment;
@@ -115,6 +118,12 @@ public class MockGenerator {
         return stationData;
     }
 
+    public static Bundle mockAdminStationsList(){
+        Bundle stationData = new Bundle();
+        stationData.putSerializable(AdminStationsActivity.ARGS_STATIONS , stationAdminListGenerator());
+        return stationData;
+    }
+
     public static ArrayList<Objective> mockMiniObjectiveList(){
         ArrayList<Objective> objectives = new ArrayList<>();
         objectives.add(new PhysicalObjective("Ez csak egy picit kérdéssorozat."));
@@ -147,13 +156,23 @@ public class MockGenerator {
         return objectives;
     }
 
-    private static ArrayList<Station> stationListGenerator(){
-        ArrayList<Station> list = new ArrayList<>();
-        list.add(new Station(0, 0, Station.Status.Started, mockMiniObjectiveList()));
-        list.add(new Station(2, 1, Station.Status.Done));
-        list.add(new Station(4, 2, Station.Status.Done));
-        list.add(new Station(1, 3, Station.Status.Started, mockBigObjectiveList()));
-        list.add(new Station(3, 4, Station.Status.NotStarted));
+    public static ArrayList<StationAdminPerspective> stationAdminListGenerator(){
+        ArrayList<StationAdminPerspective> list = new ArrayList<>();
+        list.add(new StationAdminPerspective(new Station(0, 0, mockMiniObjectiveList()), 1, 2, 3));
+        list.add(new StationAdminPerspective(new Station(1, 0), 1, 2, 3));
+        list.add(new StationAdminPerspective(new Station(2, 0), 1, 2, 3));
+        list.add(new StationAdminPerspective(new Station(3, 3, mockBigObjectiveList()), 1, 2, 3));
+        list.add(new StationAdminPerspective(new Station(4, 0), 1, 2, 3));
+        return list;
+    }
+
+    private static ArrayList<StationClientPerspective> stationListGenerator(){
+        ArrayList<StationClientPerspective> list = new ArrayList<>();
+        list.add(new StationClientPerspective(new Station(0, 0, mockMiniObjectiveList()), StationStatusFromClient.Started));
+        list.add(new StationClientPerspective(2, 1, StationStatusFromClient.Done));
+        list.add(new StationClientPerspective(4, 2, StationStatusFromClient.Done));
+        list.add(new StationClientPerspective(new Station(1, 3, mockBigObjectiveList()), StationStatusFromClient.Started));
+        list.add(new StationClientPerspective(3, 4, StationStatusFromClient.NotStarted));
         return list;
     }
 

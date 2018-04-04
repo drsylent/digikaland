@@ -8,27 +8,28 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import java.util.List;
 import hu.bme.aut.digikaland.R;
-import hu.bme.aut.digikaland.entities.Station;
+import hu.bme.aut.digikaland.entities.StationClientPerspective;
+import hu.bme.aut.digikaland.ui.common.fragments.StationViewHolder;
 
-public class ClientStationAdapter extends RecyclerView.Adapter<ClientStationAdapter.ClientStationViewHolder> {
-    private List<Station> stations;
+public class ClientStationAdapter extends RecyclerView.Adapter<StationViewHolder> {
+    private List<StationClientPerspective> stations;
     private int colorDone;
     private int colorNotStarted;
     private int colorStarted;
     private ClientStationListener activity;
 
-    public ClientStationAdapter(List<Station> s){
+    public ClientStationAdapter(List<StationClientPerspective> s){
         stations = s;
     }
 
     @Override
-    public ClientStationViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public StationViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         onAttach(parent.getContext());
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_client_station, parent, false);
         colorDone = parent.getResources().getColor(R.color.colorDone);
         colorNotStarted = parent.getResources().getColor(R.color.colorNot);
         colorStarted = parent.getResources().getColor(R.color.colorCurrently);
-        return new ClientStationViewHolder(itemView);
+        return new StationViewHolder(itemView);
     }
 
     private void onAttach(Context context) {
@@ -41,9 +42,9 @@ public class ClientStationAdapter extends RecyclerView.Adapter<ClientStationAdap
     }
 
     @Override
-    public void onBindViewHolder(ClientStationViewHolder holder, int position) {
-        final Station item = stations.get(position);
-        holder.station.setText( ((Context) activity).getString(R.string.station_show, item.number, item.id) );
+    public void onBindViewHolder(StationViewHolder holder, int position) {
+        final StationClientPerspective item = stations.get(position);
+        holder.station.setText( ((Context) activity).getString(R.string.station_show, item.station.number, item.station.id) );
         int color;
         switch (item.status){
             case Done:
@@ -73,16 +74,7 @@ public class ClientStationAdapter extends RecyclerView.Adapter<ClientStationAdap
         return stations.size();
     }
 
-    class ClientStationViewHolder extends RecyclerView.ViewHolder{
-        TextView station;
-
-        ClientStationViewHolder(View itemView){
-            super(itemView);
-            station = itemView.findViewById(R.id.clientStationItem);
-        }
-    }
-
     public interface ClientStationListener{
-        void onStartedStationClick(Station station);
+        void onStartedStationClick(StationClientPerspective station);
     }
 }

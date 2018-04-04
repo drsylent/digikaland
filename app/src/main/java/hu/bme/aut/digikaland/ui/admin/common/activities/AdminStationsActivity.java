@@ -1,21 +1,26 @@
-package hu.bme.aut.digikaland.ui.client.activities;
+package hu.bme.aut.digikaland.ui.admin.common.activities;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+
 import java.util.ArrayList;
+
 import hu.bme.aut.digikaland.R;
-import hu.bme.aut.digikaland.entities.Station;
+import hu.bme.aut.digikaland.entities.StationAdminPerspective;
 import hu.bme.aut.digikaland.entities.StationClientPerspective;
 import hu.bme.aut.digikaland.entities.objectives.Objective;
+import hu.bme.aut.digikaland.ui.admin.common.fragments.AdminStationAdapter;
+import hu.bme.aut.digikaland.ui.client.activities.ClientStationsActivity;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientStationAdapter;
+import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
-public class ClientStationsActivity extends AppCompatActivity implements ClientStationAdapter.ClientStationListener {
+public class AdminStationsActivity extends AppCompatActivity implements AdminStationAdapter.AdminStationListener {
     public final static String ARGS_STATIONS = "stations";
 
     @Override
@@ -27,16 +32,10 @@ public class ClientStationsActivity extends AppCompatActivity implements ClientS
             toolbar.setDisplayHomeAsUpEnabled(true);
             toolbar.setTitle(R.string.stations);
         }
-        ArrayList<StationClientPerspective> stations = (ArrayList<StationClientPerspective>) getIntent().getBundleExtra(ARGS_STATIONS).getSerializable(ARGS_STATIONS);
+        ArrayList<StationAdminPerspective> stations = (ArrayList<StationAdminPerspective>) getIntent().getBundleExtra(ARGS_STATIONS).getSerializable(ARGS_STATIONS);
         RecyclerView list = findViewById(R.id.clientStationList);
         list.setLayoutManager(new LinearLayoutManager(this));
-        list.setAdapter(new ClientStationAdapter(stations));
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_refresh, menu);
-        return true;
+        list.setAdapter(new AdminStationAdapter(stations));
     }
 
     @Override
@@ -51,13 +50,11 @@ public class ClientStationsActivity extends AppCompatActivity implements ClientS
     }
 
     @Override
-    public void onStartedStationClick(StationClientPerspective item) {
-        ArrayList<Objective> objectives = item.station.getObjectives();
-        if(objectives != null) {
-            Intent i = new Intent(ClientStationsActivity.this, ClientObjectiveActivity.class);
-            i.putExtra(ClientObjectiveActivity.ARGS_OBJECTIVES, objectives);
-            startActivity(i);
-        }
+    public void onStationClick(StationAdminPerspective item) {
+        // TODO: adatfolyam itt nincs
+        // kérdés lesz, hogy egyből mindent letöltsünk, vagy ha rákattint a felhasználó
+        // csak akkor töltsük le az adatokat
+        Intent i = new Intent(AdminStationsActivity.this, AdminStationSummaryActivity.class);
+        startActivity(MockGenerator.adminStationSummaryGenerator(i));
     }
 }
-

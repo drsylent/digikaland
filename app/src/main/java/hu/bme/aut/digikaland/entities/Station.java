@@ -1,37 +1,40 @@
 package hu.bme.aut.digikaland.entities;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import java.io.Serializable;
 import java.util.ArrayList;
+
 import hu.bme.aut.digikaland.entities.objectives.Objective;
 
 public class Station implements Serializable {
     public int id;
     public int number;
-    public Status status;
-    public ArrayList<Objective> objective;
-    public enum Status{
-        NotStarted,
-        Started,
-        Done
+    private ArrayList<Objective> objectives = null;
+
+    public void addObjective(Objective obj){
+        if(objectives == null) objectives = new ArrayList<>();
+        objectives.add(obj);
     }
 
-    private boolean statusCheck(Status s){
-        return s != Status.Started;
+    public void setObjectives(ArrayList<Objective> set){
+        objectives = set;
     }
 
-    public Station(int i, int n, Status s, @NonNull ArrayList<Objective> obj){
+    @Nullable
+    public ArrayList<Objective> getObjectives(){
+        return objectives;
+    }
+
+    public Station(int i, int n, @NonNull ArrayList<Objective> obj){
         id = i;
         number = n;
-        status = s;
-        objective = obj;
+        objectives = obj;
     }
 
-    public Station(int i, int n, Status s){
-        if(!statusCheck(s))
-            throw new RuntimeException("You must add a list of objectives to a station, if it is started!");
+    public Station(int i, int n){
         id = i;
         number = n;
-        status = s;
     }
 }

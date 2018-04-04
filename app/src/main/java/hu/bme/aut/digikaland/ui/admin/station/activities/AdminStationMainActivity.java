@@ -22,6 +22,7 @@ import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminEvaluateActivity;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminHelpActivity;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminStationSummaryActivity;
+import hu.bme.aut.digikaland.ui.admin.common.activities.AdminStationsActivity;
 import hu.bme.aut.digikaland.ui.admin.station.fragments.AdminStationActualFragment;
 import hu.bme.aut.digikaland.ui.client.activities.ClientObjectiveActivity;
 import hu.bme.aut.digikaland.ui.common.activities.MapsActivity;
@@ -140,9 +141,9 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
     }
 
     private void startStations(){
-        // TODO: nem ezt kéne ide, de most bekötjük egyelőre ide hogy elérjük
-        Intent i = new Intent(AdminStationMainActivity.this, AdminStationSummaryActivity.class);
-        startActivity(MockGenerator.adminStationSummaryGenerator(i));
+        Intent i = new Intent(AdminStationMainActivity.this, AdminStationsActivity.class);
+        i.putExtra(AdminStationsActivity.ARGS_STATIONS, MockGenerator.mockAdminStationsList());
+        startActivity(i);
     }
 
     private void setupToolbar(){

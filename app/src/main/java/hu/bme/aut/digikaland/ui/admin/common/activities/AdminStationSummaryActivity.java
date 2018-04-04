@@ -1,16 +1,20 @@
 package hu.bme.aut.digikaland.ui.admin.common.activities;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.entities.Contact;
+import hu.bme.aut.digikaland.ui.common.activities.MapsActivity;
 import hu.bme.aut.digikaland.ui.common.fragments.ContactFragment;
 import hu.bme.aut.digikaland.ui.common.fragments.TextFragment;
+import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
 public class AdminStationSummaryActivity extends AppCompatActivity {
     public final static String ARG_STATIONID = "stationid";
@@ -51,10 +55,32 @@ public class AdminStationSummaryActivity extends AppCompatActivity {
             TextView tvStatus = findViewById(R.id.adminStationSummaryStatus);
             tvStatus.setText(getResources().getString(R.string.tri_status, evaluated, done, sum));
             // TODO: mi van, ha nincs helyszíne egy állomásnak? le kell "tiltani" a gombot, és a helyszínt is
-            // TODO: eseménykezelők
             Button bMap = findViewById(R.id.adminStationSummaryMap);
+            bMap.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startMap();
+                }
+            });
             Button bTeams = findViewById(R.id.adminStationSummaryTeams);
+            bTeams.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startTeams();
+                }
+            });
         }
+    }
+
+    public void startMap(){
+        Intent i = new Intent(AdminStationSummaryActivity.this, MapsActivity.class);
+        // TODO: mindig a megfelelő állomásnak a helyszíne jelnjen itt meg
+        i.putExtra(MapsActivity.MARKER_LOCATIONS, MockGenerator.mockMapData());
+        startActivity(i);
+    }
+
+    public void startTeams(){
+        // TODO: ha kész az activity, berakni
     }
 
     @Override
