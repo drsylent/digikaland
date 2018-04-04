@@ -198,6 +198,7 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
             i.putExtra(AdminEvaluateActivity.ARG_TIME, new Date(118, 3, 3).getTime());
             i.putExtra(AdminEvaluateActivity.ARG_TEAM, "Narancs csapat");
             i.putExtra(AdminEvaluateActivity.ARG_PENALTY, 23);
+            i.putExtra(AdminEvaluateActivity.ARG_SEND, true);
             startActivity(i);
         }
         else showSnackBarMessage("Nincs kiértékelésre váró csapat!");

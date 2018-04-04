@@ -3,6 +3,7 @@ package hu.bme.aut.digikaland.ui.admin.common.activities;
 import android.app.DialogFragment;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.File;
@@ -30,6 +32,8 @@ public class AdminEvaluateActivity extends AppCompatActivity implements PictureF
     public final static String ARG_TIME = "time";
     public final static String ARG_PENALTY = "penalty";
     public final static String ARG_SOLUTIONS = "solut";
+    public final static String ARG_SEND = "sendable";
+    LinearLayout mainLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,12 +60,29 @@ public class AdminEvaluateActivity extends AppCompatActivity implements PictureF
             getSupportFragmentManager().beginTransaction().add(R.id.adminEvaluateContent, o.createFragment(), SolutionFragment.generateTag()).commit();
         }
         Button sendButton = findViewById(R.id.adminEvaluateSend);
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // TODO: elküldés
-            }
-        });
+        if(getIntent().getBooleanExtra(ARG_SEND, false)){
+            sendButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showSnackBarMessage("Elküldés");
+                }
+            });
+        }
+        else{
+            sendButton.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+            sendButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showSnackBarMessage("Nem értékelheted ezt a megoldást!");
+                }
+            });
+        }
+        mainLayout = findViewById(R.id.adminEvaluateMain);
+    }
+
+    // TODO: jelenleg csak placeholder megjelenítésre
+    private void showSnackBarMessage(String message) {
+        Snackbar.make(mainLayout, message, Snackbar.LENGTH_LONG).show();
     }
 
     @Override
