@@ -36,6 +36,7 @@ import static android.os.Environment.getExternalStoragePublicDirectory;
 @RuntimePermissions
 public class ClientObjectiveActivity extends AppCompatActivity implements PictureObjectiveFragment.PictureObjectiveListener, PictureFragment.PictureFragmentListener {
     public final static String ARGS_OBJECTIVES = "objectives";
+    public final static String ARG_SEND = "sendable";
     ArrayList<ObjectiveFragment> fragments = new ArrayList<>();
     LinearLayout mainLayout;
 
@@ -56,12 +57,24 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
             getSupportFragmentManager().beginTransaction().add(R.id.clientQuestionContent, fragment, ObjectiveFragment.generateTag()).commit();
         }
         Button send = findViewById(R.id.clientQuestionSend);
-        send.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sendSolution();
-            }
-        });
+        // Ha nem lehet elküldeni, akkor ez az onclick listener lesz
+        if(getIntent().getBooleanExtra(ARG_SEND, false)) {
+            send.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    sendSolution();
+                }
+            });
+        }
+        else{
+            send.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+            send.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showSnackBarMessage("Nem küldhetsz be megoldást!");
+                }
+            });
+        }
         mainLayout = findViewById(R.id.clientObjectiveMain);
     }
 

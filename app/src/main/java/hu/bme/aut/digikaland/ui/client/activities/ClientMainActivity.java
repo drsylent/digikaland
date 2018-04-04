@@ -154,6 +154,8 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     void goToObjective(){
         Intent i = new Intent(ClientMainActivity.this, ClientObjectiveActivity.class);
         i.putExtra(ClientObjectiveActivity.ARGS_OBJECTIVES, MockGenerator.mockBigObjectiveList());
+        // TODO: csak ha kapitány mód van
+        i.putExtra(ClientObjectiveActivity.ARG_SEND, true);
         startActivity(i);
     }
 

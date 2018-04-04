@@ -261,6 +261,8 @@ public class MockGenerator {
         adminStationCycle++;
     }
 
+    public static boolean adminStationIsResultsActive(){ return adminStationCycle % 5 == 0; }
+
     public static boolean adminStationIsEnding(){
         return adminStationCycle % 3 == 0;
     }

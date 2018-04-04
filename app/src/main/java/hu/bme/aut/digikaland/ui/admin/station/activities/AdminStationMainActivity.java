@@ -24,9 +24,11 @@ import hu.bme.aut.digikaland.ui.admin.common.activities.AdminHelpActivity;
 import hu.bme.aut.digikaland.ui.admin.station.fragments.AdminStationActualFragment;
 import hu.bme.aut.digikaland.ui.client.activities.ClientObjectiveActivity;
 import hu.bme.aut.digikaland.ui.common.activities.MapsActivity;
+import hu.bme.aut.digikaland.ui.common.activities.SplashActivity;
+import hu.bme.aut.digikaland.ui.common.fragments.ResultsFragment;
 import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
-public class AdminStationMainActivity extends AppCompatActivity implements AdminStationActualFragment.AdminActivityInterface {
+public class AdminStationMainActivity extends AppCompatActivity implements AdminStationActualFragment.AdminActivityInterface, ResultsFragment.ResultsFragmentListener {
 
     private NavigationView nav;
     private Toolbar toolbar;
@@ -63,10 +65,9 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
             }
         });
         setupToolbar();
-        toolbar.setTitle(R.string.actual);
         nav.getMenu().getItem(0).setChecked(true);
-        fragment = AdminStationActualFragment.newInstance("Ez egy állomás", "Ez meg a pontosítás");
-        getSupportFragmentManager().beginTransaction().add(R.id.adminStationContent, fragment).commit();
+        toolbar.setTitle(R.string.actual);
+        setActual();
     }
 
     @Override
@@ -82,10 +83,37 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
     }
 
     @Override
+    public void onNewRaceStart() {
+        startActivity(new Intent(AdminStationMainActivity.this, SplashActivity.class));
+    }
+
+    private enum ContentState{
+        Actual,
+        Results
+    }
+
+    private ContentState state;
+
+    private void setActual(){
+        state = ContentState.Actual;
+        fragment = AdminStationActualFragment.newInstance("Ez egy állomás", "Ez meg a pontosítás");
+        getSupportFragmentManager().beginTransaction().replace(R.id.adminStationContent, fragment).commit();
+    }
+
+    private void setResults(){
+        state = ContentState.Results;
+        getSupportFragmentManager().beginTransaction().replace(R.id.adminStationContent, ResultsFragment.newInstance(MockGenerator.mockResultNames(), MockGenerator.mockResultPoints())).commit();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         showSnackBarMessage(getResources().getString(R.string.refresh));
         MockGenerator.adminStationCycleStep();
-        fragment.refreshAllData();
+        if(MockGenerator.adminStationIsResultsActive()) setResults();
+        else{
+            if(state == ContentState.Actual) fragment.refreshAllData();
+            else setActual();
+        }
 //        if(state == ClientMainActivity.ViewState.Actual)
 //            switch(item.getItemId()) {
 //                case R.id.menu_refresh:
