@@ -21,6 +21,7 @@ import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminEvaluateActivity;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminHelpActivity;
+import hu.bme.aut.digikaland.ui.admin.common.activities.AdminStationSummaryActivity;
 import hu.bme.aut.digikaland.ui.admin.station.fragments.AdminStationActualFragment;
 import hu.bme.aut.digikaland.ui.client.activities.ClientObjectiveActivity;
 import hu.bme.aut.digikaland.ui.common.activities.MapsActivity;
@@ -52,7 +53,7 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
                         startMap();
                         break;
                     case R.id.adminStations:
-                        showSnackBarMessage("Station");
+                        startStations();
                         //setStations();
                         break;
                     case R.id.adminTeams:
@@ -136,6 +137,12 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
         Intent i = new Intent(AdminStationMainActivity.this, MapsActivity.class);
         i.putExtra(MapsActivity.MARKER_LOCATIONS, MockGenerator.mockMapBigData());
         startActivity(i);
+    }
+
+    private void startStations(){
+        // TODO: nem ezt kéne ide, de most bekötjük egyelőre ide hogy elérjük
+        Intent i = new Intent(AdminStationMainActivity.this, AdminStationSummaryActivity.class);
+        startActivity(MockGenerator.adminStationSummaryGenerator(i));
     }
 
     private void setupToolbar(){

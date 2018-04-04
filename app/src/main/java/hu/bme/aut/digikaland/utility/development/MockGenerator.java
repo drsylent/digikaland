@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ import hu.bme.aut.digikaland.entities.objectives.solutions.PictureSolution;
 import hu.bme.aut.digikaland.entities.objectives.solutions.Solution;
 import hu.bme.aut.digikaland.entities.objectives.solutions.TrueFalseSolution;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminHelpActivity;
+import hu.bme.aut.digikaland.ui.admin.common.activities.AdminStationSummaryActivity;
 import hu.bme.aut.digikaland.ui.client.activities.ClientHelpActivity;
 import hu.bme.aut.digikaland.ui.client.activities.ClientStationsActivity;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientActualFragment;
@@ -277,5 +279,16 @@ public class MockGenerator {
 
     public static boolean adminStationIsToEvaluate(){
         return !(adminStationCycle % 4 == 0);
+    }
+
+    public static Intent adminStationSummaryGenerator(Intent placeData){
+        placeData.putExtra(AdminStationSummaryActivity.ARG_DONE, 2);
+        placeData.putExtra(AdminStationSummaryActivity.ARG_EVALUATED, 1);
+        placeData.putExtra(AdminStationSummaryActivity.ARG_SUM, 3);
+        placeData.putExtra(AdminStationSummaryActivity.ARG_LOCATION, "Teszt helyszín");
+        placeData.putExtra(AdminStationSummaryActivity.ARG_SUBLOCATION, "Nagyon pontos hely");
+        placeData.putExtra(AdminStationSummaryActivity.ARG_STATIONID, 8);
+        placeData.putExtra(AdminStationSummaryActivity.ARG_CONTACT, new Contact("Illés Ilona", "+23 23 232 2323"));
+        return placeData;
     }
 }
