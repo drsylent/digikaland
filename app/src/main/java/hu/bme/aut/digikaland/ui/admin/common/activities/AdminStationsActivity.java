@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.entities.StationAdminPerspective;
@@ -22,6 +23,8 @@ import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
 public class AdminStationsActivity extends AppCompatActivity implements AdminStationAdapter.AdminStationListener {
     public final static String ARGS_STATIONS = "stations";
+    public final static String ARG_SUMMARY = "summary";
+    private boolean summaryMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,9 +36,10 @@ public class AdminStationsActivity extends AppCompatActivity implements AdminSta
             toolbar.setTitle(R.string.stations);
         }
         ArrayList<StationAdminPerspective> stations = (ArrayList<StationAdminPerspective>) getIntent().getBundleExtra(ARGS_STATIONS).getSerializable(ARGS_STATIONS);
+        summaryMode = getIntent().getBooleanExtra(ARG_SUMMARY, false);
         RecyclerView list = findViewById(R.id.clientStationList);
         list.setLayoutManager(new LinearLayoutManager(this));
-        list.setAdapter(new AdminStationAdapter(stations));
+        list.setAdapter(new AdminStationAdapter(stations, summaryMode));
     }
 
     @Override
@@ -54,7 +58,19 @@ public class AdminStationsActivity extends AppCompatActivity implements AdminSta
         // TODO: adatfolyam itt nincs
         // kérdés lesz, hogy egyből mindent letöltsünk, vagy ha rákattint a felhasználó
         // csak akkor töltsük le az adatokat
-        Intent i = new Intent(AdminStationsActivity.this, AdminStationSummaryActivity.class);
-        startActivity(MockGenerator.adminStationSummaryGenerator(i));
+        if(summaryMode) {
+            Intent i = new Intent(AdminStationsActivity.this, AdminStationSummaryActivity.class);
+            startActivity(MockGenerator.adminStationSummaryGenerator(i));
+        }
+        else{
+            Intent i = new Intent(AdminStationsActivity.this, AdminEvaluateActivity.class);
+            i.putExtra(AdminEvaluateActivity.ARG_SOLUTIONS, MockGenerator.mockSolutionList());
+            i.putExtra(AdminEvaluateActivity.ARG_STATION, 2);
+            i.putExtra(AdminEvaluateActivity.ARG_TIME, new Date(118, 3, 3).getTime());
+            i.putExtra(AdminEvaluateActivity.ARG_TEAM, "Narancs csapat");
+            i.putExtra(AdminEvaluateActivity.ARG_PENALTY, 23);
+            i.putExtra(AdminEvaluateActivity.ARG_SEND, true);
+            startActivity(i);
+        }
     }
 }

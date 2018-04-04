@@ -21,7 +21,6 @@ import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminEvaluateActivity;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminHelpActivity;
-import hu.bme.aut.digikaland.ui.admin.common.activities.AdminStationSummaryActivity;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminStationsActivity;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminTeamsActivity;
 import hu.bme.aut.digikaland.ui.admin.station.fragments.AdminStationActualFragment;
@@ -141,7 +140,8 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
 
     private void startStations(){
         Intent i = new Intent(AdminStationMainActivity.this, AdminStationsActivity.class);
-        i.putExtra(AdminStationsActivity.ARGS_STATIONS, MockGenerator.mockAdminStationsList());
+        i.putExtra(AdminStationsActivity.ARGS_STATIONS, MockGenerator.mockAdminStationsSummaryList());
+        i.putExtra(AdminStationsActivity.ARG_SUMMARY, true);
         startActivity(i);
     }
 

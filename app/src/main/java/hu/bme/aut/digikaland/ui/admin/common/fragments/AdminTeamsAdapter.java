@@ -14,13 +14,16 @@ import hu.bme.aut.digikaland.ui.common.fragments.StationViewHolder;
 
 public class AdminTeamsAdapter extends RecyclerView.Adapter<StationViewHolder> {
     private List<Team> teams;
+    private int colorNeutral;
     private int colorDone;
     private int colorNotStarted;
     private int colorStarted;
     private AdminTeamsListener activity;
+    private boolean summaryMode;
 
-    public AdminTeamsAdapter(List<Team> s) {
+    public AdminTeamsAdapter(List<Team> s, boolean summary) {
         teams = s;
+        summaryMode = summary;
     }
 
     @Override
@@ -30,6 +33,7 @@ public class AdminTeamsAdapter extends RecyclerView.Adapter<StationViewHolder> {
         colorDone = parent.getResources().getColor(R.color.colorDone);
         colorNotStarted = parent.getResources().getColor(R.color.colorNot);
         colorStarted = parent.getResources().getColor(R.color.colorCurrently);
+        colorNeutral = parent.getResources().getColor(R.color.colorPrimary);
         return new StationViewHolder(itemView);
     }
 
@@ -46,34 +50,45 @@ public class AdminTeamsAdapter extends RecyclerView.Adapter<StationViewHolder> {
     public void onBindViewHolder(StationViewHolder holder, int position) {
         final Team item = teams.get(position);
         holder.station.setText(item.name);
-        int color;
-        switch (item.status) {
-            case Evaluated:
-                color = colorDone;
-                holder.station.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        activity.onTeamClicked(item);
-                    }
-                });
-                break;
-            case Done:
-                color = colorStarted;
-                holder.station.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        activity.onTeamClicked(item);
-                    }
-                });
-                break;
-            case NotArrivedYet:
-                color = colorNotStarted;
-                break;
-            default:
-                color = 0;
-                break;
+        if(summaryMode){
+            holder.station.setBackgroundColor(colorNeutral);
+            holder.station.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    activity.onTeamClicked(item);
+                }
+            });
         }
-        holder.station.setBackgroundColor(color);
+        else{
+            int color;
+            switch (item.status) {
+                case Evaluated:
+                    color = colorDone;
+                    holder.station.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            activity.onTeamClicked(item);
+                        }
+                    });
+                    break;
+                case Done:
+                    color = colorStarted;
+                    holder.station.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            activity.onTeamClicked(item);
+                        }
+                    });
+                    break;
+                case NotArrivedYet:
+                    color = colorNotStarted;
+                    break;
+                default:
+                    color = 0;
+                    break;
+            }
+            holder.station.setBackgroundColor(color);
+        }
     }
 
     @Override

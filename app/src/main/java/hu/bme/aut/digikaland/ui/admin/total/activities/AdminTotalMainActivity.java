@@ -18,8 +18,6 @@ import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminHelpActivity;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminStationsActivity;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminTeamsActivity;
-import hu.bme.aut.digikaland.ui.admin.station.activities.AdminStationMainActivity;
-import hu.bme.aut.digikaland.ui.admin.station.fragments.AdminStationActualFragment;
 import hu.bme.aut.digikaland.ui.admin.total.fragments.AdminRaceStarterFragment;
 import hu.bme.aut.digikaland.ui.admin.total.fragments.AdminRunningFragment;
 import hu.bme.aut.digikaland.ui.common.activities.MapsActivity;
@@ -129,7 +127,8 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
 
     private void startStations(){
         Intent i = new Intent(AdminTotalMainActivity.this, AdminStationsActivity.class);
-        i.putExtra(AdminStationsActivity.ARGS_STATIONS, MockGenerator.mockAdminStationsList());
+        i.putExtra(AdminStationsActivity.ARGS_STATIONS, MockGenerator.mockAdminStationsSummaryList());
+        i.putExtra(AdminStationsActivity.ARG_SUMMARY, true);
         startActivity(i);
     }
 
@@ -137,6 +136,7 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
         // TODO: ez nem ugyanaz a csapat activity lesz! (vagy más módban fut?)
         Intent i = new Intent(AdminTotalMainActivity.this, AdminTeamsActivity.class);
         i.putExtra(AdminTeamsActivity.ARG_TEAMS, MockGenerator.mockAdminTeamsList());
+        i.putExtra(AdminTeamsActivity.ARG_SUMMARY, true);
         startActivity(i);
     }
 

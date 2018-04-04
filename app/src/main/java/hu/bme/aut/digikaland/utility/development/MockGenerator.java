@@ -11,11 +11,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import hu.bme.aut.digikaland.StationAdminPerspectiveTeam;
 import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.entities.EvaluationStatistics;
 import hu.bme.aut.digikaland.entities.Location;
 import hu.bme.aut.digikaland.entities.Station;
 import hu.bme.aut.digikaland.entities.StationAdminPerspective;
+import hu.bme.aut.digikaland.entities.StationAdminPerspectiveSummary;
 import hu.bme.aut.digikaland.entities.StationClientPerspective;
 import hu.bme.aut.digikaland.entities.Team;
 import hu.bme.aut.digikaland.entities.enumeration.EvaluationStatus;
@@ -137,9 +139,15 @@ public class MockGenerator {
         return stationData;
     }
 
-    public static Bundle mockAdminStationsList(){
+    public static Bundle mockAdminStationsSummaryList(){
         Bundle stationData = new Bundle();
         stationData.putSerializable(AdminStationsActivity.ARGS_STATIONS , stationAdminListGenerator());
+        return stationData;
+    }
+
+    public static Bundle mockAdminStationsEvaluateList(){
+        Bundle stationData = new Bundle();
+        stationData.putSerializable(AdminStationsActivity.ARGS_STATIONS , stationAdminEvaluateListGenerator());
         return stationData;
     }
 
@@ -190,13 +198,23 @@ public class MockGenerator {
         return objectives;
     }
 
-    public static ArrayList<StationAdminPerspective> stationAdminListGenerator(){
+    private static ArrayList<StationAdminPerspective> stationAdminListGenerator(){
         ArrayList<StationAdminPerspective> list = new ArrayList<>();
-        list.add(new StationAdminPerspective(new Station(0, 0, mockMiniObjectiveList()), 1, 2, 3));
-        list.add(new StationAdminPerspective(new Station(1, 0), 1, 2, 3));
-        list.add(new StationAdminPerspective(new Station(2, 0), 1, 2, 3));
-        list.add(new StationAdminPerspective(new Station(3, 3, mockBigObjectiveList()), 1, 2, 3));
-        list.add(new StationAdminPerspective(new Station(4, 0), 1, 2, 3));
+        list.add(new StationAdminPerspectiveSummary(new Station(0, 0, mockMiniObjectiveList()), 1, 2, 3));
+        list.add(new StationAdminPerspectiveSummary(new Station(1, 0), 1, 2, 3));
+        list.add(new StationAdminPerspectiveSummary(new Station(2, 0), 1, 2, 3));
+        list.add(new StationAdminPerspectiveSummary(new Station(3, 3, mockBigObjectiveList()), 1, 2, 3));
+        list.add(new StationAdminPerspectiveSummary(new Station(4, 0), 1, 2, 3));
+        return list;
+    }
+
+    private static ArrayList<StationAdminPerspective> stationAdminEvaluateListGenerator(){
+        ArrayList<StationAdminPerspective> list = new ArrayList<>();
+        list.add(new StationAdminPerspectiveTeam(new Station(0, 0, mockMiniObjectiveList()), EvaluationStatus.Evaluated));
+        list.add(new StationAdminPerspectiveTeam(new Station(1, 0), EvaluationStatus.Evaluated));
+        list.add(new StationAdminPerspectiveTeam(new Station(2, 0), EvaluationStatus.Done));
+        list.add(new StationAdminPerspectiveTeam(new Station(3, 3), EvaluationStatus.NotArrivedYet));
+        list.add(new StationAdminPerspectiveTeam(new Station(4, 0), EvaluationStatus.NotArrivedYet));
         return list;
     }
 

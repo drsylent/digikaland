@@ -25,6 +25,8 @@ import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
 public class AdminTeamsActivity extends AppCompatActivity implements AdminTeamsAdapter.AdminTeamsListener {
     public final static String ARG_TEAMS = "teams";
+    public final static String ARG_SUMMARY = "summary";
+    private boolean summaryMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +38,10 @@ public class AdminTeamsActivity extends AppCompatActivity implements AdminTeamsA
             toolbar.setTitle(R.string.teams);
         }
         ArrayList<Team> teams = (ArrayList<Team>) getIntent().getBundleExtra(ARG_TEAMS).getSerializable(ARG_TEAMS);
+        summaryMode = getIntent().getBooleanExtra(ARG_SUMMARY, false);
         RecyclerView list = findViewById(R.id.clientStationList);
         list.setLayoutManager(new LinearLayoutManager(this));
-        list.setAdapter(new AdminTeamsAdapter(teams));
+        list.setAdapter(new AdminTeamsAdapter(teams, summaryMode));
     }
 
     @Override
@@ -55,14 +58,22 @@ public class AdminTeamsActivity extends AppCompatActivity implements AdminTeamsA
 
     @Override
     public void onTeamClicked(Team team) {
+        if(summaryMode){
+            Intent i = new Intent(AdminTeamsActivity.this, AdminStationsActivity.class);
+            i.putExtra(AdminStationsActivity.ARGS_STATIONS, MockGenerator.mockAdminStationsEvaluateList());
+            i.putExtra(AdminStationsActivity.ARG_SUMMARY, false);
+            startActivity(i);
+        }
         // TODO: nincs még adatfolyam
-        Intent i = new Intent(AdminTeamsActivity.this, AdminEvaluateActivity.class);
-        i.putExtra(AdminEvaluateActivity.ARG_SOLUTIONS, MockGenerator.mockSolutionList());
-        i.putExtra(AdminEvaluateActivity.ARG_STATION, 2);
-        i.putExtra(AdminEvaluateActivity.ARG_TIME, new Date(118, 3, 3).getTime());
-        i.putExtra(AdminEvaluateActivity.ARG_TEAM, "Narancs csapat");
-        i.putExtra(AdminEvaluateActivity.ARG_PENALTY, 23);
-        i.putExtra(AdminEvaluateActivity.ARG_SEND, true);
-        startActivity(i);
+        else{
+            Intent i = new Intent(AdminTeamsActivity.this, AdminEvaluateActivity.class);
+            i.putExtra(AdminEvaluateActivity.ARG_SOLUTIONS, MockGenerator.mockSolutionList());
+            i.putExtra(AdminEvaluateActivity.ARG_STATION, 2);
+            i.putExtra(AdminEvaluateActivity.ARG_TIME, new Date(118, 3, 3).getTime());
+            i.putExtra(AdminEvaluateActivity.ARG_TEAM, "Narancs csapat");
+            i.putExtra(AdminEvaluateActivity.ARG_PENALTY, 23);
+            i.putExtra(AdminEvaluateActivity.ARG_SEND, true);
+            startActivity(i);
+        }
     }
 }

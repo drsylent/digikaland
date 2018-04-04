@@ -47,7 +47,8 @@
     <string name="station_status">Állomás: %1$d/%2$d</string>
     <string name="station_id">Állomás sorszáma: %1$d</string>
     <string name="tri_status">%1$d/%2$d/%3$d</string>
-    <string name="station_admin_list_item">%1$d. állomás (%2$d/%3$d/%4$d)</string>
+    <string name="station_admin_list_item_summary">%1$d. állomás (%2$d/%3$d/%4$d)</string>
+    <string name="station_admin_list_item">%1$d. állomás</string>
     <string name="point_status">%1$d/%2$d p</string>
     <string name="evaluate_station">Állomás: %1$d. állomás</string>
     <string name="evaluate_team">Csapat: %1$s</string>
