@@ -23,6 +23,7 @@ import hu.bme.aut.digikaland.ui.admin.common.activities.AdminEvaluateActivity;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminHelpActivity;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminStationSummaryActivity;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminStationsActivity;
+import hu.bme.aut.digikaland.ui.admin.common.activities.AdminTeamsActivity;
 import hu.bme.aut.digikaland.ui.admin.station.fragments.AdminStationActualFragment;
 import hu.bme.aut.digikaland.ui.client.activities.ClientObjectiveActivity;
 import hu.bme.aut.digikaland.ui.common.activities.MapsActivity;
@@ -55,11 +56,9 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
                         break;
                     case R.id.adminStations:
                         startStations();
-                        //setStations();
                         break;
                     case R.id.adminTeams:
-                        showSnackBarMessage("Teams");
-                        //setTeams();
+                        startTeams();
                         break;
                 }
                 invalidateOptionsMenu();
@@ -143,6 +142,12 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
     private void startStations(){
         Intent i = new Intent(AdminStationMainActivity.this, AdminStationsActivity.class);
         i.putExtra(AdminStationsActivity.ARGS_STATIONS, MockGenerator.mockAdminStationsList());
+        startActivity(i);
+    }
+
+    private void startTeams(){
+        Intent i = new Intent(AdminStationMainActivity.this, AdminTeamsActivity.class);
+        i.putExtra(AdminTeamsActivity.ARG_TEAMS, MockGenerator.mockAdminTeamsList());
         startActivity(i);
     }
 

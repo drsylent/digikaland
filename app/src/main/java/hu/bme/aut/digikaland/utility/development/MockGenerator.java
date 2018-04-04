@@ -15,6 +15,8 @@ import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.entities.Station;
 import hu.bme.aut.digikaland.entities.StationAdminPerspective;
 import hu.bme.aut.digikaland.entities.StationClientPerspective;
+import hu.bme.aut.digikaland.entities.Team;
+import hu.bme.aut.digikaland.entities.enumeration.EvaluationStatus;
 import hu.bme.aut.digikaland.entities.enumeration.StationStatusFromClient;
 import hu.bme.aut.digikaland.entities.objectives.CustomAnswerObjective;
 import hu.bme.aut.digikaland.entities.objectives.MultipleChoiceObjective;
@@ -31,6 +33,7 @@ import hu.bme.aut.digikaland.entities.objectives.solutions.TrueFalseSolution;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminHelpActivity;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminStationSummaryActivity;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminStationsActivity;
+import hu.bme.aut.digikaland.ui.admin.common.activities.AdminTeamsActivity;
 import hu.bme.aut.digikaland.ui.client.activities.ClientHelpActivity;
 import hu.bme.aut.digikaland.ui.client.activities.ClientStationsActivity;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientActualFragment;
@@ -122,6 +125,21 @@ public class MockGenerator {
         Bundle stationData = new Bundle();
         stationData.putSerializable(AdminStationsActivity.ARGS_STATIONS , stationAdminListGenerator());
         return stationData;
+    }
+
+    public static Bundle mockAdminTeamsList(){
+        Bundle teamData = new Bundle();
+        teamData.putSerializable(AdminTeamsActivity.ARG_TEAMS, generateTeamList());
+        return teamData;
+    }
+
+    private static ArrayList<Team> generateTeamList(){
+        ArrayList<Team> teams = new ArrayList<>();
+        teams.add(new Team("Narancs csapat", EvaluationStatus.Evaluated));
+        teams.add(new Team("Kék csapat", EvaluationStatus.Done));
+        teams.add(new Team("Lila csapat", EvaluationStatus.NotArrivedYet));
+        teams.add(new Team("Piros csapat", EvaluationStatus.NotArrivedYet));
+        return teams;
     }
 
     public static ArrayList<Objective> mockMiniObjectiveList(){

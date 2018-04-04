@@ -80,7 +80,9 @@ public class AdminStationSummaryActivity extends AppCompatActivity {
     }
 
     public void startTeams(){
-        // TODO: ha kész az activity, berakni
+        Intent i = new Intent(AdminStationSummaryActivity.this, AdminTeamsActivity.class);
+        i.putExtra(AdminTeamsActivity.ARG_TEAMS, MockGenerator.mockAdminTeamsList());
+        startActivity(i);
     }
 
     @Override
