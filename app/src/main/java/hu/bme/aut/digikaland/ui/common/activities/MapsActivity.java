@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import hu.bme.aut.digikaland.R;
+import hu.bme.aut.digikaland.ui.admin.common.activities.AdminStationSummaryActivity;
+import hu.bme.aut.digikaland.utility.development.MockGenerator;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnPermissionDenied;
 import permissions.dispatcher.RuntimePermissions;
@@ -87,6 +89,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     int id = (int) marker.getTag();
                     // TODO: megfelelő állomás összesítő activityre ugrani
                     Log.e("ID AMIRE UGRANI KELL", Integer.toString(id));
+                    Intent i = new Intent(MapsActivity.this, AdminStationSummaryActivity.class);
+                    startActivity(MockGenerator.adminStationSummaryGenerator(i));
                 }
                 else Log.e("NINCS HOVA UGRANI", "NINCS");
                 return false;
