@@ -8,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import java.util.ArrayList;
-import java.util.Date;
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.entities.station.StationAdminPerspective;
 import hu.bme.aut.digikaland.ui.admin.common.fragments.AdminStationAdapter;
@@ -57,13 +56,7 @@ public class AdminStationsActivity extends AppCompatActivity implements AdminSta
         }
         else{
             Intent i = new Intent(AdminStationsActivity.this, AdminEvaluateActivity.class);
-            i.putExtra(AdminEvaluateActivity.ARG_SOLUTIONS, MockGenerator.mockSolutionList());
-            i.putExtra(AdminEvaluateActivity.ARG_STATION, 2);
-            i.putExtra(AdminEvaluateActivity.ARG_TIME, new Date(118, 3, 3).getTime());
-            i.putExtra(AdminEvaluateActivity.ARG_TEAM, "Narancs csapat");
-            i.putExtra(AdminEvaluateActivity.ARG_PENALTY, 23);
-            i.putExtra(AdminEvaluateActivity.ARG_SEND, true);
-            startActivity(i);
+            startActivity(MockGenerator.mockEvaluateIntent(i));
         }
     }
 }

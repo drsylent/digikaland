@@ -16,6 +16,7 @@ public class ClientStationAdapter extends RecyclerView.Adapter<StationViewHolder
     private int colorDone;
     private int colorNotStarted;
     private int colorStarted;
+    private int colorWhite;
     private ClientStationListener activity;
 
     public ClientStationAdapter(List<StationClientPerspective> s){
@@ -26,7 +27,8 @@ public class ClientStationAdapter extends RecyclerView.Adapter<StationViewHolder
     public StationViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         onAttach(parent.getContext());
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_simple, parent, false);
-        colorDone = parent.getResources().getColor(R.color.colorDone);
+        colorDone = parent.getResources().getColor(R.color.colorPrimaryDark);
+        colorWhite = parent.getResources().getColor(R.color.colorWhite);
         colorNotStarted = parent.getResources().getColor(R.color.colorNot);
         colorStarted = parent.getResources().getColor(R.color.colorCurrently);
         return new StationViewHolder(itemView);
@@ -49,6 +51,7 @@ public class ClientStationAdapter extends RecyclerView.Adapter<StationViewHolder
         switch (item.status){
             case Done:
                 color = colorDone;
+                holder.station.setTextColor(colorWhite);
                 break;
             case Started:
                 color = colorStarted;

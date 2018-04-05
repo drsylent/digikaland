@@ -34,6 +34,7 @@ import hu.bme.aut.digikaland.entities.objectives.solutions.PhysicalSolution;
 import hu.bme.aut.digikaland.entities.objectives.solutions.PictureSolution;
 import hu.bme.aut.digikaland.entities.objectives.solutions.Solution;
 import hu.bme.aut.digikaland.entities.objectives.solutions.TrueFalseSolution;
+import hu.bme.aut.digikaland.ui.admin.common.activities.AdminEvaluateActivity;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminHelpActivity;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminStationSummaryActivity;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminStationsActivity;
@@ -131,6 +132,18 @@ public class MockGenerator {
         locationData.putStringArrayList(MapsActivity.MARKER_NAMES, names);
         locationData.putInt(MapsActivity.MARKER_SPECIAL, 1);
         return locationData;
+    }
+
+    public static Intent mockEvaluateIntent(Intent i){
+        i.putExtra(AdminEvaluateActivity.ARG_SOLUTIONS, mockSolutionList());
+        i.putExtra(AdminEvaluateActivity.ARG_STATION, 2);
+        Calendar c = new GregorianCalendar();
+        c.set(2018, 3, 3, 15, 40);
+        i.putExtra(AdminEvaluateActivity.ARG_TIME, c.getTime());
+        i.putExtra(AdminEvaluateActivity.ARG_TEAM, "Narancs csapat");
+        i.putExtra(AdminEvaluateActivity.ARG_PENALTY, 23);
+        i.putExtra(AdminEvaluateActivity.ARG_SEND, true);
+        return i;
     }
 
     public static Bundle mockStationsList(){

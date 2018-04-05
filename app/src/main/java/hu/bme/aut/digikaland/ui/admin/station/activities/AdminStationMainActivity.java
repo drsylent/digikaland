@@ -14,8 +14,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminEvaluateActivity;
@@ -188,15 +186,7 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
     public void onEvaluateActivation() {
         if(isToEvaluate()) {
             Intent i = new Intent(AdminStationMainActivity.this, AdminEvaluateActivity.class);
-            i.putExtra(AdminEvaluateActivity.ARG_SOLUTIONS, MockGenerator.mockSolutionList());
-            i.putExtra(AdminEvaluateActivity.ARG_STATION, 2);
-            Calendar c = new GregorianCalendar();
-            c.set(2018, 3, 3, 15, 40);
-            i.putExtra(AdminEvaluateActivity.ARG_TIME, c.getTime());
-            i.putExtra(AdminEvaluateActivity.ARG_TEAM, "Narancs csapat");
-            i.putExtra(AdminEvaluateActivity.ARG_PENALTY, 23);
-            i.putExtra(AdminEvaluateActivity.ARG_SEND, true);
-            startActivity(i);
+            startActivity(MockGenerator.mockEvaluateIntent(i));
         }
         else showSnackBarMessage("Nincs kiértékelésre váró csapat!");
     }

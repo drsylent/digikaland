@@ -8,8 +8,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.entities.Team;
 import hu.bme.aut.digikaland.ui.admin.common.fragments.AdminTeamsAdapter;
@@ -58,15 +56,7 @@ public class AdminTeamsActivity extends AppCompatActivity implements AdminTeamsA
         // TODO: nincs még adatfolyam
         else{
             Intent i = new Intent(AdminTeamsActivity.this, AdminEvaluateActivity.class);
-            i.putExtra(AdminEvaluateActivity.ARG_SOLUTIONS, MockGenerator.mockSolutionList());
-            i.putExtra(AdminEvaluateActivity.ARG_STATION, 2);
-            Calendar c = new GregorianCalendar();
-            c.set(2018, 3, 3, 15, 40);
-            i.putExtra(AdminEvaluateActivity.ARG_TIME, c.getTime());
-            i.putExtra(AdminEvaluateActivity.ARG_TEAM, "Narancs csapat");
-            i.putExtra(AdminEvaluateActivity.ARG_PENALTY, 23);
-            i.putExtra(AdminEvaluateActivity.ARG_SEND, true);
-            startActivity(i);
+            startActivity(MockGenerator.mockEvaluateIntent(i));
         }
     }
 }
