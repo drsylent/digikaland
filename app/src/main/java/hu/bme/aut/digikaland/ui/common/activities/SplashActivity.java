@@ -15,7 +15,7 @@ import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private static int milestoneVersion = 0;
+    private final static int milestoneVersion = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +102,15 @@ public class SplashActivity extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     MockGenerator.milestoneOneDialog(that).show();
+                }
+            }).show();
+        }
+        if(milestoneVersion == 2){
+            final Context that = this;
+            MockGenerator.introDialog(this, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    MockGenerator.milestoneTwoDialog(that).show();
                 }
             }).show();
         }

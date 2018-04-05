@@ -79,6 +79,30 @@ public class MockGenerator {
         }).create();
     }
 
+    public static Dialog milestoneTwoDialog(Context context){
+        return new AlertDialog.Builder(context).setTitle("Digikaland - Admin teszt").setMessage(
+                "Ez az alkalmazás második része, mely kész van - kész van benne a versenyzők grafikus felülete, illetve a felügyelők felülete. " +
+                        "Az \"Admin Total Enter\" menüpont segítségével a teljes admin felületet láthatod, ahol mindenhez hozzá tudsz férni, " +
+                        "az \"Admin Station Enter\" segítségével pedig egy állomásnak az adminja lehetsz. " +
+                        "Teljes adminként minden adathoz hozzáférsz a versenyen belül, minden beadott feladathoz, nyomon követheted a csapatok haladását, " +
+                        "és te indíthatod el a versenyt, illetve állíthatod le, indíthatod el az eredményhirdetést. " +
+                        "Állomás adminként javítani csak a saját állomásodhoz tartozó feladatokat tudod, de itt is nyomon tudod követni a verseny alakulását." +
+                        "(Jelenleg ez, hogy a javítást csak a saját állomásodnál tudod elvégezni, még nincs helyesen megoldva.)" +
+                        "Az alkalmazás jelenlegi állapotában csakis grafikus felületi elemeket tartalmaz, érdemi logikát még ne várj tőle! " +
+                        "Lesznek is inkonzisztenciák a feladatok számai között például, satöbbi, ezekkel ne foglalkozz. " +
+                        "A feladatod röviden annyi, hogy nyomkodd kényed-kedved szerint az alkalmazást, ahogy csak szeretnéd és kívánod. " +
+                        "Az a cél, hogy kiderüljön, hol romlik el az alkalmazás jelenleg, milyen felületi változásokra reagál helytelenül, és omlik össze. " +
+                        "Ha sikerült összeomlasztani, akkor mindenképp mondd el nekem, hogy mivel érted azt el! " +
+                        "Ha ezzel megvagy, utána nézd végig az alkalmazás menüpontjait, elég intuitív-e a felhasználói felület, te megtalálnád-e a dolgokat, amiket szeretnél, stb. " +
+                        "Ha van javaslatod ezzel kapcsolatban, hogy ezt javítsam, szintén szólj nekem. " +
+                        "Üdvözlettel: Csendes Dávid"
+        ).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        }).create();
+    }
+
     public static Location mockALocation(){
         return new Location("Magyar tudósok körútja 1.", "QB309");
     }
