@@ -6,19 +6,12 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Menu;
 import android.view.MenuItem;
-
 import java.util.ArrayList;
 import java.util.Date;
-
 import hu.bme.aut.digikaland.R;
-import hu.bme.aut.digikaland.entities.StationAdminPerspective;
-import hu.bme.aut.digikaland.entities.StationClientPerspective;
-import hu.bme.aut.digikaland.entities.objectives.Objective;
+import hu.bme.aut.digikaland.entities.station.StationAdminPerspective;
 import hu.bme.aut.digikaland.ui.admin.common.fragments.AdminStationAdapter;
-import hu.bme.aut.digikaland.ui.client.activities.ClientStationsActivity;
-import hu.bme.aut.digikaland.ui.client.fragments.ClientStationAdapter;
 import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
 public class AdminStationsActivity extends AppCompatActivity implements AdminStationAdapter.AdminStationListener {

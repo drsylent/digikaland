@@ -9,9 +9,9 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import hu.bme.aut.digikaland.R;
-import hu.bme.aut.digikaland.StationAdminPerspectiveTeam;
-import hu.bme.aut.digikaland.entities.StationAdminPerspective;
-import hu.bme.aut.digikaland.entities.StationAdminPerspectiveSummary;
+import hu.bme.aut.digikaland.entities.station.StationAdminPerspectiveTeam;
+import hu.bme.aut.digikaland.entities.station.StationAdminPerspective;
+import hu.bme.aut.digikaland.entities.station.StationAdminPerspectiveSummary;
 import hu.bme.aut.digikaland.ui.common.fragments.StationViewHolder;
 
 public class AdminStationAdapter extends RecyclerView.Adapter<StationViewHolder>  {
@@ -31,7 +31,7 @@ public class AdminStationAdapter extends RecyclerView.Adapter<StationViewHolder>
     @Override
     public StationViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         onAttach(parent.getContext());
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_client_station, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_simple, parent, false);
         colorNeutral = parent.getResources().getColor(R.color.colorPrimary);
         colorDone = parent.getResources().getColor(R.color.colorDone);
         colorNotStarted = parent.getResources().getColor(R.color.colorNot);

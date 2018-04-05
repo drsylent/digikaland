@@ -3,10 +3,6 @@ package hu.bme.aut.digikaland.entities.objectives.solutions;
 import hu.bme.aut.digikaland.entities.objectives.CustomAnswerObjective;
 import hu.bme.aut.digikaland.ui.common.objectives.solutions.CustomAnswerEvaluateFragment;
 
-/**
- * Created by Sylent on 2018. 04. 03..
- */
-
 public class CustomAnswerSolution extends Solution {
     public String getAnswer() {
         return answer;

@@ -1,7 +1,6 @@
 package hu.bme.aut.digikaland.ui.common.objectives.solutions;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -106,8 +105,8 @@ public class PointDisplayFragment extends Fragment {
         mListener = null;
     }
 
+    // TODO: Kommunikáció a pontszámról feltöltéskor
     public interface PointHandleActivity {
-        // TODO: Kommunikáció a pontszámról
         void settingPoint(String hostTag, int current, int max);
     }
 }

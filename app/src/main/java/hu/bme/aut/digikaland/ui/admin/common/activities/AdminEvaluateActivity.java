@@ -53,7 +53,7 @@ public class AdminEvaluateActivity extends AppCompatActivity implements PictureF
         textView = findViewById(R.id.adminEvaluateTeam);
         textView.setText(getResources().getString(R.string.evaluate_team, getIntent().getStringExtra(ARG_TEAM)));
         textView = findViewById(R.id.adminEvaluateTime);
-        Date date = new Date(getIntent().getLongExtra(ARG_TIME, 0));
+        Date date = (Date) getIntent().getSerializableExtra(ARG_TIME);
         textView.setText(getResources().getString(R.string.evaluate_date, date));
         if(savedInstanceState == null) {
             ArrayList<Solution> solutions = (ArrayList<Solution>) getIntent().getSerializableExtra(ARG_SOLUTIONS);

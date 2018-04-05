@@ -2,13 +2,8 @@ package hu.bme.aut.digikaland.ui.common.objectives.solutions;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 
 import hu.bme.aut.digikaland.entities.objectives.solutions.Solution;
-
-/**
- * Created by Sylent on 2018. 04. 05..
- */
 
 public abstract class SolutionFragment extends Fragment {
     protected static final String ARG_SOLUTION = "solution";

@@ -6,22 +6,14 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Menu;
 import android.view.MenuItem;
-
 import java.util.ArrayList;
-import java.util.Date;
-
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.entities.Team;
-import hu.bme.aut.digikaland.entities.objectives.Objective;
 import hu.bme.aut.digikaland.ui.admin.common.fragments.AdminTeamsAdapter;
-import hu.bme.aut.digikaland.ui.admin.station.activities.AdminStationMainActivity;
 import hu.bme.aut.digikaland.utility.development.MockGenerator;
-
-/**
- * Created by Sylent on 2018. 04. 04..
- */
 
 public class AdminTeamsActivity extends AppCompatActivity implements AdminTeamsAdapter.AdminTeamsListener {
     public final static String ARG_TEAMS = "teams";
@@ -55,7 +47,6 @@ public class AdminTeamsActivity extends AppCompatActivity implements AdminTeamsA
         }
     }
 
-
     @Override
     public void onTeamClicked(Team team) {
         if(summaryMode){
@@ -69,7 +60,9 @@ public class AdminTeamsActivity extends AppCompatActivity implements AdminTeamsA
             Intent i = new Intent(AdminTeamsActivity.this, AdminEvaluateActivity.class);
             i.putExtra(AdminEvaluateActivity.ARG_SOLUTIONS, MockGenerator.mockSolutionList());
             i.putExtra(AdminEvaluateActivity.ARG_STATION, 2);
-            i.putExtra(AdminEvaluateActivity.ARG_TIME, new Date(118, 3, 3).getTime());
+            Calendar c = new GregorianCalendar();
+            c.set(2018, 3, 3, 15, 40);
+            i.putExtra(AdminEvaluateActivity.ARG_TIME, c.getTime());
             i.putExtra(AdminEvaluateActivity.ARG_TEAM, "Narancs csapat");
             i.putExtra(AdminEvaluateActivity.ARG_PENALTY, 23);
             i.putExtra(AdminEvaluateActivity.ARG_SEND, true);

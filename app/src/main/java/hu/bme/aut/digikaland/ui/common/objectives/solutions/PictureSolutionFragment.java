@@ -35,7 +35,7 @@ public class PictureSolutionFragment extends SolutionFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_picture_evaluate, container, false);
+        View root = inflater.inflate(R.layout.fragment_picture_solution, container, false);
         TextView tvQuestion = root.findViewById(R.id.pictureSolutionQuestion);
         tvQuestion.setText(getSolution().getObjective().getQuestion());
         int numberOfPictures = getMaxNumberOfPictures();

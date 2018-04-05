@@ -5,10 +5,6 @@ import java.io.Serializable;
 import hu.bme.aut.digikaland.entities.objectives.Objective;
 import hu.bme.aut.digikaland.ui.common.objectives.solutions.EvaluateFragment;
 
-/**
- * Created by Sylent on 2018. 04. 03..
- */
-
 public abstract class Solution implements Serializable{
     private Objective objective;
 

@@ -5,10 +5,6 @@ import java.util.ArrayList;
 import hu.bme.aut.digikaland.entities.objectives.PictureObjective;
 import hu.bme.aut.digikaland.ui.common.objectives.solutions.PictureEvaluateFragment;
 
-/**
- * Created by Sylent on 2018. 04. 03..
- */
-
 public class PictureSolution extends Solution {
     public ArrayList<String> getAnswer() {
         return answer;

@@ -13,7 +13,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Teljes Adminok:"
+            android:text="@string/total_admins"
             android:layout_marginBottom="@dimen/s_margin"
             android:layout_marginTop="@dimen/s_margin"
             style="@style/StringFormatLocation"/>
@@ -30,7 +30,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Feladat adminok:"
+            android:text="@string/station_admins"
             android:layout_marginBottom="@dimen/s_margin"
             style="@style/StringFormatLocation"/>
 
@@ -46,7 +46,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Csapatok és kapitányaik:"
+            android:text="@string/teams_and_captains"
             android:layout_marginBottom="@dimen/s_margin"
             style="@style/StringFormatLocation"/>
 

@@ -61,7 +61,7 @@ public class AdminRunningFragment extends Fragment {
         TextView tvTime = root.findViewById(R.id.adminRunningEndTime);
         tvTime.setText(getResources().getString(R.string.date, time));
         TextView tvStatus = root.findViewById(R.id.adminRunningStatus);
-        tvStatus.setText(getResources().getString(R.string.tri_status, statistics.evaluated, statistics.done, statistics.notstarted));
+        tvStatus.setText(getResources().getString(R.string.tri_status, statistics.evaluated, statistics.done, statistics.all));
         Button bEnd = root.findViewById(R.id.adminRunningEndButton);
         bEnd.setOnClickListener(new View.OnClickListener() {
             @Override

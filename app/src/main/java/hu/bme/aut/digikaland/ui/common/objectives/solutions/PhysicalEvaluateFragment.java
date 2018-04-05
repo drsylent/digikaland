@@ -10,10 +10,6 @@ import hu.bme.aut.digikaland.entities.objectives.PhysicalObjective;
 import hu.bme.aut.digikaland.entities.objectives.solutions.PhysicalSolution;
 import hu.bme.aut.digikaland.ui.common.objectives.PhysicalObjectiveFragment;
 
-/**
- * Created by Sylent on 2018. 04. 03..
- */
-
 public class PhysicalEvaluateFragment extends EvaluateFragment {
     public PhysicalEvaluateFragment() {
         // Required empty public constructor

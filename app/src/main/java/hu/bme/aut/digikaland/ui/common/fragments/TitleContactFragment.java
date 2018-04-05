@@ -1,8 +1,5 @@
 package hu.bme.aut.digikaland.ui.common.fragments;
 
-import android.accessibilityservice.AccessibilityService;
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.Gravity;

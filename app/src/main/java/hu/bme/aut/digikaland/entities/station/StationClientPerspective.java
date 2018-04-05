@@ -1,12 +1,8 @@
-package hu.bme.aut.digikaland.entities;
+package hu.bme.aut.digikaland.entities.station;
 
 import java.io.Serializable;
 
 import hu.bme.aut.digikaland.entities.enumeration.StationStatusFromClient;
-
-/**
- * Created by Sylent on 2018. 04. 04..
- */
 
 public class StationClientPerspective implements Serializable {
     public Station station;

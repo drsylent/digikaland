@@ -1,4 +1,4 @@
-package hu.bme.aut.digikaland.entities;
+package hu.bme.aut.digikaland.entities.station;
 
 /**
  * Created by Sylent on 2018. 04. 04..

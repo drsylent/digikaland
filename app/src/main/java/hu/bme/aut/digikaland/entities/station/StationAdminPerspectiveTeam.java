@@ -1,14 +1,6 @@
-package hu.bme.aut.digikaland;
+package hu.bme.aut.digikaland.entities.station;
 
-import hu.bme.aut.digikaland.entities.EvaluationStatistics;
-import hu.bme.aut.digikaland.entities.Station;
-import hu.bme.aut.digikaland.entities.StationAdminPerspective;
 import hu.bme.aut.digikaland.entities.enumeration.EvaluationStatus;
-import hu.bme.aut.digikaland.entities.enumeration.StationStatusFromClient;
-
-/**
- * Created by Sylent on 2018. 04. 04..
- */
 
 public class StationAdminPerspectiveTeam extends StationAdminPerspective {
     public EvaluationStatus status;

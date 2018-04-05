@@ -1,4 +1,4 @@
-package hu.bme.aut.digikaland.entities;
+package hu.bme.aut.digikaland.entities.station;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;

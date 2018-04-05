@@ -11,14 +11,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import hu.bme.aut.digikaland.StationAdminPerspectiveTeam;
+import hu.bme.aut.digikaland.entities.station.StationAdminPerspectiveTeam;
 import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.entities.EvaluationStatistics;
 import hu.bme.aut.digikaland.entities.Location;
-import hu.bme.aut.digikaland.entities.Station;
-import hu.bme.aut.digikaland.entities.StationAdminPerspective;
-import hu.bme.aut.digikaland.entities.StationAdminPerspectiveSummary;
-import hu.bme.aut.digikaland.entities.StationClientPerspective;
+import hu.bme.aut.digikaland.entities.station.Station;
+import hu.bme.aut.digikaland.entities.station.StationAdminPerspective;
+import hu.bme.aut.digikaland.entities.station.StationAdminPerspectiveSummary;
+import hu.bme.aut.digikaland.entities.station.StationClientPerspective;
 import hu.bme.aut.digikaland.entities.Team;
 import hu.bme.aut.digikaland.entities.enumeration.EvaluationStatus;
 import hu.bme.aut.digikaland.entities.enumeration.StationStatusFromClient;
@@ -353,11 +353,8 @@ public class MockGenerator {
     }
 
     public static Intent adminStationSummaryGenerator(Intent placeData){
-        placeData.putExtra(AdminStationSummaryActivity.ARG_DONE, 2);
-        placeData.putExtra(AdminStationSummaryActivity.ARG_EVALUATED, 1);
-        placeData.putExtra(AdminStationSummaryActivity.ARG_SUM, 3);
-        placeData.putExtra(AdminStationSummaryActivity.ARG_LOCATION, "Teszt helyszín");
-        placeData.putExtra(AdminStationSummaryActivity.ARG_SUBLOCATION, "Nagyon pontos hely");
+        placeData.putExtra(AdminStationSummaryActivity.ARG_STATUS, new EvaluationStatistics(1, 2, 3));
+        placeData.putExtra(AdminStationSummaryActivity.ARG_LOCATION, new Location("Teszt helyszín", "Ami valahol van"));
         placeData.putExtra(AdminStationSummaryActivity.ARG_STATIONID, 8);
         placeData.putExtra(AdminStationSummaryActivity.ARG_CONTACT, new Contact("Illés Ilona", "+23 23 232 2323"));
         return placeData;

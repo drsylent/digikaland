@@ -10,7 +10,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Kiértékelt/Végzett/Összes állomás:"
+            android:text="@string/eval_done_summ_stations"
             android:layout_marginTop="@dimen/s_margin"
             style="@style/StringFormatTitle.Small"/>
 
@@ -60,7 +60,7 @@
             style="@style/ButtonStyle.Center"
             android:id="@+id/adminRunningEndButton"
             android:layout_marginTop="@dimen/xxl_margin"
-            android:text="Befejezés"/>
+            android:text="@string/end"/>
 
         <Button
             android:layout_width="wrap_content"

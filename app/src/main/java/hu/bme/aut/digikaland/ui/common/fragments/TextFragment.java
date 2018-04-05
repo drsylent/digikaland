@@ -39,7 +39,6 @@ public class TextFragment extends Fragment {
         }
     }
 
-    // TODO: ha csak a center állítás lesz, érdemesebb manuálisan azt itt beállítani, és nem tökölni többféle layouttal
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

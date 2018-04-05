@@ -1,15 +1,7 @@
 package hu.bme.aut.digikaland.ui.common.objectives.solutions;
 
-
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import hu.bme.aut.digikaland.entities.objectives.Objective;
 import hu.bme.aut.digikaland.entities.objectives.solutions.Solution;
 
 public abstract class EvaluateFragment extends SolutionFragment {

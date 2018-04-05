@@ -14,9 +14,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
-
-import java.util.Date;
-
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminEvaluateActivity;
@@ -31,9 +30,6 @@ import hu.bme.aut.digikaland.ui.common.fragments.ResultsFragment;
 import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
 public class AdminStationMainActivity extends AppCompatActivity implements AdminStationActualFragment.AdminActivityInterface, ResultsFragment.ResultsFragmentListener {
-    private final static String ARG_RESULTSSHOWN = "fragstate";
-
-    private NavigationView nav;
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private LinearLayout mainLayout;
@@ -42,10 +38,10 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_admin_station_main);
+        setContentView(R.layout.activity_admin_main);
         mainLayout = findViewById(R.id.adminStationContent);
         drawerLayout = findViewById(R.id.adminDrawer);
-        nav = findViewById(R.id.adminNavigation);
+        NavigationView nav = findViewById(R.id.adminNavigation);
         nav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -93,12 +89,6 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
         Results
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean(ARG_RESULTSSHOWN, state == ContentState.Results);
-    }
-
     private ContentState state;
 
     private void setActual(){
@@ -121,21 +111,6 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
             if(state == ContentState.Actual) fragment.refreshAllData();
             else setActual();
         }
-//        if(state == ClientMainActivity.ViewState.Actual)
-//            switch(item.getItemId()) {
-//                case R.id.menu_refresh:
-//                    switch(actualStatus) {
-//                        case normal:
-//                            setObjective();
-//                            break;
-//                        case objective:
-//                            setResults();
-//                            break;
-//                        case results:
-//                            setActual();
-//                            break;
-//                    }
-//            }
         return super.onOptionsItemSelected(item);
     }
 
@@ -215,7 +190,9 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
             Intent i = new Intent(AdminStationMainActivity.this, AdminEvaluateActivity.class);
             i.putExtra(AdminEvaluateActivity.ARG_SOLUTIONS, MockGenerator.mockSolutionList());
             i.putExtra(AdminEvaluateActivity.ARG_STATION, 2);
-            i.putExtra(AdminEvaluateActivity.ARG_TIME, new Date(118, 3, 3).getTime());
+            Calendar c = new GregorianCalendar();
+            c.set(2018, 3, 3, 15, 40);
+            i.putExtra(AdminEvaluateActivity.ARG_TIME, c.getTime());
             i.putExtra(AdminEvaluateActivity.ARG_TEAM, "Narancs csapat");
             i.putExtra(AdminEvaluateActivity.ARG_PENALTY, 23);
             i.putExtra(AdminEvaluateActivity.ARG_SEND, true);
@@ -226,7 +203,6 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
 
     @Override
     public void onObjectivesActivation() {
-        // TODO: egy egyszerűsített nézet lenne ide jobb, nem a teljes
         Intent i = new Intent(AdminStationMainActivity.this, ClientObjectiveActivity.class);
         i.putExtra(ClientObjectiveActivity.ARGS_OBJECTIVES, MockGenerator.mockBigObjectiveList());
         startActivity(i);

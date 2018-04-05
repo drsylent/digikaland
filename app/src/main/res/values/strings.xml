@@ -60,4 +60,20 @@
     <string name="point_number">%1$dp</string>
     <string name="evaluate">Értékelés</string>
     <string name="station">Állomás</string>
+    <string name="total_admins">Teljes Adminok:</string>
+    <string name="station_admins">Feladat adminok:</string>
+    <string name="teams_and_captains">Csapatok és kapitányaik:</string>
+    <string name="location">Helyszín:</string>
+    <string name="station_responsible">Állomásért felelős:</string>
+    <string name="eval_done_summ_team">Kiértékelt / végzett / összes csapat:</string>
+    <string name="start">Indítás</string>
+    <string name="eval_done_summ_stations">Kiértékelt/Végzett/Összes állomás:</string>
+    <string name="end">Befejezés</string>
+    <string name="my_station">Állomásom:</string>
+    <string name="objectives">Feladatok</string>
+    <string name="next_team">Következő csapat:</string>
+    <string name="no_location_station">Nincs konkrét helyszíne ennek az állomásnak</string>
+    <string name="solve_on_the_route">A feladatokat útközben oldjátok meg!</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Mégse</string>
 </resources>

@@ -10,10 +10,6 @@ import hu.bme.aut.digikaland.entities.objectives.CustomAnswerObjective;
 import hu.bme.aut.digikaland.entities.objectives.solutions.CustomAnswerSolution;
 import hu.bme.aut.digikaland.ui.common.objectives.CustomAnswerObjectiveFragment;
 
-/**
- * Created by Sylent on 2018. 04. 03..
- */
-
 public class CustomAnswerEvaluateFragment extends EvaluateFragment {
 
     public CustomAnswerEvaluateFragment() {

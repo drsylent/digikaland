@@ -28,20 +28,15 @@ import hu.bme.aut.digikaland.utility.development.MockGenerator;
 public class AdminTotalMainActivity extends AppCompatActivity implements ResultsFragment.ResultsFragmentListener,
         AdminRunningFragment.AdminRunningListener, AdminRaceStarterFragment.AdminStarterListener {
 
-    private static final String ARG_FRAGMENTSTATE = "state";
-
-    private NavigationView nav;
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
-    private LinearLayout mainLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_admin_station_main);
-        mainLayout = findViewById(R.id.adminStationContent);
+        setContentView(R.layout.activity_admin_main);
         drawerLayout = findViewById(R.id.adminDrawer);
-        nav = findViewById(R.id.adminNavigation);
+        NavigationView nav = findViewById(R.id.adminNavigation);
         nav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -156,10 +151,5 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
         ActionBarDrawerToggle toggler = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
         toggler.syncState();
         drawerLayout.addDrawerListener(toggler);
-    }
-
-    // TODO: jelenleg csak placeholder megjelenítésre
-    private void showSnackBarMessage(String message) {
-        Snackbar.make(mainLayout, message, Snackbar.LENGTH_LONG).show();
     }
 }

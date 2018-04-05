@@ -3,11 +3,8 @@ package hu.bme.aut.digikaland.ui.admin.common.activities;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
-
 import java.util.List;
-
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.ui.common.fragments.ContactFragment;

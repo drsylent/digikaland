@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:id="@+id/solutionTrueFalse"
+    android:baselineAligned="false"
     android:weightSum="5"
     tools:context="hu.bme.aut.digikaland.ui.common.objectives.solutions.TrueFalseEvaluateFragment">
     <LinearLayout
@@ -12,7 +13,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="4"
         android:id="@+id/evaluateQuestionContent">
-
     </LinearLayout>
 
     <LinearLayout
@@ -21,8 +21,6 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:id="@+id/evaluatePointContent">
-
     </LinearLayout>
-
 
 </LinearLayout>

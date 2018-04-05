@@ -8,7 +8,6 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import hu.bme.aut.digikaland.R;
-import hu.bme.aut.digikaland.entities.objectives.Objective;
 import hu.bme.aut.digikaland.entities.objectives.TrueFalseObjective;
 
 public class TrueFalseObjectiveFragment extends ObjectiveFragment {

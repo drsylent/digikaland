@@ -6,10 +6,6 @@ import android.widget.TextView;
 
 import hu.bme.aut.digikaland.R;
 
-/**
- * Created by Sylent on 2018. 04. 04..
- */
-
 public class StationViewHolder extends RecyclerView.ViewHolder{
     public TextView station;
 

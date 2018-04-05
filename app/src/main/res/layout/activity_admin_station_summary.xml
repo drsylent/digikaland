@@ -19,7 +19,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Helyszín:"
+            android:text="@string/location"
             android:layout_marginTop="@dimen/l_margin"
             android:gravity="center_horizontal"
             style="@style/StringFormatMiniTitle"/>
@@ -44,7 +44,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Állomásért felelős:"
+            android:text="@string/station_responsible"
             android:layout_marginTop="@dimen/l_margin"
             android:gravity="center_horizontal"
             style="@style/StringFormatMiniTitle"/>
@@ -61,7 +61,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Kiértékelt / végzett / összes csapat:"
+            android:text="@string/eval_done_summ_team"
             android:layout_marginTop="@dimen/m_margin"
             style="@style/StringFormatMiniTitle"/>
 
@@ -87,7 +87,7 @@
             style="@style/ButtonStyle.Center"
             android:id="@+id/adminStationSummaryTeams"
             android:layout_marginTop="@dimen/m_margin"
-            android:text="Csapatok"/>
+            android:text="@string/teams"/>
 
     </LinearLayout>
 </ScrollView>

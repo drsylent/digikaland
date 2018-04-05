@@ -29,7 +29,7 @@ public class AdminTeamsAdapter extends RecyclerView.Adapter<StationViewHolder> {
     @Override
     public StationViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         onAttach(parent.getContext());
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_client_station, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_simple, parent, false);
         colorDone = parent.getResources().getColor(R.color.colorDone);
         colorNotStarted = parent.getResources().getColor(R.color.colorNot);
         colorStarted = parent.getResources().getColor(R.color.colorCurrently);

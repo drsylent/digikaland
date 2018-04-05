@@ -12,10 +12,6 @@ import android.widget.NumberPicker;
 
 import hu.bme.aut.digikaland.R;
 
-/**
- * Created by Sylent on 2018. 04. 03..
- */
-
 public class NumberPickerDialogFragment extends DialogFragment {
     private static final String ARG_MAX = "maxnumber";
     private static final String ARG_CURRENT = "currentnumber";
@@ -72,19 +68,19 @@ public class NumberPickerDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View root = inflater.inflate(R.layout.item_number_picker, null);
+        View root = inflater.inflate(R.layout.fragment_number_picker, null);
         numberPicker = root.findViewById(R.id.number_picker);
         numberPicker.setMinValue(0);
         numberPicker.setMaxValue(maxPoints);
         numberPicker.setValue(currentPoints);
         builder.setView(root)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         activity.pointSet(hostTag, numberPicker.getValue());
                     }
                 })
-                .setNegativeButton("Mégse", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                     }

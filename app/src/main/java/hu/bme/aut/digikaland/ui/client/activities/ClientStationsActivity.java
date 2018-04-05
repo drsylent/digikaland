@@ -10,8 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import java.util.ArrayList;
 import hu.bme.aut.digikaland.R;
-import hu.bme.aut.digikaland.entities.Station;
-import hu.bme.aut.digikaland.entities.StationClientPerspective;
+import hu.bme.aut.digikaland.entities.station.StationClientPerspective;
 import hu.bme.aut.digikaland.entities.objectives.Objective;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientStationAdapter;
 

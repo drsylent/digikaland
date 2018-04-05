@@ -10,10 +10,6 @@ import hu.bme.aut.digikaland.entities.objectives.MultipleChoiceObjective;
 import hu.bme.aut.digikaland.entities.objectives.solutions.MultipleChoiceSolution;
 import hu.bme.aut.digikaland.ui.common.objectives.MultipleChoiceObjectiveFragment;
 
-/**
- * Created by Sylent on 2018. 04. 03..
- */
-
 public class MultipleChoiceEvaluateFragment extends EvaluateFragment {
 
     public MultipleChoiceEvaluateFragment() {

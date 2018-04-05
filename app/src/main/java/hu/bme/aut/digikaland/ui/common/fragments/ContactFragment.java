@@ -60,7 +60,7 @@ public class ContactFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.item_contact, container, false);
+        View root = inflater.inflate(R.layout.fragment_contact, container, false);
         TextView tvName = root.findViewById(R.id.contactName);
         TextView tvPhone = root.findViewById(R.id.contactPhone);
         tvName.setText(name);

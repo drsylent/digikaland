@@ -10,7 +10,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Kiértékelt / végzett / összes csapat:"
+            android:text="@string/eval_done_summ_team"
             android:layout_marginTop="@dimen/s_margin"
             style="@style/StringFormatMiniTitle"/>
 
@@ -28,12 +28,12 @@
             style="@style/ButtonStyle.Center"
             android:id="@+id/adminStationActualEvaluate"
             android:layout_marginTop="@dimen/m_margin"
-            android:text="Értékelés"/>
+            android:text="@string/evaluate"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Állomásom:"
+            android:text="@string/my_station"
             android:layout_marginTop="@dimen/l_margin"
             android:gravity="center_horizontal"
             style="@style/StringFormatMiniTitle"/>
@@ -61,7 +61,7 @@
             style="@style/ButtonStyle.Center"
             android:id="@+id/adminStationActualObjectives"
             android:layout_marginTop="@dimen/m_margin"
-            android:text="Feladatok"/>
+            android:text="@string/objectives"/>
 
         <Button
             android:layout_width="wrap_content"
@@ -74,7 +74,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Következő csapat:"
+            android:text="@string/next_team"
             android:layout_marginTop="@dimen/m_margin"
             android:gravity="center_horizontal"
             style="@style/StringFormatMiniTitle"/>

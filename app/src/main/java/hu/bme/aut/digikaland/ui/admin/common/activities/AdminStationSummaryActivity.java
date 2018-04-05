@@ -8,9 +8,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.entities.Contact;
+import hu.bme.aut.digikaland.entities.EvaluationStatistics;
+import hu.bme.aut.digikaland.entities.Location;
 import hu.bme.aut.digikaland.ui.common.activities.MapsActivity;
 import hu.bme.aut.digikaland.ui.common.fragments.ContactFragment;
 import hu.bme.aut.digikaland.ui.common.fragments.TextFragment;
@@ -19,11 +20,8 @@ import hu.bme.aut.digikaland.utility.development.MockGenerator;
 public class AdminStationSummaryActivity extends AppCompatActivity {
     public final static String ARG_STATIONID = "stationid";
     public final static String ARG_LOCATION = "loc";
-    public final static String ARG_SUBLOCATION = "subloc";
     public final static String ARG_CONTACT = "contact";
-    public final static String ARG_EVALUATED = "eval";
-    public final static String ARG_DONE = "done";
-    public final static String ARG_SUM = "sum";
+    public final static String ARG_STATUS = "status";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,18 +34,29 @@ public class AdminStationSummaryActivity extends AppCompatActivity {
         }
 
         int stationId = getIntent().getIntExtra(ARG_STATIONID, -1);
-        String location = getIntent().getStringExtra(ARG_LOCATION);
-        String sublocation = getIntent().getStringExtra(ARG_SUBLOCATION);
+        Location location = (Location) getIntent().getSerializableExtra(ARG_LOCATION);
         Contact contact = (Contact) getIntent().getSerializableExtra(ARG_CONTACT);
-        int evaluated = getIntent().getIntExtra(ARG_EVALUATED, -1);
-        int done = getIntent().getIntExtra(ARG_DONE, -1);
-        int sum = getIntent().getIntExtra(ARG_SUM, -1);
+        EvaluationStatistics status = (EvaluationStatistics) getIntent().getSerializableExtra(ARG_STATUS);
         TextView tvStationId = findViewById(R.id.adminStationSummaryId);
         tvStationId.setText(getResources().getString(R.string.station_id, stationId));
         TextView tvLocation = findViewById(R.id.adminStationSummaryLocation);
-        tvLocation.setText(location);
         TextView tvSubLocation = findViewById(R.id.adminStationSummarySubLocation);
-        tvSubLocation.setText(sublocation);
+        Button bMap = findViewById(R.id.adminStationSummaryMap);
+        if(location != null){
+            tvLocation.setText(location.main);
+            tvSubLocation.setText(location.detailed);
+            bMap.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startMap();
+                }
+            });
+        }
+        else{
+            tvLocation.setText(R.string.no_location_station);
+            tvSubLocation.setText(R.string.solve_on_the_route);
+            bMap.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        }
         if(savedInstanceState == null) {
             if (contact != null)
                 getSupportFragmentManager().beginTransaction().add(R.id.adminStationSummaryAdminContent,
@@ -57,15 +66,7 @@ public class AdminStationSummaryActivity extends AppCompatActivity {
                         TextFragment.newInstance("Nincs felelőse az állomásnak", true)).commit();
         }
         TextView tvStatus = findViewById(R.id.adminStationSummaryStatus);
-        tvStatus.setText(getResources().getString(R.string.tri_status, evaluated, done, sum));
-        // TODO: mi van, ha nincs helyszíne egy állomásnak? le kell "tiltani" a gombot, és a helyszínt is
-        Button bMap = findViewById(R.id.adminStationSummaryMap);
-        bMap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startMap();
-            }
-        });
+        tvStatus.setText(getResources().getString(R.string.tri_status, status.evaluated, status.done, status.all));
         Button bTeams = findViewById(R.id.adminStationSummaryTeams);
         bTeams.setOnClickListener(new View.OnClickListener() {
             @Override
