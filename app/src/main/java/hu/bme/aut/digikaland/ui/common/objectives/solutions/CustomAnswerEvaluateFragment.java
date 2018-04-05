@@ -14,14 +14,14 @@ import hu.bme.aut.digikaland.ui.common.objectives.CustomAnswerObjectiveFragment;
  * Created by Sylent on 2018. 04. 03..
  */
 
-public class CustomAnswerSolutionFragment extends SolutionFragment {
+public class CustomAnswerEvaluateFragment extends EvaluateFragment {
 
-    public CustomAnswerSolutionFragment() {
+    public CustomAnswerEvaluateFragment() {
         // Required empty public constructor
     }
 
-    public static CustomAnswerSolutionFragment newInstance(CustomAnswerSolution sol, int current, int max) {
-        CustomAnswerSolutionFragment fragment = new CustomAnswerSolutionFragment();
+    public static CustomAnswerEvaluateFragment newInstance(CustomAnswerSolution sol, int current, int max) {
+        CustomAnswerEvaluateFragment fragment = new CustomAnswerEvaluateFragment();
         fragment.setArguments(createBundle(sol, current, max));
         return fragment;
     }
@@ -37,11 +37,14 @@ public class CustomAnswerSolutionFragment extends SolutionFragment {
         View root = inflater.inflate(R.layout.fragment_evaluate, container, false);
         CustomAnswerSolution solution = (CustomAnswerSolution) getSolution();
         CustomAnswerObjective objective = (CustomAnswerObjective) solution.getObjective();
-        getChildFragmentManager().beginTransaction().add(R.id.evaluateQuestionContent,
-                CustomAnswerObjectiveFragment.newInstance(objective, false, solution.getAnswer())).commit();
-        PointDisplayFragment fragment = PointDisplayFragment.newInstance(currentPoints, maxPoints, getTag());
-        setPointHolder(fragment);
-        getChildFragmentManager().beginTransaction().add(R.id.evaluatePointContent, fragment).commit();
+        if(savedInstanceState == null){
+            getChildFragmentManager().beginTransaction().add(R.id.evaluateQuestionContent,
+                    CustomAnswerObjectiveFragment.newInstance(objective, false, solution.getAnswer())).commit();
+            PointDisplayFragment fragment = PointDisplayFragment.newInstance(currentPoints, maxPoints, getTag());
+            setPointHolder(fragment);
+            getChildFragmentManager().beginTransaction().add(R.id.evaluatePointContent, fragment, PointDisplayFragment.generateTag()).commit();
+        }
+        else setPointHolder(savedInstanceState.getString(ARG_POINTFRAGTAG));
         return root;
     }
 }

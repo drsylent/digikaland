@@ -1,7 +1,7 @@
 package hu.bme.aut.digikaland.entities.objectives.solutions;
 
 import hu.bme.aut.digikaland.entities.objectives.MultipleChoiceObjective;
-import hu.bme.aut.digikaland.ui.common.objectives.solutions.MultipleChoiceSolutionFragment;
+import hu.bme.aut.digikaland.ui.common.objectives.solutions.MultipleChoiceEvaluateFragment;
 
 /**
  * Created by Sylent on 2018. 04. 03..
@@ -20,7 +20,7 @@ public class MultipleChoiceSolution extends Solution {
     }
 
     @Override
-    public MultipleChoiceSolutionFragment createFragment() {
-        return MultipleChoiceSolutionFragment.newInstance(this, getCurrentPoints(), getMaxPoints());
+    public MultipleChoiceEvaluateFragment createFragment() {
+        return MultipleChoiceEvaluateFragment.newInstance(this, getCurrentPoints(), getMaxPoints());
     }
 }

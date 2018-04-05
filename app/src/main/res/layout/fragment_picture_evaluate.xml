@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_marginStart="@dimen/xs_margin"
     android:layout_marginTop="@dimen/xs_margin"
-    tools:context="hu.bme.aut.digikaland.ui.common.objectives.solutions.PictureSolutionFragment">
+    tools:context="hu.bme.aut.digikaland.ui.common.objectives.solutions.PictureEvaluateFragment">
 
     <TextView
         android:layout_width="match_parent"

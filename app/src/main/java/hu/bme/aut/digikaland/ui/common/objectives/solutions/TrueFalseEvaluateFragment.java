@@ -10,14 +10,14 @@ import hu.bme.aut.digikaland.entities.objectives.TrueFalseObjective;
 import hu.bme.aut.digikaland.entities.objectives.solutions.TrueFalseSolution;
 import hu.bme.aut.digikaland.ui.common.objectives.TrueFalseObjectiveFragment;
 
-public class TrueFalseSolutionFragment extends SolutionFragment {
+public class TrueFalseEvaluateFragment extends EvaluateFragment {
 
-    public TrueFalseSolutionFragment() {
+    public TrueFalseEvaluateFragment() {
         // Required empty public constructor
     }
 
-    public static TrueFalseSolutionFragment newInstance(TrueFalseSolution sol, int current, int max) {
-        TrueFalseSolutionFragment fragment = new TrueFalseSolutionFragment();
+    public static TrueFalseEvaluateFragment newInstance(TrueFalseSolution sol, int current, int max) {
+        TrueFalseEvaluateFragment fragment = new TrueFalseEvaluateFragment();
         fragment.setArguments(createBundle(sol, current, max));
         return fragment;
     }
@@ -33,11 +33,14 @@ public class TrueFalseSolutionFragment extends SolutionFragment {
         View root = inflater.inflate(R.layout.fragment_evaluate, container, false);
         TrueFalseSolution solution = (TrueFalseSolution) getSolution();
         TrueFalseObjective objective = (TrueFalseObjective) solution.getObjective();
-        getChildFragmentManager().beginTransaction().add(R.id.evaluateQuestionContent,
-                TrueFalseObjectiveFragment.newInstance(objective, false, solution.getAnswer())).commit();
-        PointDisplayFragment fragment = PointDisplayFragment.newInstance(currentPoints, maxPoints, getTag());
-        setPointHolder(fragment);
-        getChildFragmentManager().beginTransaction().add(R.id.evaluatePointContent, fragment).commit();
+        if(savedInstanceState == null) {
+            getChildFragmentManager().beginTransaction().add(R.id.evaluateQuestionContent,
+                    TrueFalseObjectiveFragment.newInstance(objective, false, solution.getAnswer())).commit();
+            PointDisplayFragment fragment = PointDisplayFragment.newInstance(currentPoints, maxPoints, getTag());
+            setPointHolder(fragment);
+            getChildFragmentManager().beginTransaction().add(R.id.evaluatePointContent, fragment, PointDisplayFragment.generateTag()).commit();
+        }
+        else setPointHolder(savedInstanceState.getString(ARG_POINTFRAGTAG));
         return root;
     }
 }

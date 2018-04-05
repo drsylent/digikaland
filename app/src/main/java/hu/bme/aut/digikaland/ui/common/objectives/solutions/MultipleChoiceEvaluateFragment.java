@@ -14,14 +14,14 @@ import hu.bme.aut.digikaland.ui.common.objectives.MultipleChoiceObjectiveFragmen
  * Created by Sylent on 2018. 04. 03..
  */
 
-public class MultipleChoiceSolutionFragment extends SolutionFragment {
+public class MultipleChoiceEvaluateFragment extends EvaluateFragment {
 
-    public MultipleChoiceSolutionFragment() {
+    public MultipleChoiceEvaluateFragment() {
         // Required empty public constructor
     }
 
-    public static MultipleChoiceSolutionFragment newInstance(MultipleChoiceSolution sol, int current, int max) {
-        MultipleChoiceSolutionFragment fragment = new MultipleChoiceSolutionFragment();
+    public static MultipleChoiceEvaluateFragment newInstance(MultipleChoiceSolution sol, int current, int max) {
+        MultipleChoiceEvaluateFragment fragment = new MultipleChoiceEvaluateFragment();
         fragment.setArguments(createBundle(sol, current, max));
         return fragment;
     }
@@ -37,11 +37,16 @@ public class MultipleChoiceSolutionFragment extends SolutionFragment {
         View root = inflater.inflate(R.layout.fragment_evaluate, container, false);
         MultipleChoiceSolution solution = (MultipleChoiceSolution) getSolution();
         MultipleChoiceObjective objective = (MultipleChoiceObjective) solution.getObjective();
-        getChildFragmentManager().beginTransaction().add(R.id.evaluateQuestionContent,
-                MultipleChoiceObjectiveFragment.newInstance(objective, false, solution.getAnswer())).commit();
-        PointDisplayFragment fragment = PointDisplayFragment.newInstance(currentPoints, maxPoints, getTag());
-        setPointHolder(fragment);
-        getChildFragmentManager().beginTransaction().add(R.id.evaluatePointContent, fragment).commit();
+        if(savedInstanceState == null) {
+            getChildFragmentManager().beginTransaction().add(R.id.evaluateQuestionContent,
+                    MultipleChoiceObjectiveFragment.newInstance(objective, false, solution.getAnswer())).commit();
+            PointDisplayFragment fragment = PointDisplayFragment.newInstance(currentPoints, maxPoints, getTag());
+            setPointHolder(fragment);
+            getChildFragmentManager().beginTransaction().add(R.id.evaluatePointContent, fragment, PointDisplayFragment.generateTag()).commit();
+        }
+        else{
+            setPointHolder(savedInstanceState.getString(ARG_POINTFRAGTAG));
+        }
         return root;
     }
 }

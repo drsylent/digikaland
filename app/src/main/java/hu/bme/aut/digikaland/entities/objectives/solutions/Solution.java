@@ -1,10 +1,9 @@
 package hu.bme.aut.digikaland.entities.objectives.solutions;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import hu.bme.aut.digikaland.entities.objectives.Objective;
-import hu.bme.aut.digikaland.ui.common.objectives.solutions.SolutionFragment;
+import hu.bme.aut.digikaland.ui.common.objectives.solutions.EvaluateFragment;
 
 /**
  * Created by Sylent on 2018. 04. 03..
@@ -34,5 +33,5 @@ public abstract class Solution implements Serializable{
         // TODO: feltöltése a megadott pontszámnak
     }
 
-    public abstract SolutionFragment createFragment();
+    public abstract EvaluateFragment createFragment();
 }

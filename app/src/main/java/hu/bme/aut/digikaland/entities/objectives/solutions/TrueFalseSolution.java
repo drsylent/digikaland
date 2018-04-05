@@ -1,9 +1,7 @@
 package hu.bme.aut.digikaland.entities.objectives.solutions;
 
-import hu.bme.aut.digikaland.entities.objectives.Objective;
 import hu.bme.aut.digikaland.entities.objectives.TrueFalseObjective;
-import hu.bme.aut.digikaland.ui.common.objectives.solutions.SolutionFragment;
-import hu.bme.aut.digikaland.ui.common.objectives.solutions.TrueFalseSolutionFragment;
+import hu.bme.aut.digikaland.ui.common.objectives.solutions.TrueFalseEvaluateFragment;
 
 /**
  * Created by Sylent on 2018. 04. 03..
@@ -22,7 +20,7 @@ public class TrueFalseSolution extends Solution {
     }
 
     @Override
-    public TrueFalseSolutionFragment createFragment() {
-        return TrueFalseSolutionFragment.newInstance(this, getCurrentPoints(), getMaxPoints());
+    public TrueFalseEvaluateFragment createFragment() {
+        return TrueFalseEvaluateFragment.newInstance(this, getCurrentPoints(), getMaxPoints());
     }
 }

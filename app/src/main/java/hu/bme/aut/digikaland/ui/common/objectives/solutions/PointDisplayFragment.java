@@ -27,6 +27,14 @@ public class PointDisplayFragment extends Fragment {
         // Required empty public constructor
     }
 
+    private static int tagNumber = 0;
+
+    public static String generateTag(){
+        String tag = "PointDisplayTag" + tagNumber;
+        tagNumber++;
+        return tag;
+    }
+
     public static PointDisplayFragment newInstance(int current, int max, String hostTag) {
         PointDisplayFragment fragment = new PointDisplayFragment();
         Bundle args = new Bundle();
@@ -45,6 +53,14 @@ public class PointDisplayFragment extends Fragment {
             maxPoints = getArguments().getInt(ARG_MAX);
             hostTag = getArguments().getString(ARG_HOST);
         }
+        if(savedInstanceState != null)
+            currentPoints = savedInstanceState.getInt(ARG_CURRENT);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(ARG_CURRENT, currentPoints);
     }
 
     @Override

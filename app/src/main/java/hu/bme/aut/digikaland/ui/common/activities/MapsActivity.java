@@ -46,10 +46,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ArrayList<String> markerNames = null;
     private ArrayList<Integer> markerIds = null;
     private boolean interactive = false;
+    private boolean newactivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        newactivity = savedInstanceState == null;
         Bundle starter = getIntent().getBundleExtra(MARKER_LOCATIONS);
         double latitudes[] = starter.getDoubleArray(ARGS_LATITUDE);
         double longitudes[] = starter.getDoubleArray(ARGS_LONGITUDE);
@@ -171,7 +173,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     public void startup(){
         updateLocationUI();
-        getDeviceLocation();
+        if(newactivity) getDeviceLocation();
     }
 
     @OnPermissionDenied(Manifest.permission.ACCESS_FINE_LOCATION)

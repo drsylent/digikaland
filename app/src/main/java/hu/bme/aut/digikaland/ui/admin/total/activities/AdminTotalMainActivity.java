@@ -28,6 +28,8 @@ import hu.bme.aut.digikaland.utility.development.MockGenerator;
 public class AdminTotalMainActivity extends AppCompatActivity implements ResultsFragment.ResultsFragmentListener,
         AdminRunningFragment.AdminRunningListener, AdminRaceStarterFragment.AdminStarterListener {
 
+    private static final String ARG_FRAGMENTSTATE = "state";
+
     private NavigationView nav;
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
@@ -62,7 +64,7 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
         setupToolbar();
         nav.getMenu().getItem(0).setChecked(true);
         toolbar.setTitle(R.string.actual);
-        setNotStarted();
+        if(savedInstanceState == null) setNotStarted();
     }
 
     @Override

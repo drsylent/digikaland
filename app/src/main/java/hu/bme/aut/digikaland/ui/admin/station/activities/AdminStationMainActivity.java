@@ -31,6 +31,7 @@ import hu.bme.aut.digikaland.ui.common.fragments.ResultsFragment;
 import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
 public class AdminStationMainActivity extends AppCompatActivity implements AdminStationActualFragment.AdminActivityInterface, ResultsFragment.ResultsFragmentListener {
+    private final static String ARG_RESULTSSHOWN = "fragstate";
 
     private NavigationView nav;
     private Toolbar toolbar;
@@ -67,7 +68,7 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
         setupToolbar();
         nav.getMenu().getItem(0).setChecked(true);
         toolbar.setTitle(R.string.actual);
-        setActual();
+        if(savedInstanceState == null) setActual();
     }
 
     @Override
@@ -90,6 +91,12 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
     private enum ContentState{
         Actual,
         Results
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(ARG_RESULTSSHOWN, state == ContentState.Results);
     }
 
     private ContentState state;

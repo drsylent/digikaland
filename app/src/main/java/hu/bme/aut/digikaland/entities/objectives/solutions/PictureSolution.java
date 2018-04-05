@@ -1,11 +1,9 @@
 package hu.bme.aut.digikaland.entities.objectives.solutions;
 
-import android.net.Uri;
-
 import java.util.ArrayList;
 
 import hu.bme.aut.digikaland.entities.objectives.PictureObjective;
-import hu.bme.aut.digikaland.ui.common.objectives.solutions.PictureSolutionFragment;
+import hu.bme.aut.digikaland.ui.common.objectives.solutions.PictureEvaluateFragment;
 
 /**
  * Created by Sylent on 2018. 04. 03..
@@ -24,7 +22,7 @@ public class PictureSolution extends Solution {
     }
 
     @Override
-    public PictureSolutionFragment createFragment() {
-        return PictureSolutionFragment.newInstance(this, getCurrentPoints(), getMaxPoints());
+    public PictureEvaluateFragment createFragment() {
+        return PictureEvaluateFragment.newInstance(this, getCurrentPoints(), getMaxPoints());
     }
 }

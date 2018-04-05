@@ -5,14 +5,12 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.NumberPicker;
 
 import hu.bme.aut.digikaland.R;
-import hu.bme.aut.digikaland.ui.common.objectives.solutions.SolutionFragment;
 
 /**
  * Created by Sylent on 2018. 04. 03..

@@ -23,7 +23,7 @@ import hu.bme.aut.digikaland.entities.objectives.solutions.Solution;
 import hu.bme.aut.digikaland.ui.common.fragments.NumberPickerDialogFragment;
 import hu.bme.aut.digikaland.ui.common.fragments.PictureFragment;
 import hu.bme.aut.digikaland.ui.common.objectives.solutions.PointDisplayFragment;
-import hu.bme.aut.digikaland.ui.common.objectives.solutions.SolutionFragment;
+import hu.bme.aut.digikaland.ui.common.objectives.solutions.EvaluateFragment;
 
 public class AdminEvaluateActivity extends AppCompatActivity implements PictureFragment.PictureFragmentListener, PointDisplayFragment.PointHandleActivity,
         NumberPickerDialogFragment.PointSettingInterface{
@@ -55,20 +55,21 @@ public class AdminEvaluateActivity extends AppCompatActivity implements PictureF
         textView = findViewById(R.id.adminEvaluateTime);
         Date date = new Date(getIntent().getLongExtra(ARG_TIME, 0));
         textView.setText(getResources().getString(R.string.evaluate_date, date));
-        ArrayList<Solution> solutions = (ArrayList<Solution>) getIntent().getSerializableExtra(ARG_SOLUTIONS);
-        for(Solution o : solutions){
-            getSupportFragmentManager().beginTransaction().add(R.id.adminEvaluateContent, o.createFragment(), SolutionFragment.generateTag()).commit();
+        if(savedInstanceState == null) {
+            ArrayList<Solution> solutions = (ArrayList<Solution>) getIntent().getSerializableExtra(ARG_SOLUTIONS);
+            for (Solution o : solutions) {
+                getSupportFragmentManager().beginTransaction().add(R.id.adminEvaluateContent, o.createFragment(), EvaluateFragment.generateTag()).commit();
+            }
         }
         Button sendButton = findViewById(R.id.adminEvaluateSend);
-        if(getIntent().getBooleanExtra(ARG_SEND, false)){
+        if (getIntent().getBooleanExtra(ARG_SEND, false)) {
             sendButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     showSnackBarMessage("Elküldés");
                 }
             });
-        }
-        else{
+        } else {
             sendButton.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
             sendButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -144,7 +145,7 @@ public class AdminEvaluateActivity extends AppCompatActivity implements PictureF
 
     @Override
     public void pointSet(String fragmentTag, int point) {
-        SolutionFragment frag = (SolutionFragment) getSupportFragmentManager().findFragmentByTag(fragmentTag);
+        EvaluateFragment frag = (EvaluateFragment) getSupportFragmentManager().findFragmentByTag(fragmentTag);
         frag.setPoint(point);
     }
 }

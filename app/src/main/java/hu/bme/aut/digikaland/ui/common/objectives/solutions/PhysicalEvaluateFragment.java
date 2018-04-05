@@ -14,13 +14,13 @@ import hu.bme.aut.digikaland.ui.common.objectives.PhysicalObjectiveFragment;
  * Created by Sylent on 2018. 04. 03..
  */
 
-public class PhysicalSolutionFragment extends SolutionFragment {
-    public PhysicalSolutionFragment() {
+public class PhysicalEvaluateFragment extends EvaluateFragment {
+    public PhysicalEvaluateFragment() {
         // Required empty public constructor
     }
 
-    public static PhysicalSolutionFragment newInstance(PhysicalSolution sol, int current, int max) {
-        PhysicalSolutionFragment fragment = new PhysicalSolutionFragment();
+    public static PhysicalEvaluateFragment newInstance(PhysicalSolution sol, int current, int max) {
+        PhysicalEvaluateFragment fragment = new PhysicalEvaluateFragment();
         fragment.setArguments(createBundle(sol, current, max));
         return fragment;
     }
@@ -36,11 +36,14 @@ public class PhysicalSolutionFragment extends SolutionFragment {
         View root = inflater.inflate(R.layout.fragment_evaluate, container, false);
         PhysicalSolution solution = (PhysicalSolution) getSolution();
         PhysicalObjective objective = (PhysicalObjective) solution.getObjective();
-        getChildFragmentManager().beginTransaction().add(R.id.evaluateQuestionContent,
-                PhysicalObjectiveFragment.newInstance(objective)).commit();
-        PointDisplayFragment fragment = PointDisplayFragment.newInstance(currentPoints, maxPoints, getTag());
-        setPointHolder(fragment);
-        getChildFragmentManager().beginTransaction().add(R.id.evaluatePointContent, fragment).commit();
+        if(savedInstanceState == null){
+            getChildFragmentManager().beginTransaction().add(R.id.evaluateQuestionContent,
+                    PhysicalObjectiveFragment.newInstance(objective)).commit();
+            PointDisplayFragment fragment = PointDisplayFragment.newInstance(currentPoints, maxPoints, getTag());
+            setPointHolder(fragment);
+            getChildFragmentManager().beginTransaction().add(R.id.evaluatePointContent, fragment, PointDisplayFragment.generateTag()).commit();
+        }
+        else setPointHolder(savedInstanceState.getString(ARG_POINTFRAGTAG));
         return root;
     }
 }

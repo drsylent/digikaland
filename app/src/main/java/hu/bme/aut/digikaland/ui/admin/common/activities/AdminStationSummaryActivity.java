@@ -34,42 +34,45 @@ public class AdminStationSummaryActivity extends AppCompatActivity {
             toolbar.setDisplayHomeAsUpEnabled(true);
             toolbar.setTitle(R.string.station);
         }
-        if(savedInstanceState == null){
-            int stationId = getIntent().getIntExtra(ARG_STATIONID, -1);
-            String location = getIntent().getStringExtra(ARG_LOCATION);
-            String sublocation = getIntent().getStringExtra(ARG_SUBLOCATION);
-            Contact contact = (Contact) getIntent().getSerializableExtra(ARG_CONTACT);
-            int evaluated = getIntent().getIntExtra(ARG_EVALUATED, -1);
-            int done = getIntent().getIntExtra(ARG_DONE, -1);
-            int sum = getIntent().getIntExtra(ARG_SUM, -1);
-            TextView tvStationId = findViewById(R.id.adminStationSummaryId);
-            tvStationId.setText(getResources().getString(R.string.station_id, stationId));
-            TextView tvLocation = findViewById(R.id.adminStationSummaryLocation);
-            tvLocation.setText(location);
-            TextView tvSubLocation = findViewById(R.id.adminStationSummarySubLocation);
-            tvSubLocation.setText(sublocation);
-            if(contact != null) getSupportFragmentManager().beginTransaction().add(R.id.adminStationSummaryAdminContent,
-                    ContactFragment.newInstance(contact, true)).commit();
-            else getSupportFragmentManager().beginTransaction().add(R.id.adminStationSummaryAdminContent,
-                    TextFragment.newInstance("Nincs felelőse az állomásnak", true)).commit();
-            TextView tvStatus = findViewById(R.id.adminStationSummaryStatus);
-            tvStatus.setText(getResources().getString(R.string.tri_status, evaluated, done, sum));
-            // TODO: mi van, ha nincs helyszíne egy állomásnak? le kell "tiltani" a gombot, és a helyszínt is
-            Button bMap = findViewById(R.id.adminStationSummaryMap);
-            bMap.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    startMap();
-                }
-            });
-            Button bTeams = findViewById(R.id.adminStationSummaryTeams);
-            bTeams.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    startTeams();
-                }
-            });
+
+        int stationId = getIntent().getIntExtra(ARG_STATIONID, -1);
+        String location = getIntent().getStringExtra(ARG_LOCATION);
+        String sublocation = getIntent().getStringExtra(ARG_SUBLOCATION);
+        Contact contact = (Contact) getIntent().getSerializableExtra(ARG_CONTACT);
+        int evaluated = getIntent().getIntExtra(ARG_EVALUATED, -1);
+        int done = getIntent().getIntExtra(ARG_DONE, -1);
+        int sum = getIntent().getIntExtra(ARG_SUM, -1);
+        TextView tvStationId = findViewById(R.id.adminStationSummaryId);
+        tvStationId.setText(getResources().getString(R.string.station_id, stationId));
+        TextView tvLocation = findViewById(R.id.adminStationSummaryLocation);
+        tvLocation.setText(location);
+        TextView tvSubLocation = findViewById(R.id.adminStationSummarySubLocation);
+        tvSubLocation.setText(sublocation);
+        if(savedInstanceState == null) {
+            if (contact != null)
+                getSupportFragmentManager().beginTransaction().add(R.id.adminStationSummaryAdminContent,
+                        ContactFragment.newInstance(contact, true)).commit();
+            else
+                getSupportFragmentManager().beginTransaction().add(R.id.adminStationSummaryAdminContent,
+                        TextFragment.newInstance("Nincs felelőse az állomásnak", true)).commit();
         }
+        TextView tvStatus = findViewById(R.id.adminStationSummaryStatus);
+        tvStatus.setText(getResources().getString(R.string.tri_status, evaluated, done, sum));
+        // TODO: mi van, ha nincs helyszíne egy állomásnak? le kell "tiltani" a gombot, és a helyszínt is
+        Button bMap = findViewById(R.id.adminStationSummaryMap);
+        bMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startMap();
+            }
+        });
+        Button bTeams = findViewById(R.id.adminStationSummaryTeams);
+        bTeams.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startTeams();
+            }
+        });
     }
 
     public void startMap(){

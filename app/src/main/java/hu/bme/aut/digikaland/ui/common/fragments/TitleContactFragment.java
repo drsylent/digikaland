@@ -54,6 +54,7 @@ public class TitleContactFragment extends Fragment {
         TextView tv = root.findViewById(R.id.titleContactTitle);
         tv.setText(title);
         if(center) tv.setGravity(Gravity.CENTER_HORIZONTAL);
+        if(savedInstanceState == null)
         getChildFragmentManager().beginTransaction().add(R.id.titleContactContent, ContactFragment.newInstance(contact, center)).commit();
         return root;
     }
