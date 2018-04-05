@@ -3,10 +3,19 @@ package hu.bme.aut.digikaland.ui.common.activities;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.ui.admin.total.activities.AdminTotalMainActivity;
 import hu.bme.aut.digikaland.ui.admin.station.activities.AdminStationMainActivity;
@@ -15,7 +24,9 @@ import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private final static int milestoneVersion = 2;
+    private final static int milestoneVersion = 0;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private Button testButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +43,7 @@ public class SplashActivity extends AppCompatActivity {
 
         // elinditasa a megfelelo activitynek gombnyomasra
         setEvents();
+        getData();
     }
 
     /**
@@ -43,6 +55,7 @@ public class SplashActivity extends AppCompatActivity {
         Button adminSimple = findViewById(R.id.devAdminObjectiveEnter);
         Button clientCaptain = findViewById(R.id.devClientCaptainEnter);
         Button clientSimple = findViewById(R.id.devClientSimpleEnter);
+        testButton = findViewById(R.id.devFirebaseTest);
 
         firstEnter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,5 +127,29 @@ public class SplashActivity extends AppCompatActivity {
                 }
             }).show();
         }
+    }
+
+    private void setTestButtonText(String text){
+        testButton.setText(text);
+    }
+
+    private void getData(){
+        DocumentReference docRef = db.collection("test").document("testdocument");
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null && document.exists()) {
+                        Log.e("Firebase", "DocumentSnapshot data: " + document.getData().get("teststring"));
+                        setTestButtonText((String) document.getData().get("teststring"));
+                    } else {
+                        Log.e("Firabase", "No such document");
+                    }
+                } else {
+                    Log.e("Firabase", "get failed with ", task.getException());
+                }
+            }
+        });
     }
 }

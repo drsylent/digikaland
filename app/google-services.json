@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1059124110777",
+    "firebase_url": "https://digikaland-drsylent.firebaseio.com",
+    "project_id": "digikaland-drsylent",
+    "storage_bucket": "digikaland-drsylent.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1059124110777:android:340028ea105ebfc7",
+        "android_client_info": {
+          "package_name": "hu.bme.aut.digikaland"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1059124110777-7d7tj2t4kioe96lvq8653k6shaajpp9m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKXw-0ewANR9WwaypjeYm0IVHn8f3RVK4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
