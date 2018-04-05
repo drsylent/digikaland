@@ -15,7 +15,7 @@ import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private final static int milestoneVersion = 0;
+    private final static int milestoneVersion = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
