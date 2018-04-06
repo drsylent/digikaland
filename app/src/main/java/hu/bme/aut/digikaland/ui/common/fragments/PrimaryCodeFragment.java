@@ -40,12 +40,12 @@ public class PrimaryCodeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_primary_code, container, false);
-        Button sender = root.findViewById(R.id.primarySend);
+        final Button sender = root.findViewById(R.id.primarySend);
         primaryHolder = root.findViewById(R.id.primaryCode);
         sender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startupActivity.onPrimaryCodeHit(getCode());
+                startupActivity.onPrimaryCodeHit(getCode(), sender);
             }
         });
         primaryHolder.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -53,7 +53,7 @@ public class PrimaryCodeFragment extends Fragment {
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
                 boolean handled = false;
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
-                    startupActivity.onPrimaryCodeHit(getCode());
+                    startupActivity.onPrimaryCodeHit(getCode(), sender);
                     handled = true;
                 }
                 return handled;
@@ -70,7 +70,7 @@ public class PrimaryCodeFragment extends Fragment {
             startupActivity = (PrimaryCodeReady) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement SecondaryCodeReady");
+                    + " must implement PrimaryCodeReady");
         }
     }
 
@@ -81,6 +81,6 @@ public class PrimaryCodeFragment extends Fragment {
     }
 
     public interface PrimaryCodeReady {
-        void onPrimaryCodeHit(String raceCode);
+        void onPrimaryCodeHit(String raceCode, Button button);
     }
 }

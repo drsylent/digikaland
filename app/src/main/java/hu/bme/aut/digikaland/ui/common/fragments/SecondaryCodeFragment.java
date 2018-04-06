@@ -51,12 +51,12 @@ public class SecondaryCodeFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_secondary_code, container, false);
         TextView raceTitle = root.findViewById(R.id.SecondaryRaceTitle);
         raceTitle.setText(raceName);
-        Button sender = root.findViewById(R.id.secondarySend);
+        final Button sender = root.findViewById(R.id.secondarySend);
         secondaryHolder = root.findViewById(R.id.secondaryCode);
         sender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startupActivity.onSecondaryCodeHit(secondaryHolder.getText().toString());
+                startupActivity.onSecondaryCodeHit(secondaryHolder.getText().toString(), sender);
             }
         });
         secondaryHolder.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -64,7 +64,7 @@ public class SecondaryCodeFragment extends Fragment {
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
                 boolean handled = false;
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
-                    startupActivity.onSecondaryCodeHit(getCode());
+                    startupActivity.onSecondaryCodeHit(getCode(), sender);
                     handled = true;
                 }
                 return handled;
@@ -92,6 +92,6 @@ public class SecondaryCodeFragment extends Fragment {
     }
 
     public interface SecondaryCodeReady {
-        void onSecondaryCodeHit(String roleCode);
+        void onSecondaryCodeHit(String roleCode, Button button);
     }
 }
