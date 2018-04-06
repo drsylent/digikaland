@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import java.util.Date;
 import hu.bme.aut.digikaland.R;
+import hu.bme.aut.digikaland.entities.Location;
 import hu.bme.aut.digikaland.utility.TimeWriter;
 
 public class ClientActualFragment extends Fragment {
@@ -21,8 +22,7 @@ public class ClientActualFragment extends Fragment {
 
     private int stationSum;
     private int stationNumber;
-    private String location;
-    private String subLocation;
+    private Location location;
     private Date time;
 
     private ClientActualMainListener clientActual;
@@ -43,9 +43,8 @@ public class ClientActualFragment extends Fragment {
         if (getArguments() != null) {
             stationSum = getArguments().getInt(ARG_STATIONS);
             stationNumber = getArguments().getInt(ARG_STATION_NUMBER);
-            location = getArguments().getString(ARG_LOCATION);
-            subLocation = getArguments().getString(ARG_SUBLOCATION);
-            time = new Date(getArguments().getLong(ARG_TIME));
+            location = (Location) getArguments().getSerializable(ARG_LOCATION);
+            time = (Date) getArguments().getSerializable(ARG_TIME);
         }
     }
 
@@ -72,14 +71,14 @@ public class ClientActualFragment extends Fragment {
         TextView tvSubLocation = root.findViewById(R.id.clientStationSubLocation);
         TextView tvTime = root.findViewById(R.id.clientStationTime);
         tvStation.setText(getStationString());
-        tvLocation.setText(location);
-        tvSubLocation.setText(subLocation);
-        tvTime.setText(TimeWriter.dateFormat(time));
+        tvLocation.setText(location.main);
+        tvSubLocation.setText(location.detailed);
+        tvTime.setText(getResources().getString(R.string.date, time));
         return root;
     }
 
     private String getStationString(){
-        if(stationNumber == 0) return getString(R.string.starting_place);
+        if(stationNumber == -1) return getString(R.string.starting_place);
         if(stationNumber <= stationSum) return getString(R.string.station_status, stationNumber, stationSum);
         else return getString(R.string.end_results);
     }

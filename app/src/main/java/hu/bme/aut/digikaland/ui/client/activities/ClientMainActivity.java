@@ -14,7 +14,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+
 import hu.bme.aut.digikaland.R;
+import hu.bme.aut.digikaland.dblogic.ClientEngine;
+import hu.bme.aut.digikaland.dblogic.ErrorType;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientActualFragment;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientObjectiveFragment;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientStatusFragment;
@@ -24,7 +27,7 @@ import hu.bme.aut.digikaland.ui.common.fragments.ResultsFragment;
 import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
 public class ClientMainActivity extends AppCompatActivity implements ClientActualFragment.ClientActualMainListener, ClientObjectiveFragment.ClientActiveObjectiveListener,
-        ResultsFragment.ResultsFragmentListener{
+        ResultsFragment.ResultsFragmentListener, ClientEngine.CommunicationInterface{
 
     private static final String ARG_VIEWSTATE = "state";
     private static final String ARG_ACTUALSTATE = "actuals";
@@ -33,6 +36,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private LinearLayout mainLayout;
+    private ClientEngine db = ClientEngine.getInstance(this);
 
     @Override
     public void mapActivation() {
@@ -52,6 +56,55 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     @Override
     public void onNewRaceStart() {
         startActivity(new Intent(ClientMainActivity.this, SplashActivity.class));
+    }
+
+    @Override
+    public void clientError(ErrorType type) {
+        showSnackBarMessage(type.getDefaultMessage());
+    }
+
+    private boolean uiReady = false;
+    private enum loadResult{
+        Starting,
+        Running,
+        Objective,
+        Ending
+    }
+    private loadResult postLoad = null;
+
+    @Override
+    public void startingStateLoaded() {
+        if(uiReady) {
+            Bundle startingBundle = new Bundle();
+            startingBundle.putInt(ClientActualFragment.ARG_STATION_NUMBER, -1);
+            startingBundle.putSerializable(ClientActualFragment.ARG_LOCATION, db.getLastLoadedLocation());
+            startingBundle.putSerializable(ClientActualFragment.ARG_TIME, db.getLastLoadedStartingTime());
+            setActual(startingBundle);
+        }
+        else postLoad = loadResult.Starting;
+    }
+
+    @Override
+    public void runningStateLoaded() {
+        if(uiReady) {
+            Bundle runningBundle = new Bundle();
+            runningBundle.putInt(ClientActualFragment.ARG_STATION_NUMBER, db.getLastLoadedStationNumber());
+            runningBundle.putInt(ClientActualFragment.ARG_STATIONS, db.getStationSum());
+            runningBundle.putSerializable(ClientActualFragment.ARG_LOCATION, db.getLastLoadedLocation());
+            runningBundle.putSerializable(ClientActualFragment.ARG_TIME, db.getLastLoadedStartingTime());
+            setActual(runningBundle);
+        }
+        else postLoad = loadResult.Running;
+    }
+
+    @Override
+    public void stationStateLoaded() {
+
+    }
+
+    @Override
+    public void endingStateLoaded() {
+
     }
 
     private enum ViewState{
@@ -80,6 +133,9 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // elindítjuk itt, hogy amíg a felület beállítódik, stb, addig is menjen a letöltés
+        // persze ha előbb végez, akkor gáz van, ezért figyelünk
+        ClientEngine.getInstance(this).loadState();
         setContentView(R.layout.activity_client_main);
         mainLayout = findViewById(R.id.clientContent);
         drawerLayout = findViewById(R.id.clientDrawer);
@@ -91,7 +147,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
                 if(getActiveItem() == item) return false;
                 switch(item.getItemId()){
                     case R.id.clientActual:
-                        setActual();
+                        setActualMock();
                         break;
                     case R.id.clientMap:
                         setMap();
@@ -111,14 +167,22 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
 
         if(savedInstanceState == null) {
             state = ViewState.Actual;
-            actualStatus = ActualStatus.normal;
-            setActual();
+//            actualStatus = ActualStatus.normal;
+//            setActualMock();
         }
-        else{
-            state = ViewState.valueOf(savedInstanceState.getString(ARG_VIEWSTATE));
-            actualStatus = ActualStatus.valueOf(savedInstanceState.getString(ARG_ACTUALSTATE));
-            getActiveItem().setChecked(true);
+        uiReady = true;
+        if(postLoad != null)
+        switch (postLoad){
+            case Starting: startingStateLoaded();
+            case Running: runningStateLoaded();
+            case Objective: stationStateLoaded();
+            case Ending: endingStateLoaded();
         }
+//        else{
+//            state = ViewState.valueOf(savedInstanceState.getString(ARG_VIEWSTATE));
+//            actualStatus = ActualStatus.valueOf(savedInstanceState.getString(ARG_ACTUALSTATE));
+//            getActiveItem().setChecked(true);
+//        }
     }
 
     @Override
@@ -132,11 +196,16 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         changeState(ViewState.Actual);
     }
 
-    void setActual(){
+    void setActualMock(){
         setActualMain();
         actualStatus = ActualStatus.normal;
         toolbar.setTitle(R.string.actual);
         getSupportFragmentManager().beginTransaction().replace(R.id.clientContent, ClientActualFragment.newInstance(MockGenerator.mockActualMain())).commit();
+    }
+
+    private void setActual(Bundle bundle){
+        toolbar.setTitle(R.string.actual);
+        getSupportFragmentManager().beginTransaction().replace(R.id.clientContent, ClientActualFragment.newInstance(bundle)).commit();
     }
 
     void setMap(){
@@ -174,7 +243,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     @Override
     public void onBackPressed() {
         if(drawerLayout.isDrawerOpen(findViewById(R.id.clientNavigation))) drawerLayout.closeDrawers();
-        else if(state == ViewState.Status) setActual();
+        else if(state == ViewState.Status) setActualMock();
         else super.onBackPressed();
     }
 
@@ -206,7 +275,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
                         setResults();
                         break;
                     case results:
-                        setActual();
+                        setActualMock();
                         break;
                 }
         }

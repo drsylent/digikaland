@@ -18,6 +18,10 @@ public class RacePermissionHandler {
         return ourInstance;
     }
 
+    static RacePermissionHandler getInstance() {
+        return ourInstance;
+    }
+
     private RacePermissionHandler() {
     }
 
@@ -85,6 +89,11 @@ public class RacePermissionHandler {
                         if(document.get("role") instanceof String)
                             modeSet((String) document.get("role"));
                         else comm.permissionError(ErrorType.DatabaseError);
+                        if(document.contains("reference"))
+                            if(document.get("reference") instanceof DocumentReference)
+                                setReference(document.getDocumentReference("reference"));
+                            else comm.permissionError(ErrorType.DatabaseError);
+                        if(comm != null) comm.permissionReady();
                     } else {
                         if(comm != null) comm.permissionError(ErrorType.RoleNotExists);
                     }
@@ -107,7 +116,11 @@ public class RacePermissionHandler {
         }
         // Lehet bent marad a korábbi admin... biztos mindig meglesz a reset hívás?
         Log.e("CurrentPermission", mainMode + " " + adminMode + " " + clientMode);
-        if(comm != null) comm.permissionReady();
+    }
+
+    private void setReference(DocumentReference ref){
+        if(mainMode == MainMode.Client) teamReference = ref;
+        else if(adminMode == AdminMode.Station) stationReference = ref;
     }
 
     public void reset(){
@@ -129,9 +142,20 @@ public class RacePermissionHandler {
         return clientMode;
     }
 
+    public DocumentReference getTeamReference() {
+        return teamReference;
+    }
+
+    public DocumentReference getStationReference() {
+        return stationReference;
+    }
+
     private MainMode mainMode = null;
     private AdminMode adminMode = null;
     private ClientMode clientMode = null;
+    private DocumentReference teamReference = null;
+    // ha ez lesz az állomásadminnak
+    private DocumentReference stationReference = null;
 
     public enum MainMode{
         Admin,
