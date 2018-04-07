@@ -39,7 +39,6 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         ResultsFragment.ResultsFragmentListener, ClientEngine.CommunicationInterface, ResultsEngine.CommunicationInterface, ContactsEngine.CommunicationInterface{
 
     private static final String ARG_VIEWSTATE = "state";
-    private static final String ARG_ACTUALSTATE = "actuals";
 
     private NavigationView nav;
     private Toolbar toolbar;
@@ -77,7 +76,6 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         setHelp();
     }
 
-    // TODO: ha nem kezdődött még el, vagy már befejeződött (üres stationadmin lista kéne legyen) mi történik?
     private void setHelp(){
         oneHelpLoaded++;
         if(oneHelpLoaded == oneHelpLoadedSum) goToHelp(ContactsEngine.getInstance(this).getTotalAdmins(), ContactsEngine.getInstance(this).getStationAdmins(db.getLastLoadedStationId()));
@@ -134,6 +132,11 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         getSupportFragmentManager().beginTransaction().replace(R.id.clientContent, ClientStatusFragment.newInstance(bundle)).commit();
     }
 
+    private void setActual(){
+        changeState(ViewState.Actual);
+        executePostLoad();
+    }
+
     @Override
     public void onActiveObjectiveOpen() {
         goToObjectiveMock();
@@ -160,8 +163,6 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     public void resultsError(ErrorType type) {
         showSnackBarMessage("ResultsEngine: " + type.getDefaultMessage());
     }
-
-
 
     @Override
     public void contactsError(ErrorType type) {
@@ -267,13 +268,13 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
                 if(getActiveItem() == item) return false;
                 switch(item.getItemId()){
                     case R.id.clientActual:
-                        setActualMock();
+                        setActual();
                         break;
                     case R.id.clientMap:
                         goToMap(db.getLastLoadedGeoPoint());
                         break;
                     case R.id.clientStations:
-                        setStations();
+                        setStationsMock();
                         break;
                     case R.id.clientStatus:
                         prepareStatus();
@@ -313,18 +314,10 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(ARG_VIEWSTATE, state.name());
-        outState.putString(ARG_ACTUALSTATE, actualStatus.name());
     }
 
     void setActualMain(){
         changeState(ViewState.Actual);
-    }
-
-    void setActualMock(){
-        setActualMain();
-        actualStatus = ActualStatus.normal;
-        toolbar.setTitle(R.string.actual);
-        getSupportFragmentManager().beginTransaction().replace(R.id.clientContent, ClientActualFragment.newInstance(MockGenerator.mockActualMain())).commit();
     }
 
     private void goToActual(Bundle bundle){
@@ -359,12 +352,14 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         startActivity(i);
     }
 
-    void setStations(){
+    // TODO: mock átlépés eltüntetése
+    void setStationsMock(){
         Intent i = new Intent(ClientMainActivity.this, ClientStationsActivity.class);
         i.putExtra(ClientStationsActivity.ARGS_STATIONS, MockGenerator.mockStationsList());
         startActivity(i);
     }
 
+    // TODO: mock átlépés eltüntetése
     void goToObjectiveMock(){
         Intent i = new Intent(ClientMainActivity.this, ClientObjectiveActivity.class);
         i.putExtra(ClientObjectiveActivity.ARGS_OBJECTIVES, MockGenerator.mockBigObjectiveList());
@@ -373,25 +368,12 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         startActivity(i);
     }
 
-    void setStatusMock(){
-        changeState(ViewState.Status);
-        toolbar.setTitle(R.string.status);
-        getSupportFragmentManager().beginTransaction().replace(R.id.clientContent, ClientStatusFragment.newInstance(MockGenerator.mockStatusData())).commit();
-    }
-
-    void setHelpMock(){
-        Intent i = new Intent(ClientMainActivity.this, ClientHelpActivity.class);
-        i.putExtra(ClientHelpActivity.ARG_HELPDATA, MockGenerator.mockHelpData());
-        startActivity(i);
-    }
-
     @Override
     public void onBackPressed() {
         if(drawerLayout.isDrawerOpen(findViewById(R.id.clientNavigation))) drawerLayout.closeDrawers();
         else if(state == ViewState.Status){
             //setActualMock();
-            changeState(ViewState.Actual);
-            executePostLoad();
+            setActual();
         }
         else super.onBackPressed();
     }
@@ -402,47 +384,11 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         return true;
     }
 
-    private enum ActualStatus{
-        normal,
-        objective,
-        results
-    }
-
-    private ActualStatus actualStatus = ActualStatus.normal;
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         showSnackBarMessage(getResources().getString(R.string.refresh));
         db.loadState();
-//        if(state == ViewState.Actual)
-//        switch(item.getItemId()) {
-//            case R.id.menu_refresh:
-//                switch(actualStatus) {
-//                    case normal:
-//                        setObjectiveMock();
-//                        break;
-//                    case objective:
-//                        setResultsMock();
-//                        break;
-//                    case results:
-//                        setActualMock();
-//                        break;
-//                }
-//        }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void setObjectiveMock(){
-        setActualMain();
-        actualStatus = ActualStatus.objective;
-        // feladatot itt nem kell majd atadni, mert azt callbackkel intezzuk
-        getSupportFragmentManager().beginTransaction().replace(R.id.clientContent, ClientObjectiveFragment.newInstance(2, 6, 3723)).commit();
-    }
-
-    private void setResultsMock(){
-        setActualMain();
-        actualStatus = ActualStatus.results;
-        getSupportFragmentManager().beginTransaction().replace(R.id.clientContent, ResultsFragment.newInstance(MockGenerator.mockResultNames(), MockGenerator.mockResultPoints())).commit();
     }
 
     private void setupToolbar(){
