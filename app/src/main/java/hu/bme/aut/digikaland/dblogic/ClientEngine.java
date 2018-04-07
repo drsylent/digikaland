@@ -148,6 +148,7 @@ public class ClientEngine {
                         try {
                             startingTime = document.getDate("timestart");
                             DocumentReference stationRef = document.getDocumentReference("station");
+                            stationId = stationRef.getId();
                             if(document.contains("timeend") && !document.getBoolean("done")){
                                 endingTime = document.getDate("timeend");
                                 loadStation(stationRef, true);
@@ -213,6 +214,16 @@ public class ClientEngine {
 
     private Date startingTime = null;
     private Date endingTime = null;
+
+    public String getStationId() {
+        return stationId;
+    }
+
+    public String getTeamId(){
+        return RacePermissionHandler.getInstance().getTeamReference().getId();
+    }
+
+    private String stationId = null;
 
     private GeoPoint geoPoint = null;
 

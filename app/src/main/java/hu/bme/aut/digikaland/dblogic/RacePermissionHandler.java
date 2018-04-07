@@ -150,6 +150,8 @@ public class RacePermissionHandler {
         return stationReference;
     }
 
+    public DocumentReference getRaceReference(){ return FirebaseFirestore.getInstance().collection("races").document(CodeHandler.getInstance().getRaceCode()); }
+
     private MainMode mainMode = null;
     private AdminMode adminMode = null;
     private ClientMode clientMode = null;

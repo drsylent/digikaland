@@ -25,8 +25,10 @@ import java.util.GregorianCalendar;
 
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.dblogic.ClientEngine;
+import hu.bme.aut.digikaland.dblogic.ContactsEngine;
 import hu.bme.aut.digikaland.dblogic.ErrorType;
 import hu.bme.aut.digikaland.dblogic.ResultsEngine;
+import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientActualFragment;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientObjectiveFragment;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientStatusFragment;
@@ -36,7 +38,7 @@ import hu.bme.aut.digikaland.ui.common.fragments.ResultsFragment;
 import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
 public class ClientMainActivity extends AppCompatActivity implements ClientActualFragment.ClientActualMainListener, ClientObjectiveFragment.ClientActiveObjectiveListener,
-        ResultsFragment.ResultsFragmentListener, ClientEngine.CommunicationInterface, ResultsEngine.CommunicationInterface{
+        ResultsFragment.ResultsFragmentListener, ClientEngine.CommunicationInterface, ResultsEngine.CommunicationInterface, ContactsEngine.CommunicationInterface{
 
     private static final String ARG_VIEWSTATE = "state";
     private static final String ARG_ACTUALSTATE = "actuals";
@@ -45,7 +47,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private LinearLayout mainLayout;
-    private ClientEngine db = ClientEngine.getInstance(this);
+    private ClientEngine db;
 
     @Override
     public void mapActivation() {
@@ -54,8 +56,16 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
 
     @Override
     public void helpActivation() {
-        setHelp();
+        prepareHelp();
     }
+
+    private void prepareHelp(){
+        oneHelpLoaded = false;
+        ContactsEngine.getInstance(this).loadTotalAdmins();
+        ContactsEngine.getInstance(this).loadStationAdmins(db.getStationId());
+    }
+
+    private boolean oneHelpLoaded = false;
 
     @Override
     public void onActiveObjectiveOpen() {
@@ -69,7 +79,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
 
     @Override
     public void clientError(ErrorType type) {
-        showSnackBarMessage(type.getDefaultMessage());
+        showSnackBarMessage("ClientEngine: " + type.getDefaultMessage());
     }
 
     private boolean uiReady = false;
@@ -81,7 +91,33 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
 
     @Override
     public void resultsError(ErrorType type) {
-        showSnackBarMessage(type.getDefaultMessage());
+        showSnackBarMessage("ResultsEngine: " + type.getDefaultMessage());
+    }
+
+    @Override
+    public void totalAdminsLoaded() {
+        setHelp();
+    }
+
+    @Override
+    public void stationAdminsLoaded() {
+        setHelp();
+    }
+
+    // TODO: ha nem kezdődött még el, vagy már befejeződött (üres stationadmin lista kéne legyen) mi történik?
+    private void setHelp(){
+        if(oneHelpLoaded) goToHelp(ContactsEngine.getInstance(this).getTotalAdmins(), ContactsEngine.getInstance(this).getStationAdmins(db.getStationId()));
+        else oneHelpLoaded = true;
+    }
+
+    @Override
+    public void captainLoaded() {
+
+    }
+
+    @Override
+    public void contactsError(ErrorType type) {
+        showSnackBarMessage("ContactsEngine: " + type.getDefaultMessage());
     }
 
     private enum loadResult{
@@ -155,7 +191,8 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         super.onCreate(savedInstanceState);
         // elindítjuk itt, hogy amíg a felület beállítódik, stb, addig is menjen a letöltés
         // persze ha előbb végez, akkor gáz van, ezért figyelünk
-        ClientEngine.getInstance(this).loadState();
+        db = ClientEngine.getInstance(this);
+        db.loadState();
         setContentView(R.layout.activity_client_main);
         mainLayout = findViewById(R.id.clientContent);
         drawerLayout = findViewById(R.id.clientDrawer);
@@ -274,9 +311,16 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         getSupportFragmentManager().beginTransaction().replace(R.id.clientContent, ClientStatusFragment.newInstance(MockGenerator.mockStatusData())).commit();
     }
 
-    void setHelp(){
+    void setHelpMock(){
         Intent i = new Intent(ClientMainActivity.this, ClientHelpActivity.class);
         i.putExtra(ClientHelpActivity.ARG_HELPDATA, MockGenerator.mockHelpData());
+        startActivity(i);
+    }
+
+    private void goToHelp(ArrayList<Contact> totalAdmins, ArrayList<Contact> stationAdmins){
+        Intent i = new Intent(ClientMainActivity.this, ClientHelpActivity.class);
+        i.putExtra(ClientHelpActivity.ARG_STATIONADMINS, stationAdmins);
+        i.putExtra(ClientHelpActivity.ARG_TOTALADMINS, totalAdmins);
         startActivity(i);
     }
 

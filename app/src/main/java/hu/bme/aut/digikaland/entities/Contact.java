@@ -3,6 +3,10 @@ package hu.bme.aut.digikaland.entities;
 import java.io.Serializable;
 
 public class Contact implements Serializable {
+    public Contact(){
+
+    }
+
     public Contact(String name, String phone){
         this.name = name;
         this.phone = phone;
@@ -14,6 +18,14 @@ public class Contact implements Serializable {
 
     public String getPhone() {
         return phone;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     private String name;
