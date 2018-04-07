@@ -37,6 +37,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public static final String MARKER_LOCATIONS = "markerlocations";
     public static final String MARKER_SPECIAL = "indexofspecial";
     public static final String MARKER_NAMES = "markernames";
+    // wut is dis
     public static final String MARKER_IDS = "markerids";
 
     private GoogleMap mMap;

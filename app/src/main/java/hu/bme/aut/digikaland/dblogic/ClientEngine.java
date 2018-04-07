@@ -150,10 +150,10 @@ public class ClientEngine {
                             DocumentReference stationRef = document.getDocumentReference("station");
                             if(document.contains("timeend") && !document.getBoolean("done")){
                                 endingTime = document.getDate("timeend");
-                                comm.stationStateLoaded();
+                                loadStation(stationRef, true);
                             }
                             else{
-                                loadStation(stationRef);
+                                loadStation(stationRef, false);
                             }
                         } catch (RuntimeException e){
                             comm.clientError(ErrorType.DatabaseError);
@@ -168,7 +168,7 @@ public class ClientEngine {
         });
     }
 
-    private void loadStation(DocumentReference ref){
+    private void loadStation(DocumentReference ref, final boolean onStation){
         ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -178,7 +178,8 @@ public class ClientEngine {
                         try {
                             location = new Location(document.getString("address"), document.getString("address-detailed"));
                             geoPoint = document.getGeoPoint("geodata");
-                            comm.runningStateLoaded();
+                            if(onStation) comm.stationStateLoaded();
+                            else comm.runningStateLoaded();
                         } catch (RuntimeException e){
                             comm.clientError(ErrorType.DatabaseError);
                         }

@@ -16,6 +16,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.google.firebase.firestore.GeoPoint;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -47,7 +49,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
 
     @Override
     public void mapActivation() {
-        setMap();
+        setMap(db.getLastLoadedGeoPoint());
     }
 
     @Override
@@ -168,7 +170,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
                         setActualMock();
                         break;
                     case R.id.clientMap:
-                        setMap();
+                        setMap(db.getLastLoadedGeoPoint());
                         break;
                     case R.id.clientStations:
                         setStations();
@@ -238,9 +240,17 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         getSupportFragmentManager().beginTransaction().replace(R.id.clientContent, ClientObjectiveFragment.newInstance(stationNumber, stationSum, timeLeft/1000)).commit();
     }
 
-    void setMap(){
+    void setMap(GeoPoint geo){
         Intent i = new Intent(ClientMainActivity.this, MapsActivity.class);
-        i.putExtra(MapsActivity.MARKER_LOCATIONS, MockGenerator.mockMapData());
+        Bundle locationData = new Bundle();
+        double latitudes[] = { geo.getLatitude() };
+        double longitudes[] = { geo.getLongitude() };
+        ArrayList<String> names = new ArrayList<>();
+        names.add("Következő állomás");
+        locationData.putStringArrayList(MapsActivity.MARKER_NAMES, names);
+        locationData.putDoubleArray(MapsActivity.ARGS_LATITUDE, latitudes);
+        locationData.putDoubleArray(MapsActivity.ARGS_LONGITUDE, longitudes);
+        i.putExtra(MapsActivity.MARKER_LOCATIONS, locationData);
         startActivity(i);
     }
 
