@@ -29,7 +29,7 @@ public class ResultsEngine {
     }
 
     private void downloadResults(){
-        FirebaseFirestore.getInstance().collection("races").document(CodeHandler.getInstance().getRaceCode()).collection("endresults")
+        RacePermissionHandler.getInstance().getRaceReference().collection("endresults")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

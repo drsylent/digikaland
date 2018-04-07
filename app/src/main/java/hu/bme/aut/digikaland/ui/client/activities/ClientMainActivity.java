@@ -10,7 +10,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,7 +20,6 @@ import com.google.firebase.firestore.GeoPoint;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.dblogic.ClientEngine;
@@ -51,7 +49,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
 
     @Override
     public void mapActivation() {
-        setMap(db.getLastLoadedGeoPoint());
+        goToMap(db.getLastLoadedGeoPoint());
     }
 
     @Override
@@ -59,17 +57,86 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         prepareHelp();
     }
 
+    private int oneHelpLoaded = 0;
+    private final int oneHelpLoadedSum = 2;
+
     private void prepareHelp(){
-        oneHelpLoaded = false;
+        oneHelpLoaded = 0;
         ContactsEngine.getInstance(this).loadTotalAdmins();
-        ContactsEngine.getInstance(this).loadStationAdmins(db.getStationId());
+        if(db.getLastLoadedStationNumber() == -1 || db.getLastLoadedStationNumber() > db.getStationSum()) oneHelpLoaded++;
+        else ContactsEngine.getInstance(this).loadStationAdmins(db.getLastLoadedStationId());
     }
 
-    private boolean oneHelpLoaded = false;
+    @Override
+    public void totalAdminsLoaded() {
+        setHelp();
+    }
+
+    @Override
+    public void stationAdminsLoaded() {
+        setHelp();
+    }
+
+    // TODO: ha nem kezdődött még el, vagy már befejeződött (üres stationadmin lista kéne legyen) mi történik?
+    private void setHelp(){
+        oneHelpLoaded++;
+        if(oneHelpLoaded == oneHelpLoadedSum) goToHelp(ContactsEngine.getInstance(this).getTotalAdmins(), ContactsEngine.getInstance(this).getStationAdmins(db.getLastLoadedStationId()));
+    }
+
+    private void goToHelp(ArrayList<Contact> totalAdmins, ArrayList<Contact> stationAdmins){
+        Intent i = new Intent(ClientMainActivity.this, ClientHelpActivity.class);
+        i.putExtra(ClientHelpActivity.ARG_STATIONADMINS, stationAdmins);
+        i.putExtra(ClientHelpActivity.ARG_TOTALADMINS, totalAdmins);
+        startActivity(i);
+    }
+
+    private int oneStatusLoaded = 0;
+    private int oneStatusLoadedSum = 3;
+
+    private void prepareStatus(){
+        oneStatusLoaded = 0;
+        db.loadTeamName();
+        db.loadCompletedStations();
+        ContactsEngine.getInstance(this).loadCaptain(db.getTeamId());
+    }
+
+    @Override
+    public void captainLoaded() {
+        setStatus();
+    }
+
+    @Override
+    public void teamNameLoaded() {
+        setStatus();
+    }
+
+    @Override
+    public void completedStationsLoaded() {
+        setStatus();
+    }
+
+    private void setStatus(){
+        oneStatusLoaded++;
+        if(oneStatusLoaded == oneStatusLoadedSum){
+            Bundle bundle = new Bundle();
+            bundle.putString(ClientStatusFragment.ARG_RACENAME, db.getRaceName());
+            bundle.putString(ClientStatusFragment.ARG_TEAMNAME, db.getTeamName());
+            bundle.putSerializable(ClientStatusFragment.ARG_CAPTAIN, ContactsEngine.getInstance(this).getCaptain(db.getTeamId()));
+            bundle.putInt(ClientStatusFragment.ARG_STATIONSUM, db.getStationSum());
+            bundle.putInt(ClientStatusFragment.ARG_STATION_NUMBER, db.getCompletedStations());
+            goToStatus(bundle);
+        }
+    }
+
+    private void goToStatus(Bundle bundle){
+        changeState(ViewState.Status);
+        toolbar.setTitle(R.string.status);
+        getSupportFragmentManager().beginTransaction().replace(R.id.clientContent, ClientStatusFragment.newInstance(bundle)).commit();
+    }
 
     @Override
     public void onActiveObjectiveOpen() {
-        goToObjective();
+        goToObjectiveMock();
     }
 
     @Override
@@ -94,39 +161,21 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         showSnackBarMessage("ResultsEngine: " + type.getDefaultMessage());
     }
 
-    @Override
-    public void totalAdminsLoaded() {
-        setHelp();
-    }
 
-    @Override
-    public void stationAdminsLoaded() {
-        setHelp();
-    }
-
-    // TODO: ha nem kezdődött még el, vagy már befejeződött (üres stationadmin lista kéne legyen) mi történik?
-    private void setHelp(){
-        if(oneHelpLoaded) goToHelp(ContactsEngine.getInstance(this).getTotalAdmins(), ContactsEngine.getInstance(this).getStationAdmins(db.getStationId()));
-        else oneHelpLoaded = true;
-    }
-
-    @Override
-    public void captainLoaded() {
-
-    }
 
     @Override
     public void contactsError(ErrorType type) {
         showSnackBarMessage("ContactsEngine: " + type.getDefaultMessage());
     }
 
-    private enum loadResult{
+    private enum LoadResult {
         Starting,
         Running,
-        Objective,
+        Station,
         Ending
     }
-    private loadResult postLoad = null;
+    private LoadResult loadResult = null;
+    private boolean postLoad = false;
 
     @Override
     public void startingStateLoaded() {
@@ -135,9 +184,10 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
             startingBundle.putInt(ClientActualFragment.ARG_STATION_NUMBER, -1);
             startingBundle.putSerializable(ClientActualFragment.ARG_LOCATION, db.getLastLoadedLocation());
             startingBundle.putSerializable(ClientActualFragment.ARG_TIME, db.getLastLoadedStartingTime());
-            setActual(startingBundle);
+            goToActual(startingBundle);
         }
-        else postLoad = loadResult.Starting;
+        else postLoad = true;
+        loadResult = LoadResult.Starting;
     }
 
     @Override
@@ -148,19 +198,28 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
             runningBundle.putInt(ClientActualFragment.ARG_STATIONS, db.getStationSum());
             runningBundle.putSerializable(ClientActualFragment.ARG_LOCATION, db.getLastLoadedLocation());
             runningBundle.putSerializable(ClientActualFragment.ARG_TIME, db.getLastLoadedStartingTime());
-            setActual(runningBundle);
+            goToActual(runningBundle);
         }
-        else postLoad = loadResult.Running;
+        else postLoad = true;
+        loadResult = LoadResult.Running;
     }
 
     @Override
     public void stationStateLoaded() {
-        setObjective(db.getLastLoadedStationNumber(), db.getStationSum(), db.getLastLoadedEndingTime());
+        if(uiReady) {
+            goToObjective(db.getLastLoadedStationNumber(), db.getStationSum(), db.getLastLoadedEndingTime());
+        }
+        else postLoad = true;
+        loadResult = LoadResult.Station;
     }
 
     @Override
     public void endingStateLoaded() {
-        ResultsEngine.getInstance(this).loadResults();
+        if(uiReady) {
+            ResultsEngine.getInstance(this).loadResults();
+        }
+        else postLoad = true;
+        loadResult = LoadResult.Ending;
     }
 
     private enum ViewState{
@@ -184,6 +243,10 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         getActiveItem().setChecked(false);
         state = to;
         getActiveItem().setChecked(true);
+        switch (to){
+            case Actual: toolbar.setTitle(R.string.actual); break;
+            case Status: toolbar.setTitle(R.string.status); break;
+        }
     }
 
     @Override
@@ -207,13 +270,13 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
                         setActualMock();
                         break;
                     case R.id.clientMap:
-                        setMap(db.getLastLoadedGeoPoint());
+                        goToMap(db.getLastLoadedGeoPoint());
                         break;
                     case R.id.clientStations:
                         setStations();
                         break;
                     case R.id.clientStatus:
-                        setStatus();
+                        prepareStatus();
                         break;
                 }
                 invalidateOptionsMenu();
@@ -221,25 +284,29 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
             }
         });
         setupToolbar();
-
         if(savedInstanceState == null) {
             state = ViewState.Actual;
+            changeState(ViewState.Actual);
 //            actualStatus = ActualStatus.normal;
 //            setActualMock();
         }
         uiReady = true;
-        if(postLoad != null)
-        switch (postLoad){
-            case Starting: startingStateLoaded();
-            case Running: runningStateLoaded();
-            case Objective: stationStateLoaded();
-            case Ending: endingStateLoaded();
-        }
+        if(postLoad) executePostLoad();
+
 //        else{
 //            state = ViewState.valueOf(savedInstanceState.getString(ARG_VIEWSTATE));
 //            actualStatus = ActualStatus.valueOf(savedInstanceState.getString(ARG_ACTUALSTATE));
 //            getActiveItem().setChecked(true);
 //        }
+    }
+
+    private void executePostLoad(){
+        switch (loadResult){
+            case Starting: startingStateLoaded(); break;
+            case Running: runningStateLoaded(); break;
+            case Station: stationStateLoaded(); break;
+            case Ending: endingStateLoaded(); break;
+        }
     }
 
     @Override
@@ -260,8 +327,9 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         getSupportFragmentManager().beginTransaction().replace(R.id.clientContent, ClientActualFragment.newInstance(MockGenerator.mockActualMain())).commit();
     }
 
-    private void setActual(Bundle bundle){
+    private void goToActual(Bundle bundle){
         toolbar.setTitle(R.string.actual);
+        state = ViewState.Actual;
         getSupportFragmentManager().beginTransaction().replace(R.id.clientContent, ClientActualFragment.newInstance(bundle)).commit();
     }
 
@@ -270,14 +338,14 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         getSupportFragmentManager().beginTransaction().replace(R.id.clientContent, ResultsFragment.newInstance(teams, points)).commit();
     }
 
-    private void setObjective(int stationNumber, int stationSum, Date endingTime){
+    private void goToObjective(int stationNumber, int stationSum, Date endingTime){
         Date now = Calendar.getInstance().getTime();
         long timeLeft = 0;
         if(now.before(endingTime)) timeLeft = endingTime.getTime()-now.getTime();
         getSupportFragmentManager().beginTransaction().replace(R.id.clientContent, ClientObjectiveFragment.newInstance(stationNumber, stationSum, timeLeft/1000)).commit();
     }
 
-    void setMap(GeoPoint geo){
+    void goToMap(GeoPoint geo){
         Intent i = new Intent(ClientMainActivity.this, MapsActivity.class);
         Bundle locationData = new Bundle();
         double latitudes[] = { geo.getLatitude() };
@@ -297,7 +365,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         startActivity(i);
     }
 
-    void goToObjective(){
+    void goToObjectiveMock(){
         Intent i = new Intent(ClientMainActivity.this, ClientObjectiveActivity.class);
         i.putExtra(ClientObjectiveActivity.ARGS_OBJECTIVES, MockGenerator.mockBigObjectiveList());
         // TODO: csak ha kapitány mód van
@@ -305,7 +373,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         startActivity(i);
     }
 
-    void setStatus(){
+    void setStatusMock(){
         changeState(ViewState.Status);
         toolbar.setTitle(R.string.status);
         getSupportFragmentManager().beginTransaction().replace(R.id.clientContent, ClientStatusFragment.newInstance(MockGenerator.mockStatusData())).commit();
@@ -317,17 +385,14 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         startActivity(i);
     }
 
-    private void goToHelp(ArrayList<Contact> totalAdmins, ArrayList<Contact> stationAdmins){
-        Intent i = new Intent(ClientMainActivity.this, ClientHelpActivity.class);
-        i.putExtra(ClientHelpActivity.ARG_STATIONADMINS, stationAdmins);
-        i.putExtra(ClientHelpActivity.ARG_TOTALADMINS, totalAdmins);
-        startActivity(i);
-    }
-
     @Override
     public void onBackPressed() {
         if(drawerLayout.isDrawerOpen(findViewById(R.id.clientNavigation))) drawerLayout.closeDrawers();
-        else if(state == ViewState.Status) setActualMock();
+        else if(state == ViewState.Status){
+            //setActualMock();
+            changeState(ViewState.Actual);
+            executePostLoad();
+        }
         else super.onBackPressed();
     }
 
@@ -348,6 +413,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         showSnackBarMessage(getResources().getString(R.string.refresh));
+        db.loadState();
 //        if(state == ViewState.Actual)
 //        switch(item.getItemId()) {
 //            case R.id.menu_refresh:

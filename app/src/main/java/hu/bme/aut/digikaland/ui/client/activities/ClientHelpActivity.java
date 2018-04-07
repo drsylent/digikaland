@@ -12,6 +12,7 @@ import java.util.List;
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.ui.common.fragments.ContactFragment;
+import hu.bme.aut.digikaland.ui.common.fragments.TextFragment;
 import hu.bme.aut.digikaland.utility.PhoneDial;
 
 public class ClientHelpActivity extends AppCompatActivity{
@@ -50,6 +51,8 @@ public class ClientHelpActivity extends AppCompatActivity{
             if(stationAdmins != null)
                 for(Contact c : stationAdmins)
                     getSupportFragmentManager().beginTransaction().add(R.id.clientHelpObjectiveAdminContent, ContactFragment.newInstance(c)).commit();
+            else getSupportFragmentManager().beginTransaction().add(R.id.clientHelpObjectiveAdminContent,
+                    TextFragment.newInstance("Verseny közben itt jelennek majd meg a felügyelők", false)).commit();
             if(totalAdmins != null)
                 for (Contact c : totalAdmins)
                     getSupportFragmentManager().beginTransaction().add(R.id.clientHelpTotalAdminContent, ContactFragment.newInstance(c)).commit();

@@ -134,7 +134,7 @@ public class ContactsEngine {
     }
 
     private void downloadTeamCaptain(final String id){
-        final DocumentReference totalAdminRef = RacePermissionHandler.getInstance().getTeamReference().collection("contacts").document(id);
+        final DocumentReference totalAdminRef = RacePermissionHandler.getInstance().getRaceReference().collection("contacts").document(id);
         totalAdminRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {

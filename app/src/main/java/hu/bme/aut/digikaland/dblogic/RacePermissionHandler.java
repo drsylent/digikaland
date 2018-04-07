@@ -65,7 +65,6 @@ public class RacePermissionHandler {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document != null && document.exists()) {
-                        Log.e("Firebase", "DocumentSnapshot data: " + document.get("RaceName"));
                         loadRole(docRef, roleCode);
                     } else {
                         if(comm != null) comm.permissionError(ErrorType.RaceNotExists);
@@ -85,7 +84,6 @@ public class RacePermissionHandler {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document != null && document.exists()) {
-                        Log.e("Firebase", "DocumentSnapshot data: " + document.get("role"));
                         if(document.get("role") instanceof String)
                             modeSet((String) document.get("role"));
                         else comm.permissionError(ErrorType.DatabaseError);
@@ -115,7 +113,6 @@ public class RacePermissionHandler {
             default: if(comm != null) comm.permissionError(ErrorType.DatabaseError);
         }
         // Lehet bent marad a korábbi admin... biztos mindig meglesz a reset hívás?
-        Log.e("CurrentPermission", mainMode + " " + adminMode + " " + clientMode);
     }
 
     private void setReference(DocumentReference ref){
