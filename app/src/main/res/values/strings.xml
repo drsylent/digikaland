@@ -35,6 +35,7 @@
     <string name="camera">Kamera</string>
     <string name="gallery">Galéria</string>
     <string name="end_results">Végeredmény:</string>
+    <string name="ending_place">Vége gyülekezőhely:</string>
     <string name="new_race">Új verseny</string>
     <string name="objective">Feladat</string>
     <string name="delete_picture_first">Előbb törölnöd kell egy már meglévő képet.</string>

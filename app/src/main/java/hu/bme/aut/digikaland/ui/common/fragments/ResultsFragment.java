@@ -8,14 +8,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import java.util.ArrayList;
+
 import hu.bme.aut.digikaland.R;
 
 public class ResultsFragment extends Fragment {
     private static final String ARG_TEAMS = "teams";
     private static final String ARG_POINTS = "points";
 
-    private String[] teamList;
-    private int[] pointList;
+//    private String[] teamList;
+//    private int[] pointList;
+    private ArrayList<String> teamList;
+    private ArrayList<Integer> pointList;
 
     private ResultsFragmentListener activity;
 
@@ -23,11 +27,15 @@ public class ResultsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static ResultsFragment newInstance(String[] teams, int[] points) {
+    public static ResultsFragment newInstance(String[] t, int[] p){
+        return null;
+    }
+
+    public static ResultsFragment newInstance(ArrayList<String> teams, ArrayList<Integer> points) {
         ResultsFragment fragment = new ResultsFragment();
         Bundle args = new Bundle();
-        args.putStringArray(ARG_TEAMS, teams);
-        args.putIntArray(ARG_POINTS, points);
+        args.putStringArrayList(ARG_TEAMS, teams);
+        args.putIntegerArrayList(ARG_POINTS, points);
         fragment.setArguments(args);
         return fragment;
     }
@@ -36,8 +44,10 @@ public class ResultsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            teamList = getArguments().getStringArray(ARG_TEAMS);
-            pointList = getArguments().getIntArray(ARG_POINTS);
+//            teamList = getArguments().getStringArray(ARG_TEAMS);
+//            pointList = getArguments().getIntArray(ARG_POINTS);
+            teamList = getArguments().getStringArrayList(ARG_TEAMS);
+            pointList = getArguments().getIntegerArrayList(ARG_POINTS);
         }
     }
 
@@ -45,10 +55,16 @@ public class ResultsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_results, container, false);
-        if(savedInstanceState == null)
-        for(int i = 0; i < teamList.length; i++){
-            ResultsElementFragment element = ResultsElementFragment.newInstance(i+1, teamList[i], pointList[i]);
-            getChildFragmentManager().beginTransaction().add(R.id.resultsContent, element).commit();
+//        if(savedInstanceState == null)
+//        for(int i = 0; i < teamList.length; i++){
+//            ResultsElementFragment element = ResultsElementFragment.newInstance(i+1, teamList[i], pointList[i]);
+//            getChildFragmentManager().beginTransaction().add(R.id.resultsContent, element).commit();
+//        }
+        if(savedInstanceState == null) {
+            for(int i = 0; i < teamList.size(); i++){
+                ResultsElementFragment element = ResultsElementFragment.newInstance(i+1, teamList.get(i), pointList.get(i));
+                getChildFragmentManager().beginTransaction().add(R.id.resultsContent, element).commit();
+            }
         }
         Button newRace = root.findViewById(R.id.clientResultsNewRace);
         newRace.setOnClickListener(new View.OnClickListener() {

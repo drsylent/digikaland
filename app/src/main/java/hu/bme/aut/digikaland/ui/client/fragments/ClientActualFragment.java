@@ -80,7 +80,7 @@ public class ClientActualFragment extends Fragment {
     private String getStationString(){
         if(stationNumber == -1) return getString(R.string.starting_place);
         if(stationNumber <= stationSum) return getString(R.string.station_status, stationNumber, stationSum);
-        else return getString(R.string.end_results);
+        else return getString(R.string.ending_place);
     }
 
     @Override

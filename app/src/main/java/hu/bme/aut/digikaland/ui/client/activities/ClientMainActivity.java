@@ -15,9 +15,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import java.util.ArrayList;
+
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.dblogic.ClientEngine;
 import hu.bme.aut.digikaland.dblogic.ErrorType;
+import hu.bme.aut.digikaland.dblogic.ResultsEngine;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientActualFragment;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientObjectiveFragment;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientStatusFragment;
@@ -27,7 +30,7 @@ import hu.bme.aut.digikaland.ui.common.fragments.ResultsFragment;
 import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
 public class ClientMainActivity extends AppCompatActivity implements ClientActualFragment.ClientActualMainListener, ClientObjectiveFragment.ClientActiveObjectiveListener,
-        ResultsFragment.ResultsFragmentListener, ClientEngine.CommunicationInterface{
+        ResultsFragment.ResultsFragmentListener, ClientEngine.CommunicationInterface, ResultsEngine.CommunicationInterface{
 
     private static final String ARG_VIEWSTATE = "state";
     private static final String ARG_ACTUALSTATE = "actuals";
@@ -64,6 +67,17 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     }
 
     private boolean uiReady = false;
+
+    @Override
+    public void resultsLoaded(ArrayList<String> teamNames, ArrayList<Integer> teamPoints) {
+        setResults(teamNames, teamPoints);
+    }
+
+    @Override
+    public void resultsError(ErrorType type) {
+        showSnackBarMessage(type.getDefaultMessage());
+    }
+
     private enum loadResult{
         Starting,
         Running,
@@ -104,7 +118,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
 
     @Override
     public void endingStateLoaded() {
-
+        ResultsEngine.getInstance(this).loadResults();
     }
 
     private enum ViewState{
@@ -208,6 +222,11 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         getSupportFragmentManager().beginTransaction().replace(R.id.clientContent, ClientActualFragment.newInstance(bundle)).commit();
     }
 
+    private void setResults(ArrayList<String> teams, ArrayList<Integer> points){
+        toolbar.setTitle(R.string.actual);
+        getSupportFragmentManager().beginTransaction().replace(R.id.clientContent, ResultsFragment.newInstance(teams, points)).commit();
+    }
+
     void setMap(){
         Intent i = new Intent(ClientMainActivity.this, MapsActivity.class);
         i.putExtra(MapsActivity.MARKER_LOCATIONS, MockGenerator.mockMapData());
@@ -264,21 +283,21 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         showSnackBarMessage(getResources().getString(R.string.refresh));
-        if(state == ViewState.Actual)
-        switch(item.getItemId()) {
-            case R.id.menu_refresh:
-                switch(actualStatus) {
-                    case normal:
-                        setObjective();
-                        break;
-                    case objective:
-                        setResults();
-                        break;
-                    case results:
-                        setActualMock();
-                        break;
-                }
-        }
+//        if(state == ViewState.Actual)
+//        switch(item.getItemId()) {
+//            case R.id.menu_refresh:
+//                switch(actualStatus) {
+//                    case normal:
+//                        setObjective();
+//                        break;
+//                    case objective:
+//                        setResultsMock();
+//                        break;
+//                    case results:
+//                        setActualMock();
+//                        break;
+//                }
+//        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -289,7 +308,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         getSupportFragmentManager().beginTransaction().replace(R.id.clientContent, ClientObjectiveFragment.newInstance(2, 6, 3723)).commit();
     }
 
-    private void setResults(){
+    private void setResultsMock(){
         setActualMain();
         actualStatus = ActualStatus.results;
         getSupportFragmentManager().beginTransaction().replace(R.id.clientContent, ResultsFragment.newInstance(MockGenerator.mockResultNames(), MockGenerator.mockResultPoints())).commit();

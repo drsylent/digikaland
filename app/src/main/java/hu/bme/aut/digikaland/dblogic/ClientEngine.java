@@ -96,8 +96,35 @@ public class ClientEngine {
                     if (document != null && document.exists()) {
                         try {
                             stationNumber = document.getLong("stationnumber").intValue();
-                            loadTeamStation(stationNumber);
+                            if(stationNumber <= stationSum)loadTeamStation(stationNumber);
+                            else loadEndingLocation();
                         } catch (RuntimeException e){
+                            comm.clientError(ErrorType.DatabaseError);
+                        }
+                    } else {
+                        comm.clientError(ErrorType.RaceNotExists);
+                    }
+                } else {
+                    comm.clientError(ErrorType.NoContact);
+                }
+            }
+        });
+    }
+
+    private void loadEndingLocation(){
+        final DocumentReference docRef = FirebaseFirestore.getInstance().collection("races").document(CodeHandler.getInstance().getRaceCode());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null && document.exists()) {
+                        try {
+                            location = new Location(document.getString("endingaddr"), document.getString("endingaddr-detailed"));
+                            startingTime = document.getDate("endingtime");
+                            geoPoint = document.getGeoPoint("endinggeo");
+                            comm.runningStateLoaded();
+                        }catch(RuntimeException e){
                             comm.clientError(ErrorType.DatabaseError);
                         }
                     } else {
@@ -164,8 +191,8 @@ public class ClientEngine {
         });
     }
 
-    public void loadEndingState(){
-
+    private void loadEndingState(){
+        comm.endingStateLoaded();
     }
 
     public int getLastLoadedStationNumber() {
