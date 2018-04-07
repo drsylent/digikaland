@@ -21,7 +21,7 @@ public class ClientObjectiveFragment extends Fragment {
     private CountDownTimer timer;
     private int stationNow;
     private int stationSum;
-    private long timeLeft;
+    private long secondsLeft;
     private TextView countdown;
     private ClientActiveObjectiveListener ClientActivity;
 
@@ -29,11 +29,11 @@ public class ClientObjectiveFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static ClientObjectiveFragment newInstance(int currentNumber, int sumNumber, long timeLeft) {
+    public static ClientObjectiveFragment newInstance(int currentNumber, int sumNumber, long secondsLeft) {
         ClientObjectiveFragment fragment = new ClientObjectiveFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_STATIONCURRENT, currentNumber);
-        args.putLong(ARG_TIME, timeLeft);
+        args.putLong(ARG_TIME, secondsLeft);
         args.putInt(ARG_STATIONNUMBER, sumNumber);
         fragment.setArguments(args);
         return fragment;
@@ -45,14 +45,14 @@ public class ClientObjectiveFragment extends Fragment {
         if (getArguments() != null) {
             stationNow = getArguments().getInt(ARG_STATIONCURRENT);
             stationSum = getArguments().getInt(ARG_STATIONNUMBER);
-            timeLeft = getArguments().getLong(ARG_TIME);
+            secondsLeft = getArguments().getLong(ARG_TIME);
         }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putLong(ARG_TIME, timeLeft);
+        outState.putLong(ARG_TIME, secondsLeft);
     }
 
     @Override
@@ -71,14 +71,14 @@ public class ClientObjectiveFragment extends Fragment {
         TextView stationSummary = root.findViewById(R.id.clientObjectiveStation);
         stationSummary.setText(getString(R.string.station_status, stationNow, stationSum));
         countdown = root.findViewById(R.id.clientObjectiveCounter);
-        if(savedInstanceState != null) timeLeft = savedInstanceState.getLong(ARG_TIME);
-        countdown.setText(TimeWriter.countdownFormat(timeLeft));
-        timer = new CountDownTimer(timeLeft*1000, 1000) {
+        if(savedInstanceState != null) secondsLeft = savedInstanceState.getLong(ARG_TIME);
+        countdown.setText(TimeWriter.countdownFormat(secondsLeft));
+        timer = new CountDownTimer(secondsLeft *1000, 1000) {
 
             @Override
             public void onTick(long l) {
-                countdown.setText(TimeWriter.countdownFormat(timeLeft));
-                timeLeft--;
+                countdown.setText(TimeWriter.countdownFormat(secondsLeft));
+                secondsLeft--;
             }
 
             @Override

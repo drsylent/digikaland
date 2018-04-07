@@ -22,7 +22,7 @@
     <string name="client_help_total_admin">A verseny felügyelői:</string>
     <string name="next_goal">Következő cél:</string>
     <string name="help">Segítség</string>
-    <string name="objective_progress">Feladat folyamatban:</string>
+    <string name="station_in_progress">Állomás folyamatban:</string>
     <string name="open">Megnyitás</string>
     <string name="time_left">Hátralévő idő:</string>
     <string name="current_race">Jelenlegi versenyed:</string>

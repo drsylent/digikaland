@@ -148,8 +148,9 @@ public class ClientEngine {
                         try {
                             startingTime = document.getDate("timestart");
                             DocumentReference stationRef = document.getDocumentReference("station");
-                            if(document.contains("timeend")){
-                                // TODO: állomás folyamatban!
+                            if(document.contains("timeend") && !document.getBoolean("done")){
+                                endingTime = document.getDate("timeend");
+                                comm.stationStateLoaded();
                             }
                             else{
                                 loadStation(stationRef);

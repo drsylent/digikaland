@@ -10,12 +10,16 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.dblogic.ClientEngine;
@@ -113,7 +117,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
 
     @Override
     public void stationStateLoaded() {
-
+        setObjective(db.getLastLoadedStationNumber(), db.getStationSum(), db.getLastLoadedEndingTime());
     }
 
     @Override
@@ -227,6 +231,13 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         getSupportFragmentManager().beginTransaction().replace(R.id.clientContent, ResultsFragment.newInstance(teams, points)).commit();
     }
 
+    private void setObjective(int stationNumber, int stationSum, Date endingTime){
+        Date now = Calendar.getInstance().getTime();
+        long timeLeft = 0;
+        if(now.before(endingTime)) timeLeft = endingTime.getTime()-now.getTime();
+        getSupportFragmentManager().beginTransaction().replace(R.id.clientContent, ClientObjectiveFragment.newInstance(stationNumber, stationSum, timeLeft/1000)).commit();
+    }
+
     void setMap(){
         Intent i = new Intent(ClientMainActivity.this, MapsActivity.class);
         i.putExtra(MapsActivity.MARKER_LOCATIONS, MockGenerator.mockMapData());
@@ -288,7 +299,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
 //            case R.id.menu_refresh:
 //                switch(actualStatus) {
 //                    case normal:
-//                        setObjective();
+//                        setObjectiveMock();
 //                        break;
 //                    case objective:
 //                        setResultsMock();
@@ -301,7 +312,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         return super.onOptionsItemSelected(item);
     }
 
-    private void setObjective(){
+    private void setObjectiveMock(){
         setActualMain();
         actualStatus = ActualStatus.objective;
         // feladatot itt nem kell majd atadni, mert azt callbackkel intezzuk
