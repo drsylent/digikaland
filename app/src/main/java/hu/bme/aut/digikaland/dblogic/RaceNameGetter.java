@@ -36,10 +36,11 @@ public class RaceNameGetter {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document != null && document.exists()) {
-                        Log.e("Firebase", "DocumentSnapshot data: " + document.get("RaceName"));
-                        if(document.get("RaceName") instanceof String)
-                            comm.raceNameLoaded((String) document.get("RaceName"));
-                        else comm.raceNameLoadingError(ErrorType.DatabaseError);
+                        try{
+                            comm.raceNameLoaded(document.getString("racename"));
+                        }catch(RuntimeException e){
+                            comm.raceNameLoadingError(ErrorType.DatabaseError);
+                        }
                     } else {
                         comm.raceNameLoadingError(ErrorType.RaceNotExists);
                     }
