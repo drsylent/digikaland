@@ -46,7 +46,7 @@ public class ClientStationAdapter extends RecyclerView.Adapter<StationViewHolder
     @Override
     public void onBindViewHolder(StationViewHolder holder, int position) {
         final StationClientPerspective item = stations.get(position);
-        holder.station.setText( ((Context) activity).getString(R.string.station_show, item.station.number, item.station.oldId) );
+        holder.station.setText( ((Context) activity).getString(R.string.station_show, item.station.number, item.station.id) );
         int color;
         switch (item.status){
             case Done:
