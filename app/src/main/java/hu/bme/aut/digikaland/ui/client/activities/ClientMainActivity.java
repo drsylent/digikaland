@@ -28,8 +28,10 @@ import hu.bme.aut.digikaland.dblogic.ErrorType;
 import hu.bme.aut.digikaland.dblogic.ObjectiveEngine;
 import hu.bme.aut.digikaland.dblogic.RacePermissionHandler;
 import hu.bme.aut.digikaland.dblogic.ResultsEngine;
+import hu.bme.aut.digikaland.dblogic.StationsEngine;
 import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.entities.objectives.Objective;
+import hu.bme.aut.digikaland.entities.station.StationClientPerspective;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientActualFragment;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientObjectiveFragment;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientStatusFragment;
@@ -40,7 +42,7 @@ import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
 public class ClientMainActivity extends AppCompatActivity implements ClientActualFragment.ClientActualMainListener, ClientObjectiveFragment.ClientActiveObjectiveListener,
         ResultsFragment.ResultsFragmentListener, ClientEngine.CommunicationInterface, ResultsEngine.CommunicationInterface, ContactsEngine.CommunicationInterface,
-        ObjectiveEngine.CommunicationInterface{
+        ObjectiveEngine.CommunicationInterface, StationsEngine.CommunicationInterface{
 
     private static final String ARG_VIEWSTATE = "state";
 
@@ -289,6 +291,27 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         }
     }
 
+    private void prepareStations(){
+        StationsEngine.getInstance(this).loadStationList();
+    }
+
+    @Override
+    public void stationListLoaded(ArrayList<StationClientPerspective> stations) {
+        goToStations(stations);
+    }
+
+    @Override
+    public void stationLoadingError(ErrorType type) {
+        showSnackBarMessage("StationsEngine: " + type.getDefaultMessage());
+    }
+
+
+    private void goToStations(ArrayList<StationClientPerspective> stations){
+        Intent i = new Intent(ClientMainActivity.this, ClientStationsActivity.class);
+        i.putExtra(ClientStationsActivity.ARGS_STATIONS, stations);
+        startActivity(i);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -313,7 +336,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
                         goToMap(db.getLastLoadedGeoPoint());
                         break;
                     case R.id.clientStations:
-                        setStationsMock();
+                        prepareStations();
                         break;
                     case R.id.clientStatus:
                         prepareStatus();
@@ -388,22 +411,6 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         locationData.putDoubleArray(MapsActivity.ARGS_LATITUDE, latitudes);
         locationData.putDoubleArray(MapsActivity.ARGS_LONGITUDE, longitudes);
         i.putExtra(MapsActivity.MARKER_LOCATIONS, locationData);
-        startActivity(i);
-    }
-
-    // TODO: mock átlépés eltüntetése
-    void setStationsMock(){
-        Intent i = new Intent(ClientMainActivity.this, ClientStationsActivity.class);
-        i.putExtra(ClientStationsActivity.ARGS_STATIONS, MockGenerator.mockStationsList());
-        startActivity(i);
-    }
-
-    // TODO: mock átlépés eltüntetése
-    void goToObjectiveMock(){
-        Intent i = new Intent(ClientMainActivity.this, ClientObjectiveActivity.class);
-        i.putExtra(ClientObjectiveActivity.ARGS_OBJECTIVES, MockGenerator.mockBigObjectiveList());
-        // TODO: csak ha kapitány mód van
-        i.putExtra(ClientObjectiveActivity.ARG_SEND, true);
         startActivity(i);
     }
 

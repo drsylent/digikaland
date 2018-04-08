@@ -40,11 +40,11 @@ public class ClientHelpActivity extends AppCompatActivity{
 //            List<String> totalAdminPhones = bundle.getStringArrayList(ARG_TOTALADMINPHONES);
 //            if(objectAdminNames != null && objectAdminPhones != null)
 //            for(int i = 0; i < objectAdminNames.size(); i++){
-//                getSupportFragmentManager().beginTransaction().add(R.id.clientHelpObjectiveAdminContent, ContactFragment.newInstance(objectAdminNames.get(i), objectAdminPhones.get(i))).commit();
+//                getSupportFragmentManager().beginTransaction().add(R.oldId.clientHelpObjectiveAdminContent, ContactFragment.newInstance(objectAdminNames.get(i), objectAdminPhones.get(i))).commit();
 //            }
 //            if(totalAdminNames != null && totalAdminPhones != null)
 //            for(int i = 0; i < totalAdminNames.size(); i++){
-//                getSupportFragmentManager().beginTransaction().add(R.id.clientHelpTotalAdminContent, ContactFragment.newInstance(totalAdminNames.get(i), totalAdminPhones.get(i))).commit();
+//                getSupportFragmentManager().beginTransaction().add(R.oldId.clientHelpTotalAdminContent, ContactFragment.newInstance(totalAdminNames.get(i), totalAdminPhones.get(i))).commit();
 //            }
             List<Contact> stationAdmins = (ArrayList<Contact>) getIntent().getSerializableExtra(ARG_STATIONADMINS);
             List<Contact> totalAdmins = (ArrayList<Contact>) getIntent().getSerializableExtra(ARG_TOTALADMINS);

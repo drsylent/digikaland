@@ -68,7 +68,7 @@ public class ClientStatusFragment extends Fragment {
         TextView tvRaceName = root.findViewById(R.id.clientStatusRaceName);
         TextView tvTeamName = root.findViewById(R.id.clientStatusTeamName);
         TextView tvStations = root.findViewById(R.id.clientStatusStations);
-//        getChildFragmentManager().beginTransaction().add(R.id.clientStatusContent, ContactFragment.newInstance(captain, phone, true)).commit();
+//        getChildFragmentManager().beginTransaction().add(R.oldId.clientStatusContent, ContactFragment.newInstance(captain, phone, true)).commit();
         getChildFragmentManager().beginTransaction().add(R.id.clientStatusContent, ContactFragment.newInstance(captain,true)).commit();
         tvRaceName.setText(raceName);
         tvTeamName.setText(teamName);

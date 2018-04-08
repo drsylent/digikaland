@@ -17,4 +17,9 @@ public class StationClientPerspective implements Serializable {
         station = new Station(i, n);
         status = s;
     }
+
+    public StationClientPerspective(String i, int n, StationStatusFromClient s){
+        station = new Station(i,n);
+        status = s;
+    }
 }

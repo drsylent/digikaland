@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import hu.bme.aut.digikaland.entities.objectives.Objective;
 
 public class Station implements Serializable {
-    public int id;
+    public int oldId;
+    // TODO: ez nem csak a kliens perspektívába kell?
     public int number;
     private ArrayList<Objective> objectives = null;
 
@@ -28,12 +29,19 @@ public class Station implements Serializable {
     }
 
     public Station(int i, int n, @NonNull ArrayList<Objective> obj){
-        id = i;
+        oldId = i;
         number = n;
         objectives = obj;
     }
 
     public Station(int i, int n){
+        oldId = i;
+        number = n;
+    }
+
+    public String id;
+
+    public Station(String i, int n){
         id = i;
         number = n;
     }

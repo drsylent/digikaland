@@ -58,7 +58,7 @@ public class ResultsFragment extends Fragment {
 //        if(savedInstanceState == null)
 //        for(int i = 0; i < teamList.length; i++){
 //            ResultsElementFragment element = ResultsElementFragment.newInstance(i+1, teamList[i], pointList[i]);
-//            getChildFragmentManager().beginTransaction().add(R.id.resultsContent, element).commit();
+//            getChildFragmentManager().beginTransaction().add(R.oldId.resultsContent, element).commit();
 //        }
         if(savedInstanceState == null) {
             for(int i = 0; i < teamList.size(); i++){
