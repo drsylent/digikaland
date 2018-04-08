@@ -13,12 +13,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class RacePermissionHandler {
     private static final RacePermissionHandler ourInstance = new RacePermissionHandler();
 
+    // TODO: vagy inkább ezt kivenni? elég sokan használják, de csak a startup használja kommunikálásra...
     public static RacePermissionHandler getInstance(CommunicationInterface c) {
         ourInstance.comm = c;
         return ourInstance;
     }
 
-    static RacePermissionHandler getInstance() {
+    public static RacePermissionHandler getInstance() {
         return ourInstance;
     }
 

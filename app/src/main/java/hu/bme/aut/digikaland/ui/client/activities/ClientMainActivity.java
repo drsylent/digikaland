@@ -25,8 +25,11 @@ import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.dblogic.ClientEngine;
 import hu.bme.aut.digikaland.dblogic.ContactsEngine;
 import hu.bme.aut.digikaland.dblogic.ErrorType;
+import hu.bme.aut.digikaland.dblogic.ObjectiveEngine;
+import hu.bme.aut.digikaland.dblogic.RacePermissionHandler;
 import hu.bme.aut.digikaland.dblogic.ResultsEngine;
 import hu.bme.aut.digikaland.entities.Contact;
+import hu.bme.aut.digikaland.entities.objectives.Objective;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientActualFragment;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientObjectiveFragment;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientStatusFragment;
@@ -36,7 +39,8 @@ import hu.bme.aut.digikaland.ui.common.fragments.ResultsFragment;
 import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
 public class ClientMainActivity extends AppCompatActivity implements ClientActualFragment.ClientActualMainListener, ClientObjectiveFragment.ClientActiveObjectiveListener,
-        ResultsFragment.ResultsFragmentListener, ClientEngine.CommunicationInterface, ResultsEngine.CommunicationInterface, ContactsEngine.CommunicationInterface{
+        ResultsFragment.ResultsFragmentListener, ClientEngine.CommunicationInterface, ResultsEngine.CommunicationInterface, ContactsEngine.CommunicationInterface,
+        ObjectiveEngine.CommunicationInterface{
 
     private static final String ARG_VIEWSTATE = "state";
 
@@ -137,9 +141,39 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         executePostLoad();
     }
 
+    boolean objectiveCausedLoad = false;
+
+    // ha egy ideig nem frissít, elvileg beléphet úgy, hogy már kész a feladat!
+    // ezt elkerülendő mindig lesz egy frissítés ekkor
     @Override
     public void onActiveObjectiveOpen() {
-        goToObjectiveMock();
+        prepareObjectives();
+    }
+
+    private void prepareObjectives(){
+        objectiveCausedLoad = true;
+        refresh();
+    }
+
+    private void prepareObjectivesAfterRefresh(){
+        ObjectiveEngine.getInstance(this).loadObjectives(db.getLastLoadedStationId());
+    }
+
+    @Override
+    public void objectivesLoaded(ArrayList<Objective> objectives) {
+        goToObjectives(objectives);
+    }
+
+    @Override
+    public void objectiveLoadError(ErrorType type) {
+        showSnackBarMessage("ObjectiveEngine: " + type.getDefaultMessage());
+    }
+
+    private void goToObjectives(ArrayList<Objective> objectives){
+        Intent i = new Intent(ClientMainActivity.this, ClientObjectiveActivity.class);
+        i.putExtra(ClientObjectiveActivity.ARGS_OBJECTIVES, objectives);
+        i.putExtra(ClientObjectiveActivity.ARG_SEND, RacePermissionHandler.getInstance().getClientMode() == RacePermissionHandler.ClientMode.Captain);
+        startActivity(i);
     }
 
     @Override
@@ -168,6 +202,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     public void contactsError(ErrorType type) {
         showSnackBarMessage("ContactsEngine: " + type.getDefaultMessage());
     }
+
 
     private enum LoadResult {
         Starting,
@@ -207,10 +242,14 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
 
     @Override
     public void stationStateLoaded() {
-        if(uiReady) {
+        if(objectiveCausedLoad){
+            prepareObjectivesAfterRefresh();
+        }
+        else if(uiReady) {
             goToObjective(db.getLastLoadedStationNumber(), db.getStationSum(), db.getLastLoadedEndingTime());
         }
         else postLoad = true;
+        objectiveCausedLoad = false;
         loadResult = LoadResult.Station;
     }
 
@@ -384,10 +423,15 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    private void refresh(){
         showSnackBarMessage(getResources().getString(R.string.refresh));
         db.loadState();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        objectiveCausedLoad = false;
+        refresh();
         return super.onOptionsItemSelected(item);
     }
 
