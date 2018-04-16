@@ -50,16 +50,16 @@ public class MultipleChoiceObjectiveFragment extends ObjectiveFragment {
         MultipleChoiceObjective obj = (MultipleChoiceObjective) getObjective();
         switch (rgAnswer.getCheckedRadioButtonId()){
             case rid0:
-                obj.upload(0);
+                obj.setChosen(0);
                 break;
             case rid1:
-                obj.upload(1);
+                obj.setChosen(1);
                 break;
             case rid2:
-                obj.upload(2);
+                obj.setChosen(2);
                 break;
             case rid3:
-                obj.upload(3);
+                obj.setChosen(3);
                 break;
         }
     }

@@ -8,6 +8,12 @@ import hu.bme.aut.digikaland.ui.common.objectives.ObjectiveFragment;
  */
 public class CustomAnswerObjective extends Objective {
 
+    public String getAnswer() {
+        return answer;
+    }
+
+    private String answer;
+
     public CustomAnswerObjective(String q){
         super(q);
     }
@@ -17,7 +23,7 @@ public class CustomAnswerObjective extends Objective {
         return CustomAnswerObjectiveFragment.newInstance(this);
     }
 
-    public void upload(String answer){
-        // feltoltes
+    public void setAnswer(String ans){
+        answer = ans;
     }
 }

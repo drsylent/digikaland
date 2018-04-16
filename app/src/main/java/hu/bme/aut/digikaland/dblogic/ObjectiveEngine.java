@@ -91,6 +91,7 @@ public class ObjectiveEngine {
                                 ArrayList<String> answerlist = (ArrayList<String>) document.get("answers");
                                 Objective obj = new MultipleChoiceObjective(question, answerlist);
                                 obj.setId(document.getId());
+                                obj.setStationId(stationId);
                                 progressMade(obj);
                             }catch(Exception e){
                                 loaderError(ErrorType.DatabaseError);
@@ -116,6 +117,7 @@ public class ObjectiveEngine {
                                 String question = document.getString("question");
                                 Objective obj = (Objective) type.getObjectiveClass().getConstructor(String.class).newInstance(question);
                                 obj.setId(document.getId());
+                                obj.setStationId(stationId);
                                 progressMade(obj);
                             }catch(Exception e){
                                 loaderError(ErrorType.DatabaseError);
@@ -142,6 +144,7 @@ public class ObjectiveEngine {
                                 int maxPictures = document.getLong("maxPictures").intValue();
                                 Objective obj = new PictureObjective(question, maxPictures);
                                 obj.setId(document.getId());
+                                obj.setStationId(stationId);
                                 progressMade(obj);
                             }catch(RuntimeException e){
                                 loaderError(ErrorType.DatabaseError);

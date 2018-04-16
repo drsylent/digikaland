@@ -22,7 +22,7 @@ public class TrueFalseObjectiveFragment extends ObjectiveFragment {
     @Override
     public void upload() {
         TrueFalseObjective obj = (TrueFalseObjective) getObjective();
-        obj.upload(cbAnswer.isChecked());
+        obj.setAnswer(cbAnswer.isChecked());
     }
 
     public static TrueFalseObjectiveFragment newInstance(TrueFalseObjective obj) {

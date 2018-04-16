@@ -14,6 +14,16 @@ public abstract class Objective implements Serializable, Comparable<Objective>{
     // TODO: konstruktorba beépíthető majd, de még a mockkal kompatibilisre hagyjuk
     private String id;
 
+    public String getStationId() {
+        return stationId;
+    }
+
+    public void setStationId(String stationId) {
+        this.stationId = stationId;
+    }
+
+    private String stationId;
+
     public String getId(){ return id; }
 
     public void setId(String id){ this.id = id; }

@@ -21,6 +21,13 @@ public class MultipleChoiceObjective extends Objective {
     /////
 
 
+    public int getChosenIndex() {
+        return chosenIndex;
+    }
+
+    private int chosenIndex;
+
+
     private ArrayList<String> answers;
 
     public MultipleChoiceObjective(String q, ArrayList<String> a){
@@ -35,8 +42,8 @@ public class MultipleChoiceObjective extends Objective {
         else return answer[index];
     }
 
-    public void upload(int index){
-        // feltoltes
+    public void setChosen(int index){
+        chosenIndex = index;
     }
 
     @Override

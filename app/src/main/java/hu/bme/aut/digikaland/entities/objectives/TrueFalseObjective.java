@@ -5,6 +5,12 @@ import hu.bme.aut.digikaland.ui.common.objectives.TrueFalseObjectiveFragment;
 
 public class TrueFalseObjective extends Objective {
 
+    public boolean getAnswer() {
+        return answer;
+    }
+
+    private boolean answer;
+
     public TrueFalseObjective(String q) {
         super(q);
     }
@@ -14,7 +20,7 @@ public class TrueFalseObjective extends Objective {
         return TrueFalseObjectiveFragment.newInstance(this);
     }
 
-    public void upload(boolean answer) {
-        // itt pedig a feltoles vegbemegy majd valahogyan
+    public void setAnswer(boolean ans) {
+        answer = ans;
     }
 }

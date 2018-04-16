@@ -25,26 +25,37 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import hu.bme.aut.digikaland.R;
+import hu.bme.aut.digikaland.dblogic.ErrorType;
+import hu.bme.aut.digikaland.dblogic.RacePermissionHandler;
+import hu.bme.aut.digikaland.dblogic.SolutionEngine;
+import hu.bme.aut.digikaland.entities.objectives.CustomAnswerObjective;
 import hu.bme.aut.digikaland.entities.objectives.Objective;
 import hu.bme.aut.digikaland.ui.common.fragments.PictureFragment;
+import hu.bme.aut.digikaland.ui.common.objectives.CustomAnswerObjectiveFragment;
 import hu.bme.aut.digikaland.ui.common.objectives.ObjectiveFragment;
 import hu.bme.aut.digikaland.ui.common.objectives.PictureObjectiveFragment;
+import hu.bme.aut.digikaland.ui.common.objectives.solutions.SolutionFragment;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;
 import static android.os.Environment.getExternalStoragePublicDirectory;
 
 @RuntimePermissions
-public class ClientObjectiveActivity extends AppCompatActivity implements PictureObjectiveFragment.PictureObjectiveListener, PictureFragment.PictureFragmentListener {
+public class ClientObjectiveActivity extends AppCompatActivity implements PictureObjectiveFragment.PictureObjectiveListener, PictureFragment.PictureFragmentListener,
+        CustomAnswerObjectiveFragment.CustomObjectiveListener, SolutionEngine.CommunicationInterface {
     public final static String ARGS_OBJECTIVES = "objectives";
     public final static String ARG_SEND = "sendable";
     ArrayList<ObjectiveFragment> fragments = new ArrayList<>();
+    ArrayList<Objective> objectives;
     LinearLayout mainLayout;
+    private boolean uploadOk;
+    private Button send;
+    private int uploaded = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_client_objective);
-        ArrayList<Objective> objectives = (ArrayList<Objective>) getIntent().getSerializableExtra(ARGS_OBJECTIVES);
+        objectives = (ArrayList<Objective>) getIntent().getSerializableExtra(ARGS_OBJECTIVES);
         ActionBar toolbar = getSupportActionBar();
         if(toolbar != null){
             toolbar.setDisplayHomeAsUpEnabled(true);
@@ -56,7 +67,7 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
             fragments.add(fragment);
             getSupportFragmentManager().beginTransaction().add(R.id.clientQuestionContent, fragment, ObjectiveFragment.generateTag()).commit();
         }
-        Button send = findViewById(R.id.clientQuestionSend);
+        send = findViewById(R.id.clientQuestionSend);
         // Ha nem lehet elküldeni, akkor ez az onclick listener lesz
         if(getIntent().getBooleanExtra(ARG_SEND, false)) {
             send.setOnClickListener(new View.OnClickListener() {
@@ -67,15 +78,19 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
             });
         }
         else{
-            send.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-            send.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    showSnackBarMessage("Nem küldhetsz be megoldást!");
-                }
-            });
+            disableButton(send);
         }
         mainLayout = findViewById(R.id.clientObjectiveMain);
+    }
+
+    private void disableButton(Button send){
+        send.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+        send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showSnackBarMessage("Nem küldhetsz be megoldást!");
+            }
+        });
     }
 
     @Override
@@ -174,8 +189,14 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
     }
 
     public void sendSolution(){
-        // itt küldi el a megoldást majd
+        uploadOk = true;
+        uploaded = 0;
         showSnackBarMessage(getString(R.string.send));
+        for(ObjectiveFragment fragment : fragments)
+            fragment.upload();
+        if(uploadOk){
+            SolutionEngine.getInstance(this).uploadSolutions(objectives, RacePermissionHandler.getInstance().getTeamReference().getId());
+        }
     }
 
     // TODO: jelenleg csak placeholder megjelenítésre
@@ -271,4 +292,22 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
     }
 
 
+    @Override
+    public void inputValidationError() {
+        uploadOk = false;
+        showSnackBarMessage("A szöveg amit megadtál nem tölthető fel.");
+    }
+
+    @Override
+    public void uploadCompleted() {
+        if(++uploaded == objectives.size()) {
+            disableButton(send);
+            showSnackBarMessage("Megoldás feltöltése sikeres!");
+        }
+    }
+
+    @Override
+    public void uploadError(ErrorType errorType) {
+        showSnackBarMessage("Feltöltési hiba!");
+    }
 }
