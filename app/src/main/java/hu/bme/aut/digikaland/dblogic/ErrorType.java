@@ -6,7 +6,9 @@ public enum ErrorType {
     RoleNotExists,
     DatabaseError,
     EmptyField,
-    IllegalCharacter;
+    IllegalCharacter,
+    UploadError,
+    PictureUploadError;
 
     public String getDefaultMessage(){
         switch (this){
@@ -16,6 +18,8 @@ public enum ErrorType {
             case RoleNotExists: return "A megadott szerepkód nem helyes.";
             case IllegalCharacter: return "Helytelen karakter található az inputban.";
             case EmptyField: return "Kihagytál egy kötelező mezőt.";
+            case UploadError: return "Feltöltés közben hiba történt.";
+            case PictureUploadError: return "Kép feltöltése közben hiba történt.";
             default: return "NONDEFINEDERROR";
         }
     }

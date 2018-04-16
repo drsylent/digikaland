@@ -27,8 +27,12 @@ public class PictureObjectiveFragment extends ObjectiveFragment {
 
     @Override
     public void upload() {
+        ArrayList<Uri> pictures = new ArrayList<>();
+        for(PictureFragment fragment : fragments)
+            if(fragment.getPictureUri() != null)
+                pictures.add(fragment.getPictureUri());
         PictureObjective obj = (PictureObjective) getObjective();
-        obj.upload();
+        obj.setPictures(pictures);
     }
 
     public static PictureObjectiveFragment newInstance(PictureObjective obj) {

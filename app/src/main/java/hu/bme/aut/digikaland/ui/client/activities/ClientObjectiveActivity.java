@@ -298,6 +298,7 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
         showSnackBarMessage("A szöveg amit megadtál nem tölthető fel.");
     }
 
+    // TODO: megcsinálni a státusz haladásokat (stationsben, teams/stationsben)
     @Override
     public void uploadCompleted() {
         if(++uploaded == objectives.size()) {
@@ -308,6 +309,6 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
 
     @Override
     public void uploadError(ErrorType errorType) {
-        showSnackBarMessage("Feltöltési hiba!");
+        showSnackBarMessage(errorType.getDefaultMessage());
     }
 }
