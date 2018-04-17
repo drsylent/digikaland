@@ -49,7 +49,6 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
     LinearLayout mainLayout;
     private boolean uploadOk;
     private Button send;
-    private int uploaded = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -190,7 +189,6 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
 
     public void sendSolution(){
         uploadOk = true;
-        uploaded = 0;
         showSnackBarMessage(getString(R.string.send));
         for(ObjectiveFragment fragment : fragments)
             fragment.upload();
@@ -301,10 +299,8 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
     // TODO: megcsinálni a státusz haladásokat (stationsben, teams/stationsben)
     @Override
     public void uploadCompleted() {
-        if(++uploaded == objectives.size()) {
-            disableButton(send);
-            showSnackBarMessage("Megoldás feltöltése sikeres!");
-        }
+        disableButton(send);
+        showSnackBarMessage("Megoldás feltöltése sikeres!");
     }
 
     @Override

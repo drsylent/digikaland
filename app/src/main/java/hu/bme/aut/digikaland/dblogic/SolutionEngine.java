@@ -3,18 +3,26 @@ package hu.bme.aut.digikaland.dblogic;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.ServerTimestamp;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
-import hu.bme.aut.digikaland.entities.Picture;
+import hu.bme.aut.digikaland.entities.enumeration.EvaluationStatus;
 import hu.bme.aut.digikaland.entities.objectives.CustomAnswerObjective;
 import hu.bme.aut.digikaland.entities.objectives.MultipleChoiceObjective;
 import hu.bme.aut.digikaland.entities.objectives.Objective;
@@ -31,6 +39,9 @@ public class SolutionEngine {
 
     private CommunicationInterface comm;
 
+    @ServerTimestamp
+    private Date serverTime = new Date();
+
     public static SolutionEngine getInstance(CommunicationInterface c) {
         ourInstance.comm = c;
         return ourInstance;
@@ -40,92 +51,119 @@ public class SolutionEngine {
     }
 
     public void uploadSolutions(ArrayList<Objective> objectives, String teamId){
-        int index = 1;
-        for(Objective objective : objectives){
-            String solutionId = documentIdGenerator(objective.getStationId(), index++, teamId);
-            if(objective.getClass() == TrueFalseObjective.class)
-                uploadTrueFalse((TrueFalseObjective) objective, solutionId);
-            else if(objective.getClass() == MultipleChoiceObjective.class)
-                uploadMultipleChoice((MultipleChoiceObjective) objective, solutionId);
-            else if(objective.getClass() == CustomAnswerObjective.class)
-                uploadCustomAnswer((CustomAnswerObjective) objective, solutionId);
-            else if(objective.getClass() == PhysicalObjective.class)
-                uploadPhysicalObjective(solutionId);
-            else if(objective.getClass() == PictureObjective.class)
-                new PictureUploader((PictureObjective) objective, solutionId).uploadPictures();
+        new Uploader(objectives, teamId).start();
+    }
+
+    private class Uploader{
+        ArrayList<Objective> objectives;
+        private String stationId;
+        private String teamId;
+        private int uploadDone = 0;
+
+        private Uploader(ArrayList<Objective> objectives, String teamId){
+            this.objectives = objectives;
+            this.teamId = teamId;
+            stationId = objectives.get(0).getStationId();
+        }
+
+        private void start(){
+            int index = 1;
+            for(Objective objective : objectives){
+                String solutionId = documentIdGenerator(index++);
+                if(objective.getClass() == TrueFalseObjective.class)
+                    uploadTrueFalse((TrueFalseObjective) objective, solutionId);
+                else if(objective.getClass() == MultipleChoiceObjective.class)
+                    uploadMultipleChoice((MultipleChoiceObjective) objective, solutionId);
+                else if(objective.getClass() == CustomAnswerObjective.class)
+                    uploadCustomAnswer((CustomAnswerObjective) objective, solutionId);
+                else if(objective.getClass() == PhysicalObjective.class)
+                    uploadPhysicalObjective(solutionId);
+                else if(objective.getClass() == PictureObjective.class)
+                    new PictureUploader(this, (PictureObjective) objective, solutionId).uploadPictures();
+            }
+        }
+
+        private void solutionUploaded(){
+            if(++uploadDone == objectives.size()){
+                StatusUpdater statusUpdater = new StatusUpdater(stationId);
+                statusUpdater.updateStationStatus();
+                statusUpdater.updateTeamStationStatus();
+            }
+        }
+
+        private String documentIdGenerator(int index){
+            return stationId + "_" + Integer.toString(index) + "_" + teamId;
+        }
+
+        private void uploadTrueFalse(TrueFalseObjective objective, String solutionId){
+            RacePermissionHandler.getInstance().getRaceReference().collection("solutions").document(solutionId)
+                    .update("answer", objective.getAnswer())
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            solutionUploaded();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            comm.uploadError(ErrorType.DatabaseError);
+                        }
+                    });
+        }
+
+        private void uploadMultipleChoice(MultipleChoiceObjective objective, String solutionId){
+            RacePermissionHandler.getInstance().getRaceReference().collection("solutions").document(solutionId)
+                    .update("answer", objective.getChosenIndex())
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            solutionUploaded();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            comm.uploadError(ErrorType.DatabaseError);
+                        }
+                    });
+        }
+
+        private void uploadCustomAnswer(CustomAnswerObjective objective, String solutionId){
+            uploadStringAnswer(objective.getAnswer(), solutionId);
+        }
+
+        private void uploadPhysicalObjective(String solutionId){
+            uploadStringAnswer("complete", solutionId);
+        }
+
+        private void uploadStringAnswer(String answer, String solutionId){
+            RacePermissionHandler.getInstance().getRaceReference().collection("solutions").document(solutionId)
+                    .update("answer", answer)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            solutionUploaded();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            comm.uploadError(ErrorType.UploadError);
+                        }
+                    });
         }
     }
 
-    private String documentIdGenerator(String stationId, int index, String teamId){
-        return stationId + "_" + Integer.toString(index) + "_" + teamId;
-    }
-
-    private void uploadTrueFalse(TrueFalseObjective objective, String solutionId){
-        RacePermissionHandler.getInstance().getRaceReference().collection("solutions").document(solutionId)
-                .update("answer", objective.getAnswer())
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        comm.uploadCompleted();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        comm.uploadError(ErrorType.DatabaseError);
-                    }
-        });
-    }
-
-    private void uploadMultipleChoice(MultipleChoiceObjective objective, String solutionId){
-        RacePermissionHandler.getInstance().getRaceReference().collection("solutions").document(solutionId)
-                .update("answer", objective.getChosenIndex())
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        comm.uploadCompleted();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        comm.uploadError(ErrorType.DatabaseError);
-                    }
-                });
-    }
-
-    private void uploadCustomAnswer(CustomAnswerObjective objective, String solutionId){
-        uploadStringAnswer(objective.getAnswer(), solutionId);
-    }
-
-    private void uploadPhysicalObjective(String solutionId){
-        uploadStringAnswer("complete", solutionId);
-    }
-
-    private void uploadStringAnswer(String answer, String solutionId){
-        RacePermissionHandler.getInstance().getRaceReference().collection("solutions").document(solutionId)
-                .update("answer", answer)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        comm.uploadCompleted();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        comm.uploadError(ErrorType.UploadError);
-                    }
-                });
-    }
 
     private class PictureUploader{
         private PictureObjective objective;
-        int counter = 0;
+        private int counter = 0;
         private ArrayList<String> filepaths = new ArrayList<>();
-        int completed = 0;
+        private Uploader uploadMaster;
         private String solutionId;
-        private PictureUploader(PictureObjective obj, String sId){
+        private PictureUploader(Uploader callback, PictureObjective obj, String sId){
+            uploadMaster = callback;
             objective = obj;
             solutionId = sId;
         }
@@ -150,7 +188,7 @@ public class SolutionEngine {
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                pictureSolutionUploaded();
+                                uploadMaster.solutionUploaded();
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -160,10 +198,6 @@ public class SolutionEngine {
                             }
                         });
             }
-        }
-
-        private void pictureSolutionUploaded(){
-            comm.uploadCompleted();
         }
 
         private void uploadPicture(Uri file){
@@ -183,6 +217,101 @@ public class SolutionEngine {
                     pictureUploaded(filepath);
                 }
             });
+        }
+    }
+
+    private class StatusUpdater{
+        private String stationId;
+        private int statusDone = 0;
+
+        private StatusUpdater(String sId){
+            stationId = sId;
+        }
+
+        private DocumentReference getStationReference(){
+            return RacePermissionHandler.getInstance().getRaceReference().collection("stations").document(stationId);
+        }
+
+        private void statusUploadCompleted(){
+            if(++statusDone == 2) comm.uploadCompleted();
+        }
+
+        private void updateTeamStationStatus(){
+            RacePermissionHandler.getInstance().getTeamReference().collection("stations").whereEqualTo("station", getStationReference())
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                if(task.getResult().getDocuments().size() != 1)
+                                    comm.uploadError(ErrorType.DatabaseError);
+                                else{
+                                    DocumentSnapshot station = task.getResult().getDocuments().get(0);
+                                    updateTeamStationStatus2(station.getReference());
+                                }
+                            } else {
+                                comm.uploadError(ErrorType.NoContact);
+                            }
+                        }
+                    });
+        }
+
+        private void updateTeamStationStatus2(DocumentReference teamStationRef){
+            Map<String, Object> updateData = new HashMap<>();
+            updateData.put("done", true);
+            updateData.put("timedone", serverTime);
+            teamStationRef.set(updateData, SetOptions.merge())
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            statusUploadCompleted();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            comm.uploadError(ErrorType.UploadError);
+                        }
+                    });
+        }
+
+        private void updateStationStatus(){
+            RacePermissionHandler.getInstance().getRaceReference().collection("stations").document(stationId).collection("teams")
+                    .whereEqualTo("team", RacePermissionHandler.getInstance().getTeamReference())
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                if(task.getResult().getDocuments().size() != 1)
+                                    comm.uploadError(ErrorType.DatabaseError);
+                                else{
+                                    DocumentSnapshot station = task.getResult().getDocuments().get(0);
+                                    updateStationStatus2(station.getReference());
+                                }
+                            } else {
+                                comm.uploadError(ErrorType.NoContact);
+                            }
+                        }
+                    });
+        }
+
+        private void updateStationStatus2(DocumentReference teamStationRef){
+            final Map<String, Object> updateData = new HashMap<>();
+            updateData.put("status", EvaluationStatus.Done.toString());
+            teamStationRef.set(updateData, SetOptions.merge())
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            statusUploadCompleted();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            comm.uploadError(ErrorType.UploadError);
+                        }
+                    });
         }
     }
 
