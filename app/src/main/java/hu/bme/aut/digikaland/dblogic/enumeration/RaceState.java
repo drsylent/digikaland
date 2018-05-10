@@ -1,4 +1,4 @@
-package hu.bme.aut.digikaland.dblogic;
+package hu.bme.aut.digikaland.dblogic.enumeration;
 
 /**
  * Created by Sylent on 2018. 04. 06..

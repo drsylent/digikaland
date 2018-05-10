@@ -15,11 +15,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.dblogic.AdminEngine;
 import hu.bme.aut.digikaland.dblogic.ErrorType;
+import hu.bme.aut.digikaland.dblogic.ResultsEngine;
 import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.entities.Location;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminEvaluateActivity;
@@ -35,7 +37,7 @@ import hu.bme.aut.digikaland.ui.common.fragments.ResultsFragment;
 import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
 public class AdminStationMainActivity extends AppCompatActivity implements AdminStationActualFragment.AdminActivityInterface, ResultsFragment.ResultsFragmentListener,
-        AdminRaceStarterFragment.AdminStarterListener, AdminEngine.CommunicationInterface{
+        AdminRaceStarterFragment.AdminStarterListener, AdminEngine.CommunicationInterface, ResultsEngine.CommunicationInterface{
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private LinearLayout mainLayout;
@@ -86,7 +88,7 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
             case Starting: startingStateLoaded(); break;
             case Running: runningStateLoaded(); break;
 //            case Station: stationStateLoaded(); break;
-//            case Ending: endingStateLoaded(); break;
+            case Ending: endingStateLoaded(); break;
         }
     }
 
@@ -137,6 +139,24 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
             goToActual(db.getLastLoadedLocation());
         }
         else postLoad = true;
+    }
+
+    @Override
+    public void endingStateLoaded() {
+        if(uiReady) {
+            ResultsEngine.getInstance(this).loadResults();
+        }
+        else postLoad = true;
+    }
+
+    @Override
+    public void resultsLoaded(ArrayList<String> teamNames, ArrayList<Integer> teamPoints) {
+        getSupportFragmentManager().beginTransaction().replace(R.id.adminStationContent, ResultsFragment.newInstance(teamNames, teamPoints)).commit();
+    }
+
+    @Override
+    public void resultsError(ErrorType type) {
+        showSnackBarMessage(type.getDefaultMessage());
     }
 
     private enum ContentState{

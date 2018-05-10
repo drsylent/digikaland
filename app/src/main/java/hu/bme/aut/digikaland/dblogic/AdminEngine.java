@@ -15,6 +15,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.Date;
 
 import hu.bme.aut.digikaland.dblogic.enumeration.LoadResult;
+import hu.bme.aut.digikaland.dblogic.enumeration.RaceState;
 import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.entities.Location;
 import hu.bme.aut.digikaland.entities.enumeration.EvaluationStatus;
@@ -57,7 +58,7 @@ public class AdminEngine {
                             switch (RaceState.valueOf(document.getString("status"))){
                                 case NotStarted: loadStartingState(); break;
                                 case Started: loadRunningState(); break;
-                                case Ended: loadEndingState(); break;
+                                case Ended: endingStateLoaded(); break;
                             }
                         }catch (IllegalArgumentException e){
                             comm.clientError(ErrorType.DatabaseError);
@@ -209,10 +210,6 @@ public class AdminEngine {
         });
     }
 
-    private void loadEndingState(){
-
-    }
-
     private void stationStateLoaded(){
         loadResult = LoadResult.Station;
 //        comm.stationStateLoaded();
@@ -220,7 +217,7 @@ public class AdminEngine {
 
     private void endingStateLoaded(){
         loadResult = LoadResult.Ending;
-//        comm.endingStateLoaded();
+        comm.endingStateLoaded();
     }
 
     private void startingStateLoaded(){
@@ -344,7 +341,7 @@ public class AdminEngine {
         void startingStateLoaded();
         void runningStateLoaded();
 //        void stationStateLoaded();
-//        void endingStateLoaded();
+        void endingStateLoaded();
 //        void teamNameLoaded();
 //        void completedStationsLoaded();
     }

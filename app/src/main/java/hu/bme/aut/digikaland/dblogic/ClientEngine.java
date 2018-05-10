@@ -1,7 +1,6 @@
 package hu.bme.aut.digikaland.dblogic;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -15,6 +14,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.Date;
 
 import hu.bme.aut.digikaland.dblogic.enumeration.LoadResult;
+import hu.bme.aut.digikaland.dblogic.enumeration.RaceState;
 import hu.bme.aut.digikaland.entities.Location;
 
 /**
@@ -100,7 +100,7 @@ public class ClientEngine {
                             switch (RaceState.valueOf(document.getString("status"))){
                                 case NotStarted: loadStartingState(); break;
                                 case Started: loadRunningState(); break;
-                                case Ended: loadEndingState(); break;
+                                case Ended: endingStateLoaded(); break;
                             }
                         }catch (IllegalArgumentException e){
                             comm.clientError(ErrorType.DatabaseError);
@@ -293,10 +293,6 @@ public class ClientEngine {
     private void runningStateLoaded(){
         loadResult = LoadResult.Running;
         comm.runningStateLoaded();
-    }
-
-    private void loadEndingState(){
-        comm.endingStateLoaded();
     }
 
     public int getLastLoadedStationNumber() {
