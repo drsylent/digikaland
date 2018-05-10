@@ -11,17 +11,21 @@ import android.widget.TextView;
 
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.entities.Contact;
+import hu.bme.aut.digikaland.entities.Location;
 import hu.bme.aut.digikaland.ui.common.fragments.TextFragment;
 import hu.bme.aut.digikaland.ui.common.fragments.TitleContactFragment;
 
 public class AdminStationActualFragment extends Fragment {
     private static final String ARG_LOCATION = "location";
     private static final String ARG_SUBLOCATION = "detailedlocation";
+    private static final String ARG_FULLLOCATION = "fulllocation";
 
     // Mivel a gazda activity fogja kezelni a hálózati kapcsolatot, és gondoskodik az adatok frisseségéért
     // ezért praktikusabb, ha a változó adatokat ott tároljuk.
     private String location;
     private String sublocation;
+
+    private Location fullLocation;
 
     private AdminActivityInterface activity;
 
@@ -29,11 +33,20 @@ public class AdminStationActualFragment extends Fragment {
         // Required empty public constructor
     }
 
+    // TODO: deprecated
     public static AdminStationActualFragment newInstance(String location, String sublocation) {
         AdminStationActualFragment fragment = new AdminStationActualFragment();
         Bundle arguments = new Bundle();
         arguments.putString(ARG_LOCATION, location);
         arguments.putString(ARG_SUBLOCATION, sublocation);
+        fragment.setArguments(arguments);
+        return fragment;
+    }
+
+    public static AdminStationActualFragment newInstance(Location location) {
+        AdminStationActualFragment fragment = new AdminStationActualFragment();
+        Bundle arguments = new Bundle();
+        arguments.putSerializable(ARG_FULLLOCATION, location);
         fragment.setArguments(arguments);
         return fragment;
     }
@@ -44,6 +57,7 @@ public class AdminStationActualFragment extends Fragment {
         if (getArguments() != null) {
             location = getArguments().getString(ARG_LOCATION);
             sublocation = getArguments().getString(ARG_SUBLOCATION);
+            fullLocation = (Location) getArguments().getSerializable(ARG_FULLLOCATION);
         }
     }
 
@@ -56,7 +70,7 @@ public class AdminStationActualFragment extends Fragment {
     }
 
     public void setNextTeamValues(){
-        if(!activity.isEnding()){
+        if(!activity.areAllTeamsDone()){
             String nextTeam = activity.getNextTeamName();
             Contact nextContact = activity.getNextTeamContact();
             getChildFragmentManager().beginTransaction().replace(R.id.adminStationNextTeamContent, TitleContactFragment.newInstance(nextTeam, nextContact, true)).commit();
@@ -91,8 +105,8 @@ public class AdminStationActualFragment extends Fragment {
         stationStatus = root.findViewById(R.id.adminStationActualStatus);
         TextView stationloc = root.findViewById(R.id.adminStationStationLocation);
         TextView stationsubloc = root.findViewById(R.id.adminStationStationSubLocation);
-        stationloc.setText(location);
-        stationsubloc.setText(sublocation);
+        stationloc.setText(fullLocation.main);
+        stationsubloc.setText(fullLocation.detailed);
         evaluate = root.findViewById(R.id.adminStationActualEvaluate);
         evaluate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,7 +154,7 @@ public class AdminStationActualFragment extends Fragment {
         int getEvaluated();
         int getDone();
         int getSum();
-        boolean isEnding();
+        boolean areAllTeamsDone();
         String getNextTeamName();
         Contact getNextTeamContact();
         void onEvaluateActivation();

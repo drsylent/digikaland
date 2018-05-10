@@ -20,7 +20,6 @@ import java.util.Date;
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.dblogic.AdminEngine;
 import hu.bme.aut.digikaland.dblogic.ErrorType;
-import hu.bme.aut.digikaland.dblogic.enumeration.LoadResult;
 import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.entities.Location;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminEvaluateActivity;
@@ -40,7 +39,7 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private LinearLayout mainLayout;
-    private AdminStationActualFragment fragment;
+    private AdminStationActualFragment fragment = null;
     private AdminEngine db;
 
     private boolean uiReady = false;
@@ -85,7 +84,7 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
     private void executePostLoad(){
         switch (db.getLoadResult()){
             case Starting: startingStateLoaded(); break;
-//            case Running: runningStateLoaded(); break;
+            case Running: runningStateLoaded(); break;
 //            case Station: stationStateLoaded(); break;
 //            case Ending: endingStateLoaded(); break;
         }
@@ -128,6 +127,18 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
         setNotStarted();
     }
 
+    @Override
+    public void runningStateLoaded() {
+        evaluated = db.getEvaluated();
+        done = db.getDone();
+        teamName = db.getTeamName();
+        teamContact = db.getNextTeamContact();
+        if(uiReady){
+            goToActual(db.getLastLoadedLocation());
+        }
+        else postLoad = true;
+    }
+
     private enum ContentState{
         NotStarted,
         Actual,
@@ -148,10 +159,13 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
                 AdminRaceStarterFragment.newInstance(loc, time, false)).commit();
     }
 
-    private void setActual(){
+    private void goToActual(Location location){
         state = ContentState.Actual;
-        fragment = AdminStationActualFragment.newInstance("Ez egy állomás", "Ez meg a pontosítás");
-        getSupportFragmentManager().beginTransaction().replace(R.id.adminStationContent, fragment).commit();
+        if(fragment == null) {
+            fragment = AdminStationActualFragment.newInstance(location);
+            getSupportFragmentManager().beginTransaction().replace(R.id.adminStationContent, fragment).commit();
+        }
+        else fragment.refreshAllData();
     }
 
     private void setResults(){
@@ -162,12 +176,13 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         showSnackBarMessage(getResources().getString(R.string.refresh));
-        MockGenerator.adminStationCycleStep();
-        if(MockGenerator.adminStationIsResultsActive()) setResults();
-        else{
-            if(state == ContentState.Actual) fragment.refreshAllData();
-            else setActual();
-        }
+//        MockGenerator.adminStationCycleStep();
+//        if(MockGenerator.adminStationIsResultsActive()) setResults();
+//        else{
+//            if(state == ContentState.Actual) fragment.refreshAllData();
+//            else goToActual();
+//        }
+        db.loadState();
         return super.onOptionsItemSelected(item);
     }
 
@@ -211,34 +226,41 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
         Snackbar.make(mainLayout, message, Snackbar.LENGTH_LONG).show();
     }
 
+    private int evaluated = -1;
+    private int done = -1;
+
     @Override
     public int getEvaluated() {
-        return 1;
+        return evaluated;
     }
 
     @Override
     public int getDone() {
-        return 2;
+        return done;
     }
 
     @Override
     public int getSum() {
-        return 3;
+        return db.getTeamSum();
     }
 
     @Override
-    public boolean isEnding() {
-        return MockGenerator.adminStationIsEnding();
+    public boolean areAllTeamsDone() {
+        return done == getSum();
     }
+
+    private String teamName = null;
 
     @Override
     public String getNextTeamName() {
-        return MockGenerator.adminStationGetNextTeamName();
+        return teamName;
     }
+
+    private Contact teamContact = null;
 
     @Override
     public Contact getNextTeamContact() {
-        return MockGenerator.adminStationGetNextContact();
+        return teamContact;
     }
 
     @Override
@@ -266,6 +288,6 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
 
     @Override
     public boolean isToEvaluate() {
-        return MockGenerator.adminStationIsToEvaluate();
+        return done != evaluated;
     }
 }

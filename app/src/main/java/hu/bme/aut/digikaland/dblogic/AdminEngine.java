@@ -4,15 +4,20 @@ import android.support.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Date;
 
 import hu.bme.aut.digikaland.dblogic.enumeration.LoadResult;
+import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.entities.Location;
+import hu.bme.aut.digikaland.entities.enumeration.EvaluationStatus;
 
 /**
  * Created by Sylent on 2018. 05. 10..
@@ -96,7 +101,112 @@ public class AdminEngine {
     }
 
     private void loadRunningState(){
+        final DocumentReference stationRef = RacePermissionHandler.getInstance().getStationReference();
+        stationRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null && document.exists()) {
+                        try {
+                            location = new Location(document.getString("address"), document.getString("address-detailed"));
+                            //geoPoint = document.getGeoPoint("geodata");
+                            loadStationState();
+                        } catch (RuntimeException e){
+                            comm.clientError(ErrorType.DatabaseError);
+                        }
+                    } else {
+                        comm.clientError(ErrorType.RaceNotExists);
+                    }
+                } else {
+                    comm.clientError(ErrorType.NoContact);
+                }
+            }
+        });
+    }
 
+    private void loadStationState(){
+        final CollectionReference stationRef = RacePermissionHandler.getInstance().getStationReference().collection("teams");
+        stationRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    try {
+                        done = 0;
+                        evaluated = 0;
+                        teamId = null;
+                        boolean firstNotArrived = true;
+                        DocumentReference docRef = null;
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            EvaluationStatus status = EvaluationStatus.valueOf(document.getString("status"));
+                            switch (status){
+                                case Done: done++; break;
+                                case Evaluated: done++; evaluated++; break;
+                                case NotArrivedYet:
+                                    if(firstNotArrived){
+                                        docRef = document.getDocumentReference("team");
+                                        teamId = docRef.getId();
+                                        firstNotArrived = false;
+                                    }
+                                    break;
+                            }
+                        }
+                        if(firstNotArrived) runningStateLoaded();
+                        else loadNextTeamInfo(docRef);
+                    } catch (RuntimeException e){
+                        comm.clientError(ErrorType.DatabaseError);
+                    }
+                } else {
+                    comm.clientError(ErrorType.NoContact);
+                }
+            }
+        });
+    }
+
+    private void loadNextTeamInfo(DocumentReference docRef){
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null && document.exists()) {
+                        try {
+                            teamName = document.getString("name");
+                            loadTeamContact(document.getDocumentReference("captain"));
+                        } catch (RuntimeException e){
+                            comm.clientError(ErrorType.DatabaseError);
+                        }
+                    } else {
+                        comm.clientError(ErrorType.RaceNotExists);
+                    }
+                } else {
+                    comm.clientError(ErrorType.NoContact);
+                }
+            }
+        });
+    }
+
+    private void loadTeamContact(DocumentReference docRef){
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null && document.exists()) {
+                        try {
+                            captainContact = document.toObject(Contact.class);
+                            runningStateLoaded();
+                        } catch (RuntimeException e){
+                            comm.clientError(ErrorType.DatabaseError);
+                        }
+                    } else {
+                        comm.clientError(ErrorType.RaceNotExists);
+                    }
+                } else {
+                    comm.clientError(ErrorType.NoContact);
+                }
+            }
+        });
     }
 
     private void loadEndingState(){
@@ -120,7 +230,7 @@ public class AdminEngine {
 
     private void runningStateLoaded(){
         loadResult = LoadResult.Running;
-//        comm.runningStateLoaded();
+        comm.runningStateLoaded();
     }
 
     private void resetData(){
@@ -129,11 +239,38 @@ public class AdminEngine {
         stationSum = -1;
         raceName = null;
         teamName = null;
+        captainContact = null;
+        done = -1;
+        evaluated = -1;
         location = null;
         startingTime = null;
         endingTime = null;
         stationId = null;
         geoPoint = null;
+    }
+
+    private int evaluated = -1;
+
+    public int getEvaluated() {
+        return evaluated;
+    }
+
+    public int getDone() {
+        return done;
+    }
+
+    private int done = -1;
+
+    private String teamId = null;
+
+    private Contact captainContact = null;
+
+    public Contact getNextTeamContact() {
+        return captainContact;
+    }
+
+    public String getNextTeamId() {
+        return teamId;
     }
 
     public int getLastLoadedStationNumber() {
@@ -205,7 +342,7 @@ public class AdminEngine {
     public interface CommunicationInterface{
         void clientError(ErrorType type);
         void startingStateLoaded();
-//        void runningStateLoaded();
+        void runningStateLoaded();
 //        void stationStateLoaded();
 //        void endingStateLoaded();
 //        void teamNameLoaded();
