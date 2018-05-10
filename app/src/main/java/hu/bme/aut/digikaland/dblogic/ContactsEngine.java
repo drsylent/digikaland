@@ -179,9 +179,4 @@ public class ContactsEngine {
         void captainLoaded();
         void contactsError(ErrorType type);
     }
-
-    public interface ExtendedCommunicationInterface extends CommunicationInterface{
-        void allStationsLoaded();
-        void allCaptainLoaded();
-    }
 }

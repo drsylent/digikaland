@@ -288,11 +288,11 @@ public class MockGenerator {
         Bundle i = new Bundle();
         i.putStringArrayList(AdminHelpActivity.ARG_OBJECTADMINS, objectiveAdminNameGenerator());
         i.putStringArrayList(AdminHelpActivity.ARG_TOTALADMINS, totalAdminNameGenerator());
-        i.putStringArrayList(AdminHelpActivity.ARG_OBJECTADMINPHONES, objectiveAdminPhoneGenerator());
-        i.putStringArrayList(AdminHelpActivity.ARG_TOTALADMINPHONES, totalAdminPhoneGenerator());
-        i.putStringArrayList(AdminHelpActivity.ARG_OBJECTIVENAMES, objectiveNameGenerator());
-        i.putStringArrayList(AdminHelpActivity.ARG_TEAMNAMES, teamNameGenerator());
-        i.putStringArrayList(AdminHelpActivity.ARG_CAPTAINPHONES, captainPhoneGenerator());
+//        i.putStringArrayList(AdminHelpActivity.ARG_OBJECTADMINPHONES, objectiveAdminPhoneGenerator());
+//        i.putStringArrayList(AdminHelpActivity.ARG_TOTALADMINPHONES, totalAdminPhoneGenerator());
+//        i.putStringArrayList(AdminHelpActivity.ARG_OBJECTIVENAMES, objectiveNameGenerator());
+//        i.putStringArrayList(AdminHelpActivity.ARG_TEAMNAMES, teamNameGenerator());
+//        i.putStringArrayList(AdminHelpActivity.ARG_CAPTAINPHONES, captainPhoneGenerator());
         i.putStringArrayList(AdminHelpActivity.ARG_CAPTAINS, captainNameGenerator());
         return i;
     }

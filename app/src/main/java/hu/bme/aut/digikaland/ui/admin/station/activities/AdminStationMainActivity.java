@@ -17,9 +17,11 @@ import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.dblogic.AdminEngine;
+import hu.bme.aut.digikaland.dblogic.ContactsEngineFull;
 import hu.bme.aut.digikaland.dblogic.ErrorType;
 import hu.bme.aut.digikaland.dblogic.ObjectiveEngine;
 import hu.bme.aut.digikaland.dblogic.ResultsEngine;
@@ -39,7 +41,8 @@ import hu.bme.aut.digikaland.ui.common.fragments.ResultsFragment;
 import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
 public class AdminStationMainActivity extends AppCompatActivity implements AdminStationActualFragment.AdminActivityInterface, ResultsFragment.ResultsFragmentListener,
-        AdminRaceStarterFragment.AdminStarterListener, AdminEngine.CommunicationInterface, ResultsEngine.CommunicationInterface, ObjectiveEngine.CommunicationInterface{
+        AdminRaceStarterFragment.AdminStarterListener, AdminEngine.CommunicationInterface, ResultsEngine.CommunicationInterface, ObjectiveEngine.CommunicationInterface,
+        ContactsEngineFull.CommunicationInterface{
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private LinearLayout mainLayout;
@@ -169,6 +172,16 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
 
     @Override
     public void objectiveLoadError(ErrorType type) {
+        showSnackBarMessage(type.getDefaultMessage());
+    }
+
+    @Override
+    public void allDataLoaded(ArrayList<Contact> totalAdmins, HashMap<String, ArrayList<Contact>> stationAdmins, HashMap<String, Contact> captains) {
+        setHelp(totalAdmins, stationAdmins, captains);
+    }
+
+    @Override
+    public void contactsError(ErrorType type) {
         showSnackBarMessage(type.getDefaultMessage());
     }
 
@@ -314,8 +327,20 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
 
     @Override
     public void onHelpActivation() {
+        ContactsEngineFull.getInstance(this).loadAllData();
+    }
+
+    private void setHelp(ArrayList<Contact> totalAdmins, HashMap<String, ArrayList<Contact>> stationAdmins, HashMap<String, Contact> captains){
+        Bundle i = new Bundle();
+        i.putSerializable(AdminHelpActivity.ARG_OBJECTADMINS, stationAdmins);
+        i.putSerializable(AdminHelpActivity.ARG_TOTALADMINS, totalAdmins);
+        i.putSerializable(AdminHelpActivity.ARG_CAPTAINS, captains);
+        goToHelp(i);
+    }
+
+    private void goToHelp(Bundle helpBundle){
         Intent i = new Intent(AdminStationMainActivity.this, AdminHelpActivity.class);
-        i.putExtra(AdminHelpActivity.ARG_HELPDATA, MockGenerator.mockAdminHelpData());
+        i.putExtra(AdminHelpActivity.ARG_HELPDATA, helpBundle);
         startActivity(i);
     }
 
