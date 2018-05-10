@@ -21,9 +21,11 @@ import java.util.Date;
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.dblogic.AdminEngine;
 import hu.bme.aut.digikaland.dblogic.ErrorType;
+import hu.bme.aut.digikaland.dblogic.ObjectiveEngine;
 import hu.bme.aut.digikaland.dblogic.ResultsEngine;
 import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.entities.Location;
+import hu.bme.aut.digikaland.entities.objectives.Objective;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminEvaluateActivity;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminHelpActivity;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminStationsActivity;
@@ -37,7 +39,7 @@ import hu.bme.aut.digikaland.ui.common.fragments.ResultsFragment;
 import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
 public class AdminStationMainActivity extends AppCompatActivity implements AdminStationActualFragment.AdminActivityInterface, ResultsFragment.ResultsFragmentListener,
-        AdminRaceStarterFragment.AdminStarterListener, AdminEngine.CommunicationInterface, ResultsEngine.CommunicationInterface{
+        AdminRaceStarterFragment.AdminStarterListener, AdminEngine.CommunicationInterface, ResultsEngine.CommunicationInterface, ObjectiveEngine.CommunicationInterface{
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private LinearLayout mainLayout;
@@ -151,11 +153,22 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
 
     @Override
     public void resultsLoaded(ArrayList<String> teamNames, ArrayList<Integer> teamPoints) {
+        state = ContentState.Results;
         getSupportFragmentManager().beginTransaction().replace(R.id.adminStationContent, ResultsFragment.newInstance(teamNames, teamPoints)).commit();
     }
 
     @Override
     public void resultsError(ErrorType type) {
+        showSnackBarMessage(type.getDefaultMessage());
+    }
+
+    @Override
+    public void objectivesLoaded(ArrayList<Objective> objectives) {
+        goToObjectives(objectives);
+    }
+
+    @Override
+    public void objectiveLoadError(ErrorType type) {
         showSnackBarMessage(type.getDefaultMessage());
     }
 
@@ -186,11 +199,6 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
             getSupportFragmentManager().beginTransaction().replace(R.id.adminStationContent, fragment).commit();
         }
         else fragment.refreshAllData();
-    }
-
-    private void setResults(){
-        state = ContentState.Results;
-        getSupportFragmentManager().beginTransaction().replace(R.id.adminStationContent, ResultsFragment.newInstance(MockGenerator.mockResultNames(), MockGenerator.mockResultPoints())).commit();
     }
 
     @Override
@@ -294,8 +302,13 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
 
     @Override
     public void onObjectivesActivation() {
+        ObjectiveEngine.getInstance(this).loadObjectives(db.getMyStationId());
+    }
+
+    private void goToObjectives(ArrayList<Objective> objectives){
         Intent i = new Intent(AdminStationMainActivity.this, ClientObjectiveActivity.class);
-        i.putExtra(ClientObjectiveActivity.ARGS_OBJECTIVES, MockGenerator.mockBigObjectiveList());
+        i.putExtra(ClientObjectiveActivity.ARGS_OBJECTIVES, objectives);
+        i.putExtra(ClientObjectiveActivity.ARG_SEND, false);
         startActivity(i);
     }
 

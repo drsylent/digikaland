@@ -317,6 +317,8 @@ public class AdminEngine {
 
     private String stationId = null;
 
+    public String getMyStationId(){ return RacePermissionHandler.getInstance().getStationReference().getId(); }
+
     private GeoPoint geoPoint = null;
 
     public Location getLastLoadedLocation(){
