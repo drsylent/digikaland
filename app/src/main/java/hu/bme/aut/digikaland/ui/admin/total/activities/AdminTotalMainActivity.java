@@ -3,7 +3,6 @@ package hu.bme.aut.digikaland.ui.admin.total.activities;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -12,13 +11,12 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminHelpActivity;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminStationsActivity;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminTeamsActivity;
-import hu.bme.aut.digikaland.ui.admin.total.fragments.AdminRaceStarterFragment;
+import hu.bme.aut.digikaland.ui.admin.common.fragments.AdminRaceStarterFragment;
 import hu.bme.aut.digikaland.ui.admin.total.fragments.AdminRunningFragment;
 import hu.bme.aut.digikaland.ui.common.activities.MapsActivity;
 import hu.bme.aut.digikaland.ui.common.activities.SplashActivity;
@@ -101,7 +99,7 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
     private void setNotStarted(){
         state = RaceState.NotStarted;
         getSupportFragmentManager().beginTransaction().replace(R.id.adminStationContent,
-                AdminRaceStarterFragment.newInstance(MockGenerator.mockALocation(), MockGenerator.mockATime())).commit();
+                AdminRaceStarterFragment.newInstance(MockGenerator.mockALocation(), MockGenerator.mockATime(), true)).commit();
     }
 
     private void setRunning(){

@@ -1,4 +1,4 @@
-package hu.bme.aut.digikaland.ui.admin.total.fragments;
+package hu.bme.aut.digikaland.ui.admin.common.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -17,9 +17,11 @@ import hu.bme.aut.digikaland.entities.Location;
 public class AdminRaceStarterFragment extends Fragment {
     private static final String ARG_LOCATION = "loc";
     private static final String ARG_TIME = "time";
+    private static final String ARG_TOTAL = "total";
 
     private Location location;
     private Date time;
+    private boolean total;
 
     private AdminStarterListener totalAdmin;
 
@@ -27,11 +29,12 @@ public class AdminRaceStarterFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static AdminRaceStarterFragment newInstance(Location location, Date time) {
+    public static AdminRaceStarterFragment newInstance(Location location, Date time, boolean canStart) {
         AdminRaceStarterFragment fragment = new AdminRaceStarterFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_LOCATION, location);
         args.putSerializable(ARG_TIME, time);
+        args.putBoolean(ARG_TOTAL, canStart);
         fragment.setArguments(args);
         return fragment;
     }
@@ -42,6 +45,7 @@ public class AdminRaceStarterFragment extends Fragment {
         if (getArguments() != null) {
             location = (Location) getArguments().getSerializable(ARG_LOCATION);
             time = (Date) getArguments().getSerializable(ARG_TIME);
+            total = getArguments().getBoolean(ARG_TOTAL);
         }
     }
 
@@ -62,6 +66,8 @@ public class AdminRaceStarterFragment extends Fragment {
                 totalAdmin.onStartPressed();
             }
         });
+        if(!total)
+            bEnd.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
         Button bHelp = root.findViewById(R.id.adminStarterHelp);
         bHelp.setOnClickListener(new View.OnClickListener() {
             @Override

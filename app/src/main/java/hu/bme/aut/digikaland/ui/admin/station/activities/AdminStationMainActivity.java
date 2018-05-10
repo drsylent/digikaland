@@ -14,12 +14,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+
+import java.util.Date;
+
 import hu.bme.aut.digikaland.R;
+import hu.bme.aut.digikaland.dblogic.AdminEngine;
+import hu.bme.aut.digikaland.dblogic.ErrorType;
+import hu.bme.aut.digikaland.dblogic.enumeration.LoadResult;
 import hu.bme.aut.digikaland.entities.Contact;
+import hu.bme.aut.digikaland.entities.Location;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminEvaluateActivity;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminHelpActivity;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminStationsActivity;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminTeamsActivity;
+import hu.bme.aut.digikaland.ui.admin.common.fragments.AdminRaceStarterFragment;
 import hu.bme.aut.digikaland.ui.admin.station.fragments.AdminStationActualFragment;
 import hu.bme.aut.digikaland.ui.client.activities.ClientObjectiveActivity;
 import hu.bme.aut.digikaland.ui.common.activities.MapsActivity;
@@ -27,15 +35,22 @@ import hu.bme.aut.digikaland.ui.common.activities.SplashActivity;
 import hu.bme.aut.digikaland.ui.common.fragments.ResultsFragment;
 import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
-public class AdminStationMainActivity extends AppCompatActivity implements AdminStationActualFragment.AdminActivityInterface, ResultsFragment.ResultsFragmentListener {
+public class AdminStationMainActivity extends AppCompatActivity implements AdminStationActualFragment.AdminActivityInterface, ResultsFragment.ResultsFragmentListener,
+        AdminRaceStarterFragment.AdminStarterListener, AdminEngine.CommunicationInterface{
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private LinearLayout mainLayout;
     private AdminStationActualFragment fragment;
+    private AdminEngine db;
+
+    private boolean uiReady = false;
+    private boolean postLoad = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        db = AdminEngine.getInstance(this);
+        db.loadState();
         setContentView(R.layout.activity_admin_main);
         mainLayout = findViewById(R.id.adminStationContent);
         drawerLayout = findViewById(R.id.adminDrawer);
@@ -62,7 +77,18 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
         setupToolbar();
         nav.getMenu().getItem(0).setChecked(true);
         toolbar.setTitle(R.string.actual);
-        if(savedInstanceState == null) setActual();
+        uiReady = true;
+        if(postLoad) executePostLoad();
+        //if(savedInstanceState == null) setNotStarted();
+    }
+
+    private void executePostLoad(){
+        switch (db.getLoadResult()){
+            case Starting: startingStateLoaded(); break;
+//            case Running: runningStateLoaded(); break;
+//            case Station: stationStateLoaded(); break;
+//            case Ending: endingStateLoaded(); break;
+        }
     }
 
     @Override
@@ -82,12 +108,45 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
         startActivity(new Intent(AdminStationMainActivity.this, SplashActivity.class));
     }
 
+    @Override
+    public void onStartPressed() {
+        showSnackBarMessage(getString(R.string.stadmin_cant_start_race));
+    }
+
+    @Override
+    public void onHelpPressed() {
+        onHelpActivation();
+    }
+
+    @Override
+    public void clientError(ErrorType type) {
+        showSnackBarMessage(type.getDefaultMessage());
+    }
+
+    @Override
+    public void startingStateLoaded() {
+        setNotStarted();
+    }
+
     private enum ContentState{
+        NotStarted,
         Actual,
         Results
     }
 
     private ContentState state;
+
+    private void setNotStarted(){
+        if(uiReady)
+        goToNotStarted(db.getLastLoadedLocation(), db.getLastLoadedStartingTime());
+        else postLoad = true;
+    }
+
+    private void goToNotStarted(Location loc, Date time){
+        state = ContentState.NotStarted;
+        getSupportFragmentManager().beginTransaction().replace(R.id.adminStationContent,
+                AdminRaceStarterFragment.newInstance(loc, time, false)).commit();
+    }
 
     private void setActual(){
         state = ContentState.Actual;

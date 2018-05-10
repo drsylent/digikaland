@@ -14,6 +14,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Date;
 
+import hu.bme.aut.digikaland.dblogic.enumeration.LoadResult;
 import hu.bme.aut.digikaland.entities.Location;
 
 /**
@@ -30,6 +31,12 @@ public class ClientEngine {
 
     private CommunicationInterface comm = null;
     private ClientEngine() {
+    }
+
+    private LoadResult loadResult = null;
+
+    public LoadResult getLoadResult() {
+        return loadResult;
     }
 
     public void loadTeamName(){
@@ -122,7 +129,7 @@ public class ClientEngine {
                             location = new Location(document.getString("startingaddr"), document.getString("startingaddr-detailed"));
                             startingTime = document.getDate("startingtime");
                             geoPoint = document.getGeoPoint("startinggeo");
-                            comm.startingStateLoaded();
+                            startingStateLoaded();
                         }catch(RuntimeException e){
                             comm.clientError(ErrorType.DatabaseError);
                         }
@@ -173,7 +180,7 @@ public class ClientEngine {
                             location = new Location(document.getString("endingaddr"), document.getString("endingaddr-detailed"));
                             startingTime = document.getDate("endingtime");
                             geoPoint = document.getGeoPoint("endinggeo");
-                            comm.runningStateLoaded();
+                            runningStateLoaded();
                         }catch(RuntimeException e){
                             comm.clientError(ErrorType.DatabaseError);
                         }
@@ -253,8 +260,8 @@ public class ClientEngine {
                         try {
                             location = new Location(document.getString("address"), document.getString("address-detailed"));
                             geoPoint = document.getGeoPoint("geodata");
-                            if(onStation) comm.stationStateLoaded();
-                            else comm.runningStateLoaded();
+                            if(onStation) stationStateLoaded();
+                            else runningStateLoaded();
                         } catch (RuntimeException e){
                             comm.clientError(ErrorType.DatabaseError);
                         }
@@ -266,6 +273,26 @@ public class ClientEngine {
                 }
             }
         });
+    }
+
+    private void stationStateLoaded(){
+        loadResult = LoadResult.Station;
+        comm.stationStateLoaded();
+    }
+
+    private void endingStateLoaded(){
+        loadResult = LoadResult.Ending;
+        comm.endingStateLoaded();
+    }
+
+    private void startingStateLoaded(){
+        loadResult = LoadResult.Starting;
+        comm.startingStateLoaded();
+    }
+
+    private void runningStateLoaded(){
+        loadResult = LoadResult.Running;
+        comm.runningStateLoaded();
     }
 
     private void loadEndingState(){

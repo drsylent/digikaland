@@ -77,4 +77,5 @@
     <string name="no_location_station">Nincs konkrét helyszíne ennek az állomásnak</string>
     <string name="solve_on_the_route">A feladatokat útközben oldjátok meg!</string>
     <string name="ok">OK</string>
+    <string name="stadmin_cant_start_race">Te nem indíthatod el a versenyt!</string>
 </resources>

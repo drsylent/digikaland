@@ -29,6 +29,7 @@ import hu.bme.aut.digikaland.dblogic.ObjectiveEngine;
 import hu.bme.aut.digikaland.dblogic.RacePermissionHandler;
 import hu.bme.aut.digikaland.dblogic.ResultsEngine;
 import hu.bme.aut.digikaland.dblogic.StationsEngine;
+import hu.bme.aut.digikaland.dblogic.enumeration.LoadResult;
 import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.entities.objectives.Objective;
 import hu.bme.aut.digikaland.entities.station.StationClientPerspective;
@@ -205,14 +206,6 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         showSnackBarMessage("ContactsEngine: " + type.getDefaultMessage());
     }
 
-
-    private enum LoadResult {
-        Starting,
-        Running,
-        Station,
-        Ending
-    }
-    private LoadResult loadResult = null;
     private boolean postLoad = false;
 
     @Override
@@ -225,7 +218,6 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
             goToActual(startingBundle);
         }
         else postLoad = true;
-        loadResult = LoadResult.Starting;
     }
 
     @Override
@@ -239,7 +231,6 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
             goToActual(runningBundle);
         }
         else postLoad = true;
-        loadResult = LoadResult.Running;
     }
 
     @Override
@@ -252,7 +243,6 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         }
         else postLoad = true;
         objectiveCausedLoad = false;
-        loadResult = LoadResult.Station;
     }
 
     @Override
@@ -261,7 +251,6 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
             ResultsEngine.getInstance(this).loadResults();
         }
         else postLoad = true;
-        loadResult = LoadResult.Ending;
     }
 
     private enum ViewState{
@@ -364,7 +353,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     }
 
     private void executePostLoad(){
-        switch (loadResult){
+        switch (db.getLoadResult()){
             case Starting: startingStateLoaded(); break;
             case Running: runningStateLoaded(); break;
             case Station: stationStateLoaded(); break;
