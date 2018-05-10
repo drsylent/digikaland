@@ -15,6 +15,11 @@ public class TrueFalseSolution extends Solution {
         answer = ans;
     }
 
+    public TrueFalseSolution(int curr, int max, boolean ans){
+        super(curr, max);
+        answer = ans;
+    }
+
     @Override
     public TrueFalseEvaluateFragment createFragment() {
         return TrueFalseEvaluateFragment.newInstance(this, getCurrentPoints(), getMaxPoints());

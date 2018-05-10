@@ -22,11 +22,12 @@ import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.entities.objectives.solutions.Solution;
 import hu.bme.aut.digikaland.ui.common.fragments.NumberPickerDialogFragment;
 import hu.bme.aut.digikaland.ui.common.fragments.PictureFragment;
+import hu.bme.aut.digikaland.ui.common.objectives.CustomAnswerObjectiveFragment;
 import hu.bme.aut.digikaland.ui.common.objectives.solutions.PointDisplayFragment;
 import hu.bme.aut.digikaland.ui.common.objectives.solutions.EvaluateFragment;
 
 public class AdminEvaluateActivity extends AppCompatActivity implements PictureFragment.PictureFragmentListener, PointDisplayFragment.PointHandleActivity,
-        NumberPickerDialogFragment.PointSettingInterface{
+        NumberPickerDialogFragment.PointSettingInterface, CustomAnswerObjectiveFragment.CustomObjectiveListener{
     public final static String ARG_STATION = "stat";
     public final static String ARG_TEAM = "team";
     public final static String ARG_TIME = "time";
@@ -147,5 +148,9 @@ public class AdminEvaluateActivity extends AppCompatActivity implements PictureF
     public void pointSet(String fragmentTag, int point) {
         EvaluateFragment frag = (EvaluateFragment) getSupportFragmentManager().findFragmentByTag(fragmentTag);
         frag.setPoint(point);
+    }
+
+    @Override
+    public void inputValidationError() {
     }
 }

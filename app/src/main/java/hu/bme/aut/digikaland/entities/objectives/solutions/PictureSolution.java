@@ -17,6 +17,11 @@ public class PictureSolution extends Solution {
         answer = ans;
     }
 
+    public PictureSolution(int curr, int max, ArrayList<String> ans){
+        super(curr, max);
+        answer = ans;
+    }
+
     @Override
     public PictureEvaluateFragment createFragment() {
         return PictureEvaluateFragment.newInstance(this, getCurrentPoints(), getMaxPoints());

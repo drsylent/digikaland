@@ -34,20 +34,20 @@ import hu.bme.aut.digikaland.entities.objectives.TrueFalseObjective;
  * Created by Sylent on 2018. 04. 16..
  */
 
-public class SolutionEngine {
-    private static final SolutionEngine ourInstance = new SolutionEngine();
+public class SolutionUploadEngine {
+    private static final SolutionUploadEngine ourInstance = new SolutionUploadEngine();
 
     private CommunicationInterface comm;
 
     @ServerTimestamp
     private Date serverTime = new Date();
 
-    public static SolutionEngine getInstance(CommunicationInterface c) {
+    public static SolutionUploadEngine getInstance(CommunicationInterface c) {
         ourInstance.comm = c;
         return ourInstance;
     }
 
-    private SolutionEngine() {
+    private SolutionUploadEngine() {
     }
 
     public void uploadSolutions(ArrayList<Objective> objectives, String teamId){

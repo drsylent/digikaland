@@ -27,21 +27,19 @@ import java.util.Date;
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.dblogic.ErrorType;
 import hu.bme.aut.digikaland.dblogic.RacePermissionHandler;
-import hu.bme.aut.digikaland.dblogic.SolutionEngine;
-import hu.bme.aut.digikaland.entities.objectives.CustomAnswerObjective;
+import hu.bme.aut.digikaland.dblogic.SolutionUploadEngine;
 import hu.bme.aut.digikaland.entities.objectives.Objective;
 import hu.bme.aut.digikaland.ui.common.fragments.PictureFragment;
 import hu.bme.aut.digikaland.ui.common.objectives.CustomAnswerObjectiveFragment;
 import hu.bme.aut.digikaland.ui.common.objectives.ObjectiveFragment;
 import hu.bme.aut.digikaland.ui.common.objectives.PictureObjectiveFragment;
-import hu.bme.aut.digikaland.ui.common.objectives.solutions.SolutionFragment;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;
 import static android.os.Environment.getExternalStoragePublicDirectory;
 
 @RuntimePermissions
 public class ClientObjectiveActivity extends AppCompatActivity implements PictureObjectiveFragment.PictureObjectiveListener, PictureFragment.PictureFragmentListener,
-        CustomAnswerObjectiveFragment.CustomObjectiveListener, SolutionEngine.CommunicationInterface {
+        CustomAnswerObjectiveFragment.CustomObjectiveListener, SolutionUploadEngine.CommunicationInterface {
     public final static String ARGS_OBJECTIVES = "objectives";
     public final static String ARG_SEND = "sendable";
     ArrayList<ObjectiveFragment> fragments = new ArrayList<>();
@@ -193,7 +191,7 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
         for(ObjectiveFragment fragment : fragments)
             fragment.upload();
         if(uploadOk){
-            SolutionEngine.getInstance(this).uploadSolutions(objectives, RacePermissionHandler.getInstance().getTeamReference().getId());
+            SolutionUploadEngine.getInstance(this).uploadSolutions(objectives, RacePermissionHandler.getInstance().getTeamReference().getId());
         }
     }
 

@@ -25,9 +25,11 @@ import hu.bme.aut.digikaland.dblogic.ContactsEngineFull;
 import hu.bme.aut.digikaland.dblogic.ErrorType;
 import hu.bme.aut.digikaland.dblogic.ObjectiveEngine;
 import hu.bme.aut.digikaland.dblogic.ResultsEngine;
+import hu.bme.aut.digikaland.dblogic.SolutionDownloadEngine;
 import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.entities.Location;
 import hu.bme.aut.digikaland.entities.objectives.Objective;
+import hu.bme.aut.digikaland.entities.objectives.solutions.Solution;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminEvaluateActivity;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminHelpActivity;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminStationsActivity;
@@ -42,7 +44,7 @@ import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
 public class AdminStationMainActivity extends AppCompatActivity implements AdminStationActualFragment.AdminActivityInterface, ResultsFragment.ResultsFragmentListener,
         AdminRaceStarterFragment.AdminStarterListener, AdminEngine.CommunicationInterface, ResultsEngine.CommunicationInterface, ObjectiveEngine.CommunicationInterface,
-        ContactsEngineFull.CommunicationInterface{
+        ContactsEngineFull.CommunicationInterface, SolutionDownloadEngine.CommunicationInterface{
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private LinearLayout mainLayout;
@@ -185,6 +187,16 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
         showSnackBarMessage(type.getDefaultMessage());
     }
 
+    @Override
+    public void solutionsLoaded(ArrayList<Solution> solutions, int penalty, Date uploadTime, String teamName) {
+        setEvaluator(solutions, penalty, uploadTime, teamName);
+    }
+
+    @Override
+    public void solutionsLoadError(ErrorType type) {
+        showSnackBarMessage(type.getDefaultMessage());
+    }
+
     private enum ContentState{
         NotStarted,
         Actual,
@@ -307,10 +319,28 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
     @Override
     public void onEvaluateActivation() {
         if(isToEvaluate()) {
-            Intent i = new Intent(AdminStationMainActivity.this, AdminEvaluateActivity.class);
-            startActivity(MockGenerator.mockEvaluateIntent(i));
+//            Intent i = new Intent(AdminStationMainActivity.this, AdminEvaluateActivity.class);
+//            startActivity(MockGenerator.mockEvaluateIntent(i));
+            // TODO: megszerezni a teamId-t
+            SolutionDownloadEngine.getInstance(this).loadSolutions(db.getMyStationId(), "red");
         }
         else showSnackBarMessage("Nincs kiértékelésre váró csapat!");
+    }
+
+    private void setEvaluator(ArrayList<Solution> solutions, int penalty, Date time, String teamName){
+        Intent i = new Intent(AdminStationMainActivity.this, AdminEvaluateActivity.class);
+        i.putExtra(AdminEvaluateActivity.ARG_SOLUTIONS, solutions);
+        i.putExtra(AdminEvaluateActivity.ARG_STATION, Integer.valueOf(db.getMyStationId()));
+        i.putExtra(AdminEvaluateActivity.ARG_TIME, time);
+        i.putExtra(AdminEvaluateActivity.ARG_TEAM, teamName);
+        i.putExtra(AdminEvaluateActivity.ARG_PENALTY, penalty);
+        // TODO: ezt lekezelni
+        i.putExtra(AdminEvaluateActivity.ARG_SEND, true);
+        goToEvaluation(i);
+    }
+
+    private void goToEvaluation(Intent i){
+        startActivity(i);
     }
 
     @Override

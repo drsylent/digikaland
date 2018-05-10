@@ -8,6 +8,10 @@ public class PhysicalSolution extends Solution {
         super(o, curr, max);
     }
 
+     public PhysicalSolution(int curr, int max){
+        super(curr, max);
+    }
+
     @Override
     public PhysicalEvaluateFragment createFragment() {
         return PhysicalEvaluateFragment.newInstance(this, getCurrentPoints(), getMaxPoints());

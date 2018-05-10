@@ -15,6 +15,11 @@ public class MultipleChoiceSolution extends Solution {
         answer = ans;
     }
 
+    public MultipleChoiceSolution(int curr, int max, int ans){
+        super(curr, max);
+        answer = ans;
+    }
+
     @Override
     public MultipleChoiceEvaluateFragment createFragment() {
         return MultipleChoiceEvaluateFragment.newInstance(this, getCurrentPoints(), getMaxPoints());

@@ -6,6 +6,11 @@ import hu.bme.aut.digikaland.entities.objectives.Objective;
 import hu.bme.aut.digikaland.entities.objectives.PhysicalObjective;
 import hu.bme.aut.digikaland.entities.objectives.PictureObjective;
 import hu.bme.aut.digikaland.entities.objectives.TrueFalseObjective;
+import hu.bme.aut.digikaland.entities.objectives.solutions.CustomAnswerSolution;
+import hu.bme.aut.digikaland.entities.objectives.solutions.MultipleChoiceSolution;
+import hu.bme.aut.digikaland.entities.objectives.solutions.PhysicalSolution;
+import hu.bme.aut.digikaland.entities.objectives.solutions.PictureSolution;
+import hu.bme.aut.digikaland.entities.objectives.solutions.TrueFalseSolution;
 
 /**
  * Created by Sylent on 2018. 04. 08..
@@ -25,6 +30,17 @@ public enum ObjectiveType {
             case TrueFalse: return TrueFalseObjective.class;
             case CustomAnswer: return CustomAnswerObjective.class;
             case MultipleChoice: return MultipleChoiceObjective.class;
+            default: return null;
+        }
+    }
+
+    public Class<?> getSolutionClass(){
+        switch (this){
+            case Picture: return PictureSolution.class;
+            case Physical: return PhysicalSolution.class;
+            case TrueFalse: return TrueFalseSolution.class;
+            case CustomAnswer: return CustomAnswerSolution.class;
+            case MultipleChoice: return MultipleChoiceSolution.class;
             default: return null;
         }
     }
