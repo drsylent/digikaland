@@ -277,7 +277,7 @@ public class SolutionUploadEngine {
 
         private void updateStationStatus(){
             RacePermissionHandler.getInstance().getRaceReference().collection("stations").document(stationId).collection("teams")
-                    .whereEqualTo("team", RacePermissionHandler.getInstance().getTeamReference())
+                    .whereEqualTo("reference", RacePermissionHandler.getInstance().getTeamReference())
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override

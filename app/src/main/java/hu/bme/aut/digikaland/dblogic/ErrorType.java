@@ -8,6 +8,7 @@ public enum ErrorType {
     EmptyField,
     IllegalCharacter,
     UploadError,
+    DownloadError,
     PictureUploadError;
 
     public String getDefaultMessage(){
@@ -19,6 +20,7 @@ public enum ErrorType {
             case IllegalCharacter: return "Helytelen karakter található az inputban.";
             case EmptyField: return "Kihagytál egy kötelező mezőt.";
             case UploadError: return "Feltöltés közben hiba történt.";
+            case DownloadError: return "Letöltés közben hiba történt.";
             case PictureUploadError: return "Kép feltöltése közben hiba történt.";
             default: return "NONDEFINEDERROR";
         }
