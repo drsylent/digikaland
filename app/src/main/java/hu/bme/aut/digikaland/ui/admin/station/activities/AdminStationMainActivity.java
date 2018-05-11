@@ -140,7 +140,7 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
     public void runningStateLoaded() {
         evaluated = db.getEvaluated();
         done = db.getDone();
-        teamName = db.getTeamName();
+        teamName = db.getArrivingTeamName();
         teamContact = db.getNextTeamContact();
         if(uiReady){
             goToActual(db.getLastLoadedLocation());
@@ -321,8 +321,7 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
         if(isToEvaluate()) {
 //            Intent i = new Intent(AdminStationMainActivity.this, AdminEvaluateActivity.class);
 //            startActivity(MockGenerator.mockEvaluateIntent(i));
-            // TODO: megszerezni a teamId-t
-            SolutionDownloadEngine.getInstance(this).loadSolutions(db.getMyStationId(), "red");
+            SolutionDownloadEngine.getInstance(this).loadSolutions(db.getMyStationId(), db.getNextEvaluateTeamId());
         }
         else showSnackBarMessage("Nincs kiértékelésre váró csapat!");
     }

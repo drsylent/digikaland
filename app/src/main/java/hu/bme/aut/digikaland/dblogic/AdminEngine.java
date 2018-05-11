@@ -135,25 +135,35 @@ public class AdminEngine {
                     try {
                         done = 0;
                         evaluated = 0;
-                        teamId = null;
+                        nextTeamId = null;
                         boolean firstNotArrived = true;
-                        DocumentReference docRef = null;
+                        boolean firstDone = true;
+                        DocumentReference notArrivedTeam = null;
+                        DocumentReference doneTeam = null;
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             EvaluationStatus status = EvaluationStatus.valueOf(document.getString("status"));
                             switch (status){
-                                case Done: done++; break;
+                                case Done: done++;
+                                    if(firstDone){
+                                        doneTeam = document.getDocumentReference("reference");
+                                        nextEvaluateTeamId = doneTeam.getId();
+                                        firstDone = false;
+                                    }
+                                break;
                                 case Evaluated: done++; evaluated++; break;
                                 case NotArrivedYet:
                                     if(firstNotArrived){
-                                        docRef = document.getDocumentReference("team");
-                                        teamId = docRef.getId();
+                                        notArrivedTeam = document.getDocumentReference("reference");
+                                        nextTeamId = notArrivedTeam.getId();
                                         firstNotArrived = false;
                                     }
                                     break;
                             }
                         }
-                        if(firstNotArrived) runningStateLoaded();
-                        else loadNextTeamInfo(docRef);
+                        if(firstNotArrived) teamNameLoaded();
+                        else loadNextTeamInfo(notArrivedTeam, true);
+                        if(firstDone) teamNameLoaded();
+                        else loadNextTeamInfo(doneTeam, false);
                     } catch (RuntimeException e){
                         comm.clientError(ErrorType.DatabaseError);
                     }
@@ -164,7 +174,15 @@ public class AdminEngine {
         });
     }
 
-    private void loadNextTeamInfo(DocumentReference docRef){
+    private int teamNames = 0;
+    private void teamNameLoaded(){
+        if(++teamNames == 2) {
+            teamNames = 0;
+            runningStateLoaded();
+        }
+    }
+
+    private void loadNextTeamInfo(final DocumentReference docRef, final boolean contactNeeded){
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -172,8 +190,13 @@ public class AdminEngine {
                     DocumentSnapshot document = task.getResult();
                     if (document != null && document.exists()) {
                         try {
-                            teamName = document.getString("name");
-                            loadTeamContact(document.getDocumentReference("captain"));
+                            if(contactNeeded) {
+                                arrivingTeamName = document.getString("name");
+                                loadTeamContact(document.getDocumentReference("captain"));
+                            }
+                            else {
+                                teamNameLoaded();
+                            }
                         } catch (RuntimeException e){
                             comm.clientError(ErrorType.DatabaseError);
                         }
@@ -196,7 +219,7 @@ public class AdminEngine {
                     if (document != null && document.exists()) {
                         try {
                             captainContact = document.toObject(Contact.class);
-                            runningStateLoaded();
+                            teamNameLoaded();
                         } catch (RuntimeException e){
                             comm.clientError(ErrorType.DatabaseError);
                         }
@@ -235,7 +258,7 @@ public class AdminEngine {
         completedStations = -1;
         stationSum = -1;
         raceName = null;
-        teamName = null;
+        arrivingTeamName = null;
         captainContact = null;
         done = -1;
         evaluated = -1;
@@ -258,7 +281,13 @@ public class AdminEngine {
 
     private int done = -1;
 
-    private String teamId = null;
+    private String nextTeamId = null;
+
+    public String getNextEvaluateTeamId() {
+        return nextEvaluateTeamId;
+    }
+
+    private String nextEvaluateTeamId = null;
 
     private Contact captainContact = null;
 
@@ -267,7 +296,7 @@ public class AdminEngine {
     }
 
     public String getNextTeamId() {
-        return teamId;
+        return nextTeamId;
     }
 
     public int getLastLoadedStationNumber() {
@@ -300,11 +329,11 @@ public class AdminEngine {
         return raceName;
     }
 
-    public String getTeamName() {
-        return teamName;
+    public String getArrivingTeamName() {
+        return arrivingTeamName;
     }
 
-    private String teamName = null;
+    private String arrivingTeamName = null;
 
     private Location location = null;
 
