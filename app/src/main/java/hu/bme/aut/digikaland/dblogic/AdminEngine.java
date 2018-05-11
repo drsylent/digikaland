@@ -61,15 +61,15 @@ public class AdminEngine {
                                 case Ended: endingStateLoaded(); break;
                             }
                         }catch (IllegalArgumentException e){
-                            comm.clientError(ErrorType.DatabaseError);
+                            comm.adminError(ErrorType.DatabaseError);
                         }catch (RuntimeException e){
-                            comm.clientError(ErrorType.DatabaseError);
+                            comm.adminError(ErrorType.DatabaseError);
                         }
                     } else {
-                        comm.clientError(ErrorType.RaceNotExists);
+                        comm.adminError(ErrorType.RaceNotExists);
                     }
                 } else {
-                    comm.clientError(ErrorType.NoContact);
+                    comm.adminError(ErrorType.NoContact);
                 }
             }
         });
@@ -89,13 +89,13 @@ public class AdminEngine {
                             geoPoint = document.getGeoPoint("startinggeo");
                             startingStateLoaded();
                         }catch(RuntimeException e){
-                            comm.clientError(ErrorType.DatabaseError);
+                            comm.adminError(ErrorType.DatabaseError);
                         }
                     } else {
-                        comm.clientError(ErrorType.RaceNotExists);
+                        comm.adminError(ErrorType.RaceNotExists);
                     }
                 } else {
-                    comm.clientError(ErrorType.NoContact);
+                    comm.adminError(ErrorType.NoContact);
                 }
             }
         });
@@ -114,13 +114,13 @@ public class AdminEngine {
                             //geoPoint = document.getGeoPoint("geodata");
                             loadStationState();
                         } catch (RuntimeException e){
-                            comm.clientError(ErrorType.DatabaseError);
+                            comm.adminError(ErrorType.DatabaseError);
                         }
                     } else {
-                        comm.clientError(ErrorType.RaceNotExists);
+                        comm.adminError(ErrorType.RaceNotExists);
                     }
                 } else {
-                    comm.clientError(ErrorType.NoContact);
+                    comm.adminError(ErrorType.NoContact);
                 }
             }
         });
@@ -165,10 +165,10 @@ public class AdminEngine {
                         if(firstDone) teamNameLoaded();
                         else loadNextTeamInfo(doneTeam, false);
                     } catch (RuntimeException e){
-                        comm.clientError(ErrorType.DatabaseError);
+                        comm.adminError(ErrorType.DatabaseError);
                     }
                 } else {
-                    comm.clientError(ErrorType.NoContact);
+                    comm.adminError(ErrorType.NoContact);
                 }
             }
         });
@@ -198,13 +198,13 @@ public class AdminEngine {
                                 teamNameLoaded();
                             }
                         } catch (RuntimeException e){
-                            comm.clientError(ErrorType.DatabaseError);
+                            comm.adminError(ErrorType.DatabaseError);
                         }
                     } else {
-                        comm.clientError(ErrorType.RaceNotExists);
+                        comm.adminError(ErrorType.RaceNotExists);
                     }
                 } else {
-                    comm.clientError(ErrorType.NoContact);
+                    comm.adminError(ErrorType.NoContact);
                 }
             }
         });
@@ -221,13 +221,13 @@ public class AdminEngine {
                             captainContact = document.toObject(Contact.class);
                             teamNameLoaded();
                         } catch (RuntimeException e){
-                            comm.clientError(ErrorType.DatabaseError);
+                            comm.adminError(ErrorType.DatabaseError);
                         }
                     } else {
-                        comm.clientError(ErrorType.RaceNotExists);
+                        comm.adminError(ErrorType.RaceNotExists);
                     }
                 } else {
-                    comm.clientError(ErrorType.NoContact);
+                    comm.adminError(ErrorType.NoContact);
                 }
             }
         });
@@ -368,7 +368,7 @@ public class AdminEngine {
 
 
     public interface CommunicationInterface{
-        void clientError(ErrorType type);
+        void adminError(ErrorType type);
         void startingStateLoaded();
         void runningStateLoaded();
 //        void stationStateLoaded();

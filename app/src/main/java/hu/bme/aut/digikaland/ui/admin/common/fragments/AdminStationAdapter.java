@@ -52,7 +52,7 @@ public class AdminStationAdapter extends RecyclerView.Adapter<StationViewHolder>
     public void onBindViewHolder(StationViewHolder holder, int position) {
         if(summaryMode){
             final StationAdminPerspectiveSummary item = (StationAdminPerspectiveSummary) stations.get(position);
-            holder.station.setText( ((Context) activity).getString(R.string.station_admin_list_item_summary, item.station.oldId, item.evaluated, item.done, item.sum) );
+            holder.station.setText( ((Context) activity).getString(R.string.station_admin_list_item_summary, Integer.parseInt(item.station.id), item.evaluated, item.done, item.sum) );
             holder.station.setBackgroundColor(colorNeutral);
             holder.station.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -63,7 +63,7 @@ public class AdminStationAdapter extends RecyclerView.Adapter<StationViewHolder>
         }
         else{
             final StationAdminPerspectiveTeam item = (StationAdminPerspectiveTeam) stations.get(position);
-            holder.station.setText(((Context) activity).getString(R.string.station_admin_list_item, item.station.oldId));
+            holder.station.setText(((Context) activity).getString(R.string.station_admin_list_item, Integer.parseInt(item.station.id)));
             int color;
             switch (item.status) {
                 case Evaluated:
