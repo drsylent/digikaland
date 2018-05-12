@@ -71,8 +71,11 @@ public class AdminTeamsActivity extends AppCompatActivity implements AdminTeamsA
         }
     }
 
+    private String lastTeamId;
+
     private void prepareEvaluation(Team team){
-        SolutionDownloadEngine.getInstance(this).loadSolutions(stationId, team.id);
+        lastTeamId = team.id;
+        SolutionDownloadEngine.getInstance(this).loadSolutions(stationId, lastTeamId);
     }
 
     private void setEvaluation(ArrayList<Solution> solutions, int penalty, Date time, String teamName){
@@ -84,6 +87,7 @@ public class AdminTeamsActivity extends AppCompatActivity implements AdminTeamsA
         i.putExtra(AdminEvaluateActivity.ARG_TEAM, teamName);
         i.putExtra(AdminEvaluateActivity.ARG_PENALTY, penalty);
         i.putExtra(AdminEvaluateActivity.ARG_SEND, userStationId.equals(stationId));
+        i.putExtra(AdminEvaluateActivity.ARG_TEAMID, lastTeamId);
         goToEvaluation(i);
     }
 

@@ -38,6 +38,4 @@ public abstract class SolutionFragment extends Fragment {
     public Solution getSolution(){
         return solution;
     }
-
-    public abstract void upload();
 }

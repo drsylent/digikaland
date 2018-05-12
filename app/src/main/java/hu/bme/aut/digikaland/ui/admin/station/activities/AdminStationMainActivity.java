@@ -384,6 +384,7 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
         i.putExtra(AdminEvaluateActivity.ARG_PENALTY, penalty);
         // TODO: ezt lekezelni
         i.putExtra(AdminEvaluateActivity.ARG_SEND, true);
+        i.putExtra(AdminEvaluateActivity.ARG_TEAMID, db.getNextEvaluateTeamId());
         goToEvaluation(i);
     }
 

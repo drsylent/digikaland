@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import hu.bme.aut.digikaland.R;
+import hu.bme.aut.digikaland.dblogic.ErrorType;
+import hu.bme.aut.digikaland.dblogic.enumeration.EvaluatorEngine;
 import hu.bme.aut.digikaland.entities.objectives.solutions.Solution;
 import hu.bme.aut.digikaland.ui.common.fragments.NumberPickerDialogFragment;
 import hu.bme.aut.digikaland.ui.common.fragments.PictureFragment;
@@ -27,14 +29,20 @@ import hu.bme.aut.digikaland.ui.common.objectives.solutions.PointDisplayFragment
 import hu.bme.aut.digikaland.ui.common.objectives.solutions.EvaluateFragment;
 
 public class AdminEvaluateActivity extends AppCompatActivity implements PictureFragment.PictureFragmentListener, PointDisplayFragment.PointHandleActivity,
-        NumberPickerDialogFragment.PointSettingInterface, CustomAnswerObjectiveFragment.CustomObjectiveListener{
+        NumberPickerDialogFragment.PointSettingInterface, CustomAnswerObjectiveFragment.CustomObjectiveListener, EvaluatorEngine.CommunicationInterface{
     public final static String ARG_STATION = "stat";
     public final static String ARG_TEAM = "team";
     public final static String ARG_TIME = "time";
     public final static String ARG_PENALTY = "penalty";
     public final static String ARG_SOLUTIONS = "solut";
     public final static String ARG_SEND = "sendable";
-    LinearLayout mainLayout;
+    public final static String ARG_TEAMID = "teamid";
+    private LinearLayout mainLayout;
+    private int uploadSum;
+    private String stationId;
+    private String teamId;
+
+    private ArrayList<EvaluateFragment> evaluators = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +55,8 @@ public class AdminEvaluateActivity extends AppCompatActivity implements PictureF
         }
         TextView textView = findViewById(R.id.adminEvaluateStation);
         int number = getIntent().getIntExtra(ARG_STATION, -1);
+        stationId = Integer.toString(number);
+        teamId = getIntent().getStringExtra(ARG_TEAMID);
         textView.setText(getResources().getString(R.string.evaluate_station, number));
         textView = findViewById(R.id.adminEvaluatePenalty);
         number = getIntent().getIntExtra(ARG_PENALTY, -1);
@@ -59,7 +69,9 @@ public class AdminEvaluateActivity extends AppCompatActivity implements PictureF
         if(savedInstanceState == null) {
             ArrayList<Solution> solutions = (ArrayList<Solution>) getIntent().getSerializableExtra(ARG_SOLUTIONS);
             for (Solution o : solutions) {
-                getSupportFragmentManager().beginTransaction().add(R.id.adminEvaluateContent, o.createFragment(), EvaluateFragment.generateTag()).commit();
+                EvaluateFragment fragment = o.createFragment();
+                evaluators.add(fragment);
+                getSupportFragmentManager().beginTransaction().add(R.id.adminEvaluateContent, fragment, EvaluateFragment.generateTag()).commit();
             }
         }
         Button sendButton = findViewById(R.id.adminEvaluateSend);
@@ -67,7 +79,7 @@ public class AdminEvaluateActivity extends AppCompatActivity implements PictureF
             sendButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    showSnackBarMessage("Elküldés");
+                    sendEvaluation();
                 }
             });
         } else {
@@ -80,11 +92,25 @@ public class AdminEvaluateActivity extends AppCompatActivity implements PictureF
             });
         }
         mainLayout = findViewById(R.id.adminEvaluateMain);
+        uploadSum = evaluators.size()+1;
     }
 
     // TODO: jelenleg csak placeholder megjelenítésre
     private void showSnackBarMessage(String message) {
         Snackbar.make(mainLayout, message, Snackbar.LENGTH_LONG).show();
+    }
+
+    private int uploadNumber;
+
+    private void sendEvaluation(){
+        uploadNumber = 0;
+        errorFired = false;
+        showSnackBarMessage("Elküldés");
+        EvaluatorEngine db = EvaluatorEngine.getInstance(this);
+        for(EvaluateFragment fragment : evaluators){
+            db.uploadEvaluation(fragment.getSolution().getId(), fragment.getCurrentPoints());
+            db.updateEvaluationStatus(stationId, teamId);
+        }
     }
 
     @Override
@@ -152,5 +178,31 @@ public class AdminEvaluateActivity extends AppCompatActivity implements PictureF
 
     @Override
     public void inputValidationError() {
+    }
+
+    @Override
+    public void evaluationUploaded() {
+        uploadSuccess();
+    }
+
+    @Override
+    public void evaluationStatusUpdated() {
+        uploadSuccess();
+    }
+
+    private void uploadSuccess(){
+        if(!errorFired && ++uploadNumber == uploadSum){
+            showSnackBarMessage("Feltöltés sikeres!");
+        }
+    }
+
+    private boolean errorFired;
+
+    @Override
+    public void evaluationUploadError(ErrorType type) {
+        if(!errorFired){
+            errorFired = true;
+            showSnackBarMessage(type.getDefaultMessage());
+        }
     }
 }

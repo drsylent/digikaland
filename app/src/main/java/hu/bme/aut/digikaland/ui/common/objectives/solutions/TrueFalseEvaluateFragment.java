@@ -23,11 +23,6 @@ public class TrueFalseEvaluateFragment extends EvaluateFragment {
     }
 
     @Override
-    public void upload() {
-
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_evaluate, container, false);

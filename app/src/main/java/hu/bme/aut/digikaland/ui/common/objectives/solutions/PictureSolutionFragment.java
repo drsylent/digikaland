@@ -22,10 +22,6 @@ public class PictureSolutionFragment extends SolutionFragment {
         // Required empty public constructor
     }
 
-    @Override
-    public void upload() {
-    }
-
     public static PictureSolutionFragment newInstance(PictureSolution sol) {
         PictureSolutionFragment fragment = new PictureSolutionFragment();
         fragment.setArguments(createBundle(sol));
