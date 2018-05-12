@@ -46,7 +46,7 @@ import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
 public class AdminStationMainActivity extends AppCompatActivity implements AdminStationActualFragment.AdminActivityInterface, ResultsFragment.ResultsFragmentListener,
         AdminRaceStarterFragment.AdminStarterListener, AdminEngine.CommunicationInterface, ResultsEngine.CommunicationInterface, ObjectiveEngine.CommunicationInterface,
-        ContactsEngineFull.CommunicationInterface, SolutionDownloadEngine.CommunicationInterface, AdminStationEngine.CommunicationInterface{
+        ContactsEngineFull.CommunicationInterface, SolutionDownloadEngine.CommunicationInterface, AdminStationEngine.CommunicationInterface {
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private LinearLayout mainLayout;
@@ -209,8 +209,13 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
     }
 
     @Override
-    public void loadCompleted(ArrayList<StationAdminPerspective> list) {
+    public void allStationLoadCompleted(ArrayList<StationAdminPerspective> list) {
         setStations(list);
+    }
+
+    @Override
+    public void stationSummaryLoaded(String stationId, Location location, ArrayList<Contact> stationAdmins) {
+
     }
 
     private void setStations(ArrayList<StationAdminPerspective> list){

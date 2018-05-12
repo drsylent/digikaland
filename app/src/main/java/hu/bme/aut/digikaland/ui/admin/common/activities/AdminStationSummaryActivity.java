@@ -8,6 +8,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.entities.EvaluationStatistics;
@@ -35,7 +38,7 @@ public class AdminStationSummaryActivity extends AppCompatActivity {
 
         int stationId = getIntent().getIntExtra(ARG_STATIONID, -1);
         Location location = (Location) getIntent().getSerializableExtra(ARG_LOCATION);
-        Contact contact = (Contact) getIntent().getSerializableExtra(ARG_CONTACT);
+        ArrayList<Contact> contacts = (ArrayList<Contact>) getIntent().getSerializableExtra(ARG_CONTACT);
         EvaluationStatistics status = (EvaluationStatistics) getIntent().getSerializableExtra(ARG_STATUS);
         TextView tvStationId = findViewById(R.id.adminStationSummaryId);
         tvStationId.setText(getResources().getString(R.string.station_id, stationId));
@@ -58,7 +61,8 @@ public class AdminStationSummaryActivity extends AppCompatActivity {
             bMap.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         }
         if(savedInstanceState == null) {
-            if (contact != null)
+            if (contacts != null)
+                for(Contact contact : contacts)
                 getSupportFragmentManager().beginTransaction().add(R.id.adminStationSummaryAdminContent,
                         ContactFragment.newInstance(contact, true)).commit();
             else
