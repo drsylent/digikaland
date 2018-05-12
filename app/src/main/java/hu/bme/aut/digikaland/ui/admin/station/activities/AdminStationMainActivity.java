@@ -78,7 +78,7 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
                         prepareStations();
                         break;
                     case R.id.adminTeams:
-                        startTeams();
+                        prepareTeams();
                         break;
                 }
                 invalidateOptionsMenu();
@@ -221,7 +221,7 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
 
     @Override
     public void allTeamStatusLoaded(ArrayList<Team> teams) {
-
+        setTeams(teams);
     }
 
     private void setStations(ArrayList<StationAdminPerspective> list){
@@ -287,9 +287,23 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
 
 
 
-    private void startTeams(){
+    private void prepareTeams(){
+//        Intent i = new Intent(AdminStationMainActivity.this, AdminTeamsActivity.class);
+//        i.putExtra(AdminTeamsActivity.ARG_TEAMS, MockGenerator.mockAdminTeamsList());
+//        startActivity(i);
+        AdminStationEngine.getInstance(this).loadTeamList(db.getMyStationId());
+    }
+
+    private void setTeams(ArrayList<Team> teams){
+        Bundle teamData = new Bundle();
+        teamData.putSerializable(AdminTeamsActivity.ARG_TEAMS, teams);
+        goToTeams(teamData);
+    }
+
+    private void goToTeams(Bundle teamData){
         Intent i = new Intent(AdminStationMainActivity.this, AdminTeamsActivity.class);
-        i.putExtra(AdminTeamsActivity.ARG_TEAMS, MockGenerator.mockAdminTeamsList());
+        i.putExtra(AdminTeamsActivity.ARG_TEAMS, teamData);
+        i.putExtra(AdminTeamsActivity.ARG_STATIONID, db.getMyStationId());
         startActivity(i);
     }
 
