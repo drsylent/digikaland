@@ -19,6 +19,7 @@ import hu.bme.aut.digikaland.dblogic.ErrorType;
 import hu.bme.aut.digikaland.dblogic.RacePermissionHandler;
 import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.entities.Location;
+import hu.bme.aut.digikaland.entities.Team;
 import hu.bme.aut.digikaland.entities.enumeration.EvaluationStatus;
 import hu.bme.aut.digikaland.entities.station.Station;
 import hu.bme.aut.digikaland.entities.station.StationAdminPerspective;
@@ -39,8 +40,6 @@ public class AdminStationEngine {
     private ArrayList<StationAdminPerspective> stations = new ArrayList<>();
 
     private int stationNumber = 0;
-
-    private int teamSum = -1;
 
     private CommunicationInterface comm;
 
@@ -186,9 +185,73 @@ public class AdminStationEngine {
     private HashMap<String, Location> locations = new HashMap<>();
     private HashMap<String, ArrayList<Contact>> admins = new HashMap<>();
 
+    private ArrayList<Team> teams = new ArrayList<>();
+    private int teamSum;
+
+    public void loadTeamList(String stationId){
+        teams.clear();
+        final CollectionReference stationRef = RacePermissionHandler.getInstance().getRaceReference().collection("stations")
+                .document(stationId).collection("teams");
+        stationRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    try {
+                        teamSum = task.getResult().size();
+                        int i = 0;
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            EvaluationStatus status = EvaluationStatus.valueOf(document.getString("status"));
+                            DocumentReference teamRef = document.getDocumentReference("reference");
+                            loadTeamName(teamRef, status, i++);
+                        }
+                    } catch (RuntimeException e){
+                        comm.adminStationError(ErrorType.DatabaseError);
+                    }
+                } else {
+                    comm.adminStationError(ErrorType.NoContact);
+                }
+            }
+        });
+    }
+
+    private void loadTeamName(final DocumentReference teamRef, final EvaluationStatus status, final int number){
+        teamRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null && document.exists()) {
+                        try {
+                            String teamName = document.getString("name");
+                            Team loaded = new Team(teamName, status);
+                            loaded.arrivingNumber = number;
+                            loaded.id = document.getId();
+                            teamLoaded(loaded);
+                        } catch (RuntimeException e){
+                            comm.adminStationError(ErrorType.DatabaseError);
+                        }
+                    } else {
+                        comm.adminStationError(ErrorType.RaceNotExists);
+                    }
+                } else {
+                    comm.adminStationError(ErrorType.NoContact);
+                }
+            }
+        });
+    }
+
+    private void teamLoaded(Team loaded){
+        teams.add(loaded);
+        if(teams.size() == teamSum){
+            Collections.sort(teams);
+            comm.allTeamStatusLoaded(teams);
+        }
+    }
+
     public interface CommunicationInterface {
         void adminStationError(ErrorType type);
         void allStationLoadCompleted(ArrayList<StationAdminPerspective> list);
         void stationSummaryLoaded(String stationId, Location location, ArrayList<Contact> stationAdmins);
+        void allTeamStatusLoaded(ArrayList<Team> teams);
     }
 }

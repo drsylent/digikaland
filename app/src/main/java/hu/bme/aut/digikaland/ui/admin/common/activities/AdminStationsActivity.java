@@ -16,6 +16,7 @@ import hu.bme.aut.digikaland.dblogic.ErrorType;
 import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.entities.EvaluationStatistics;
 import hu.bme.aut.digikaland.entities.Location;
+import hu.bme.aut.digikaland.entities.Team;
 import hu.bme.aut.digikaland.entities.station.StationAdminPerspective;
 import hu.bme.aut.digikaland.entities.station.StationAdminPerspectiveSummary;
 import hu.bme.aut.digikaland.ui.admin.common.fragments.AdminStationAdapter;
@@ -95,6 +96,11 @@ public class AdminStationsActivity extends AppCompatActivity implements AdminSta
     @Override
     public void stationSummaryLoaded(String stationId, Location location, ArrayList<Contact> stationAdmins) {
         setStationSummary(stationId, location, stationAdmins);
+    }
+
+    @Override
+    public void allTeamStatusLoaded(ArrayList<Team> teams) {
+
     }
 
     private void setStationSummary(String stationId, Location location, ArrayList<Contact> stationAdmins){

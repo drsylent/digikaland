@@ -29,6 +29,7 @@ import hu.bme.aut.digikaland.dblogic.ResultsEngine;
 import hu.bme.aut.digikaland.dblogic.SolutionDownloadEngine;
 import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.entities.Location;
+import hu.bme.aut.digikaland.entities.Team;
 import hu.bme.aut.digikaland.entities.objectives.Objective;
 import hu.bme.aut.digikaland.entities.objectives.solutions.Solution;
 import hu.bme.aut.digikaland.entities.station.StationAdminPerspective;
@@ -215,6 +216,11 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
 
     @Override
     public void stationSummaryLoaded(String stationId, Location location, ArrayList<Contact> stationAdmins) {
+
+    }
+
+    @Override
+    public void allTeamStatusLoaded(ArrayList<Team> teams) {
 
     }
 
