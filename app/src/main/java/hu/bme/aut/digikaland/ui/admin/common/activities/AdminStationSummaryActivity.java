@@ -140,6 +140,7 @@ public class AdminStationSummaryActivity extends AppCompatActivity implements Ad
     private void goToTeams(Bundle teamData){
         Intent i = new Intent(AdminStationSummaryActivity.this, AdminTeamsActivity.class);
         i.putExtra(AdminTeamsActivity.ARG_TEAMS, teamData);
+        i.putExtra(AdminTeamsActivity.ARG_STATIONID, Integer.toString(stationId));
         startActivity(i);
     }
 

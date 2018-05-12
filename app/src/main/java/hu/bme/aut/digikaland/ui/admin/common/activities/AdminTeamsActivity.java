@@ -2,21 +2,31 @@ package hu.bme.aut.digikaland.ui.admin.common.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import java.util.ArrayList;
+import java.util.Date;
+
 import hu.bme.aut.digikaland.R;
+import hu.bme.aut.digikaland.dblogic.ErrorType;
+import hu.bme.aut.digikaland.dblogic.RacePermissionHandler;
+import hu.bme.aut.digikaland.dblogic.SolutionDownloadEngine;
 import hu.bme.aut.digikaland.entities.Team;
+import hu.bme.aut.digikaland.entities.objectives.solutions.Solution;
 import hu.bme.aut.digikaland.ui.admin.common.fragments.AdminTeamsAdapter;
 import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
-public class AdminTeamsActivity extends AppCompatActivity implements AdminTeamsAdapter.AdminTeamsListener {
+public class AdminTeamsActivity extends AppCompatActivity implements AdminTeamsAdapter.AdminTeamsListener, SolutionDownloadEngine.CommunicationInterface {
     public final static String ARG_TEAMS = "teams";
     public final static String ARG_SUMMARY = "summary";
+    public final static String ARG_STATIONID = "stationid";
     private boolean summaryMode;
+    private String stationId;
+    private RecyclerView mainLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +39,8 @@ public class AdminTeamsActivity extends AppCompatActivity implements AdminTeamsA
         }
         ArrayList<Team> teams = (ArrayList<Team>) getIntent().getBundleExtra(ARG_TEAMS).getSerializable(ARG_TEAMS);
         summaryMode = getIntent().getBooleanExtra(ARG_SUMMARY, false);
+        stationId = getIntent().getStringExtra(ARG_STATIONID);
+        mainLayout = findViewById(R.id.clientStationList);
         RecyclerView list = findViewById(R.id.clientStationList);
         list.setLayoutManager(new LinearLayoutManager(this));
         list.setAdapter(new AdminTeamsAdapter(teams, summaryMode));
@@ -55,8 +67,42 @@ public class AdminTeamsActivity extends AppCompatActivity implements AdminTeamsA
         }
         // TODO: nincs még adatfolyam
         else{
-            Intent i = new Intent(AdminTeamsActivity.this, AdminEvaluateActivity.class);
-            startActivity(MockGenerator.mockEvaluateIntent(i));
+            prepareEvaluation(team);
         }
+    }
+
+    private void prepareEvaluation(Team team){
+        SolutionDownloadEngine.getInstance(this).loadSolutions(stationId, team.id);
+    }
+
+    private void setEvaluation(ArrayList<Solution> solutions, int penalty, Date time, String teamName){
+        Intent i = new Intent(AdminTeamsActivity.this, AdminEvaluateActivity.class);
+        i.putExtra(AdminEvaluateActivity.ARG_SOLUTIONS, solutions);
+        String userStationId = RacePermissionHandler.getInstance().getStationReference().getId();
+        i.putExtra(AdminEvaluateActivity.ARG_STATION, Integer.valueOf(stationId));
+        i.putExtra(AdminEvaluateActivity.ARG_TIME, time);
+        i.putExtra(AdminEvaluateActivity.ARG_TEAM, teamName);
+        i.putExtra(AdminEvaluateActivity.ARG_PENALTY, penalty);
+        i.putExtra(AdminEvaluateActivity.ARG_SEND, userStationId.equals(stationId));
+        goToEvaluation(i);
+    }
+
+    private void goToEvaluation(Intent i){
+        startActivity(i);
+    }
+
+    @Override
+    public void solutionsLoaded(ArrayList<Solution> solutions, int penalty, Date uploadTime, String teamName) {
+        setEvaluation(solutions, penalty, uploadTime, teamName);
+    }
+
+    @Override
+    public void solutionsLoadError(ErrorType type) {
+        showSnackBarMessage(type.getDefaultMessage());
+    }
+
+    // TODO: jelenleg csak placeholder megjelenítésre
+    private void showSnackBarMessage(String message) {
+        Snackbar.make(mainLayout, message, Snackbar.LENGTH_LONG).show();
     }
 }
