@@ -6,16 +6,21 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Date;
 
 import hu.bme.aut.digikaland.dblogic.enumeration.LoadResult;
 import hu.bme.aut.digikaland.dblogic.enumeration.RaceState;
+import hu.bme.aut.digikaland.entities.EvaluationStatistics;
 import hu.bme.aut.digikaland.entities.Location;
+import hu.bme.aut.digikaland.entities.enumeration.EvaluationStatus;
 
 /**
  * Created by Sylent on 2018. 05. 13..
@@ -48,7 +53,7 @@ public class AdminTotalEngine {
                         try{
                             switch (RaceState.valueOf(document.getString("status"))){
                                 case NotStarted: loadStartingState(); break;
-//                                case Started: loadRunningState(); break;
+                                case Started: loadRunningState(); break;
 //                                case Ended: endingStateLoaded(); break;
                             }
                         }catch (IllegalArgumentException e){
@@ -76,7 +81,7 @@ public class AdminTotalEngine {
                     if (document != null && document.exists()) {
                         try {
                             location = new Location(document.getString("startingaddr"), document.getString("startingaddr-detailed"));
-                            startingTime = document.getDate("startingtime");
+                            time = document.getDate("startingtime");
                             geoPoint = document.getGeoPoint("startinggeo");
                             startingStateLoaded();
                         }catch(RuntimeException e){
@@ -90,6 +95,106 @@ public class AdminTotalEngine {
                 }
             }
         });
+    }
+
+    private void loadRunningState(){
+        final DocumentReference docRef = RacePermissionHandler.getInstance().getRaceReference();
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null && document.exists()) {
+                        try {
+                            location = new Location(document.getString("endingaddr"), document.getString("endingaddr-detailed"));
+                            time = document.getDate("endingtime");
+                            geoPoint = document.getGeoPoint("endinggeo");
+                            new StatisticsLoader().loadStatistics();
+                        }catch(RuntimeException e){
+                            comm.totalAdminError(ErrorType.DatabaseError);
+                        }
+                    } else {
+                        comm.totalAdminError(ErrorType.RaceNotExists);
+                    }
+                } else {
+                    comm.totalAdminError(ErrorType.NoContact);
+                }
+            }
+        });
+    }
+
+    private class StatisticsLoader{
+        private int done = 0;
+        private int evaluated = 0;
+        private int counter = 0;
+        private boolean errorFree = true;
+
+        private void loadStatistics(){
+            final CollectionReference stationRef = RacePermissionHandler.getInstance().getRaceReference().collection("stations");
+            stationRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        try {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                loadStation(document.getReference());
+                            }
+                        } catch (RuntimeException e){
+                            error(ErrorType.DatabaseError);
+                        }
+                    } else {
+                        error(ErrorType.NoContact);
+                    }
+                }
+            });
+        }
+
+        private void loadStation(DocumentReference stationRef){
+            CollectionReference teamsRef = stationRef.collection("teams");
+            teamsRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        try {
+                            boolean evaluatedAll = true;
+                            boolean doneAll = true;
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                EvaluationStatus status = EvaluationStatus.valueOf(document.getString("status"));
+                                switch (status){
+                                    case Done: evaluatedAll = false; break;
+                                    case NotArrivedYet: evaluatedAll = false; doneAll = false; break;
+                                }
+                            }
+                            if(doneAll){
+                                if(evaluatedAll) stationLoaded(EvaluationStatus.Evaluated);
+                                else stationLoaded(EvaluationStatus.Done);
+                            }
+                            else stationLoaded(EvaluationStatus.NotArrivedYet);
+                        } catch (RuntimeException e){
+                            error(ErrorType.DatabaseError);
+                        }
+                    } else {
+                        error(ErrorType.NoContact);
+                    }
+                }
+            });
+        }
+
+        private void error(ErrorType type){
+            if(errorFree) comm.totalAdminError(type);
+            else errorFree = false;
+        }
+
+        private void stationLoaded(EvaluationStatus status){
+            if(errorFree) {
+                if (status == EvaluationStatus.Evaluated) evaluated++;
+                else if (status == EvaluationStatus.Done) done++;
+                if (++counter == stationSum) {
+                    statistics = new EvaluationStatistics(evaluated, done, stationSum);
+                    runningStateLoaded();
+                }
+            }
+        }
     }
 
     public void updateRaceStatus(RaceState state){
@@ -117,8 +222,14 @@ public class AdminTotalEngine {
         return location;
     }
 
-    public Date getLastLoadedStartingTime() {
-        return startingTime;
+    public Date getLastLoadedTime() {
+        return time;
+    }
+
+    private EvaluationStatistics statistics;
+
+    public EvaluationStatistics getStatistics(){
+        return statistics;
     }
 
     public int getStationSum() {
@@ -136,17 +247,22 @@ public class AdminTotalEngine {
         comm.startingStateLoaded();
     }
 
+    private void runningStateLoaded(){
+        loadResult = LoadResult.Running;
+        comm.runningStateLoaded();
+    }
+
     private void resetData(){
         loadResult = null;
         stationSum = -1;
         teamSum = -1;
         location = null;
-        startingTime = null;
+        time = null;
         geoPoint = null;
     }
 
     private Location location;
-    private Date startingTime;
+    private Date time;
     private GeoPoint geoPoint;
 
     private int stationSum = -1;
@@ -156,5 +272,6 @@ public class AdminTotalEngine {
         void totalAdminError(ErrorType type);
         void startingStateLoaded();
         void statusUpdateSuccessful();
+        void runningStateLoaded();
     }
 }

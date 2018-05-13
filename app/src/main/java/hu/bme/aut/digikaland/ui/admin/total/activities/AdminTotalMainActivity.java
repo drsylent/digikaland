@@ -21,6 +21,7 @@ import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.dblogic.AdminTotalEngine;
 import hu.bme.aut.digikaland.dblogic.ErrorType;
 import hu.bme.aut.digikaland.dblogic.enumeration.RaceState;
+import hu.bme.aut.digikaland.entities.EvaluationStatistics;
 import hu.bme.aut.digikaland.entities.Location;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminHelpActivity;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminStationsActivity;
@@ -31,8 +32,6 @@ import hu.bme.aut.digikaland.ui.common.activities.MapsActivity;
 import hu.bme.aut.digikaland.ui.common.activities.SplashActivity;
 import hu.bme.aut.digikaland.ui.common.fragments.ResultsFragment;
 import hu.bme.aut.digikaland.utility.development.MockGenerator;
-
-import static hu.bme.aut.digikaland.dblogic.enumeration.LoadResult.Starting;
 
 public class AdminTotalMainActivity extends AppCompatActivity implements ResultsFragment.ResultsFragmentListener,
         AdminRunningFragment.AdminRunningListener, AdminRaceStarterFragment.AdminStarterListener, AdminTotalEngine.CommunicationInterface {
@@ -140,11 +139,9 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
         setNotStarted();
     }
 
-    private RaceState state;
-
     private void setNotStarted(){
         if(uiReady)
-            goToNotStarted(db.getLastLoadedLocation(), db.getLastLoadedStartingTime());
+            goToNotStarted(db.getLastLoadedLocation(), db.getLastLoadedTime());
         else postLoad = true;
     }
 
@@ -153,9 +150,20 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
                 AdminRaceStarterFragment.newInstance(loc, time, true)).commit();
     }
 
+    @Override
+    public void runningStateLoaded() {
+        setRunning();
+    }
+
     private void setRunning(){
+        if(uiReady)
+            goToRunning(db.getLastLoadedLocation(), db.getLastLoadedTime(), db.getStatistics());
+        else postLoad = true;
+    }
+
+    private void goToRunning(Location loc, Date time, EvaluationStatistics statistics){
         getSupportFragmentManager().beginTransaction().replace(R.id.adminStationContent,
-                AdminRunningFragment.newInstance(MockGenerator.mockALocation(), MockGenerator.mockATime(), MockGenerator.mockStatistics())).commit();
+                AdminRunningFragment.newInstance(loc, time, statistics)).commit();
     }
 
     private void setFinished(){
