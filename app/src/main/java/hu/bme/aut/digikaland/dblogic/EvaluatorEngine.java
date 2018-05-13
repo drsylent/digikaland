@@ -1,4 +1,4 @@
-package hu.bme.aut.digikaland.dblogic.enumeration;
+package hu.bme.aut.digikaland.dblogic;
 
 import android.support.annotation.NonNull;
 
@@ -11,15 +11,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import hu.bme.aut.digikaland.dblogic.ErrorType;
-import hu.bme.aut.digikaland.dblogic.RacePermissionHandler;
 import hu.bme.aut.digikaland.entities.enumeration.EvaluationStatus;
-import hu.bme.aut.digikaland.entities.objectives.solutions.Solution;
 
 /**
  * Created by Sylent on 2018. 05. 12..

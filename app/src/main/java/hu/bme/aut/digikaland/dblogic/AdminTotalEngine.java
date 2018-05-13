@@ -3,6 +3,8 @@ package hu.bme.aut.digikaland.dblogic;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -90,6 +92,23 @@ public class AdminTotalEngine {
         });
     }
 
+    public void updateRaceStatus(RaceState state){
+        RacePermissionHandler.getInstance().getRaceReference()
+                .update("status", state.toString())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        comm.statusUpdateSuccessful();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        comm.totalAdminError(ErrorType.UploadError);
+                    }
+                });
+    }
+
     public LoadResult getLoadResult() {
         return loadResult;
     }
@@ -136,5 +155,6 @@ public class AdminTotalEngine {
     public interface CommunicationInterface{
         void totalAdminError(ErrorType type);
         void startingStateLoaded();
+        void statusUpdateSuccessful();
     }
 }

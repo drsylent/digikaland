@@ -20,7 +20,7 @@ import java.util.Date;
 
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.dblogic.ErrorType;
-import hu.bme.aut.digikaland.dblogic.enumeration.EvaluatorEngine;
+import hu.bme.aut.digikaland.dblogic.EvaluatorEngine;
 import hu.bme.aut.digikaland.entities.objectives.solutions.Solution;
 import hu.bme.aut.digikaland.ui.common.fragments.NumberPickerDialogFragment;
 import hu.bme.aut.digikaland.ui.common.fragments.PictureFragment;

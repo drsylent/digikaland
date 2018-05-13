@@ -25,7 +25,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/starting_place"
+            android:text="@string/ending_place"
             android:layout_marginTop="@dimen/s_margin"
             style="@style/StringFormatMiniTitle"/>
 

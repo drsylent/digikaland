@@ -20,6 +20,7 @@ import java.util.Date;
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.dblogic.AdminTotalEngine;
 import hu.bme.aut.digikaland.dblogic.ErrorType;
+import hu.bme.aut.digikaland.dblogic.enumeration.RaceState;
 import hu.bme.aut.digikaland.entities.Location;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminHelpActivity;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminStationsActivity;
@@ -104,7 +105,17 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
 
     @Override
     public void onStartPressed() {
-        setRunning();
+        prepareStatusUpdate(RaceState.Started);
+    }
+
+    private void prepareStatusUpdate(RaceState state){
+        db.updateRaceStatus(state);
+    }
+
+    @Override
+    public void statusUpdateSuccessful() {
+        showSnackBarMessage("Feltöltés sikeres");
+        //db.loadState();
     }
 
     @Override
@@ -129,12 +140,6 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
         setNotStarted();
     }
 
-    private enum RaceState{
-        NotStarted,
-        Running,
-        Finished
-    }
-
     private RaceState state;
 
     private void setNotStarted(){
@@ -149,13 +154,11 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
     }
 
     private void setRunning(){
-        state = RaceState.Running;
         getSupportFragmentManager().beginTransaction().replace(R.id.adminStationContent,
                 AdminRunningFragment.newInstance(MockGenerator.mockALocation(), MockGenerator.mockATime(), MockGenerator.mockStatistics())).commit();
     }
 
     private void setFinished(){
-        state = RaceState.Finished;
         getSupportFragmentManager().beginTransaction().replace(R.id.adminStationContent,
                 ResultsFragment.newInstance(MockGenerator.mockResultNames(), MockGenerator.mockResultPoints())).commit();
     }
