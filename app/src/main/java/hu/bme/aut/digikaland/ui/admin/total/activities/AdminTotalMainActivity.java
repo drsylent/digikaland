@@ -3,16 +3,24 @@ package hu.bme.aut.digikaland.ui.admin.total.activities;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
+
+import java.util.Date;
 
 import hu.bme.aut.digikaland.R;
+import hu.bme.aut.digikaland.dblogic.AdminTotalEngine;
+import hu.bme.aut.digikaland.dblogic.ErrorType;
+import hu.bme.aut.digikaland.entities.Location;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminHelpActivity;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminStationsActivity;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminTeamsActivity;
@@ -23,16 +31,29 @@ import hu.bme.aut.digikaland.ui.common.activities.SplashActivity;
 import hu.bme.aut.digikaland.ui.common.fragments.ResultsFragment;
 import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
+import static hu.bme.aut.digikaland.dblogic.enumeration.LoadResult.Starting;
+
 public class AdminTotalMainActivity extends AppCompatActivity implements ResultsFragment.ResultsFragmentListener,
-        AdminRunningFragment.AdminRunningListener, AdminRaceStarterFragment.AdminStarterListener {
+        AdminRunningFragment.AdminRunningListener, AdminRaceStarterFragment.AdminStarterListener, AdminTotalEngine.CommunicationInterface {
 
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
+    private LinearLayout mainLayout;
+
+    private boolean uiReady = false;
+    private boolean postLoad = false;
+
+    private AdminTotalEngine db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        uiReady = false;
+        postLoad = false;
+        db = AdminTotalEngine.getInstance(this);
+        db.loadState();
         setContentView(R.layout.activity_admin_main);
+        mainLayout = findViewById(R.id.adminStationContent);
         drawerLayout = findViewById(R.id.adminDrawer);
         NavigationView nav = findViewById(R.id.adminNavigation);
         nav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -57,7 +78,17 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
         setupToolbar();
         nav.getMenu().getItem(0).setChecked(true);
         toolbar.setTitle(R.string.actual);
-        if(savedInstanceState == null) setNotStarted();
+       // if(savedInstanceState == null) setNotStarted();
+        uiReady = true;
+        if(postLoad) executePostLoad();
+    }
+
+    private void executePostLoad(){
+        switch (db.getLoadResult()){
+            case Starting: startingStateLoaded(); break;
+//            case Running: runningStateLoaded(); break;
+//            case Ending: endingStateLoaded(); break;
+        }
     }
 
     @Override
@@ -88,6 +119,16 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
         startActivity(i);
     }
 
+    @Override
+    public void totalAdminError(ErrorType type) {
+        showSnackBarMessage(type.getDefaultMessage());
+    }
+
+    @Override
+    public void startingStateLoaded() {
+        setNotStarted();
+    }
+
     private enum RaceState{
         NotStarted,
         Running,
@@ -97,9 +138,14 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
     private RaceState state;
 
     private void setNotStarted(){
-        state = RaceState.NotStarted;
+        if(uiReady)
+            goToNotStarted(db.getLastLoadedLocation(), db.getLastLoadedStartingTime());
+        else postLoad = true;
+    }
+
+    private void goToNotStarted(Location loc, Date time){
         getSupportFragmentManager().beginTransaction().replace(R.id.adminStationContent,
-                AdminRaceStarterFragment.newInstance(MockGenerator.mockALocation(), MockGenerator.mockATime(), true)).commit();
+                AdminRaceStarterFragment.newInstance(loc, time, true)).commit();
     }
 
     private void setRunning(){
@@ -149,5 +195,29 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
         ActionBarDrawerToggle toggler = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
         toggler.syncState();
         drawerLayout.addDrawerListener(toggler);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_refresh, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        showSnackBarMessage(getResources().getString(R.string.refresh));
+//        MockGenerator.adminStationCycleStep();
+//        if(MockGenerator.adminStationIsResultsActive()) setResults();
+//        else{
+//            if(state == ContentState.Actual) fragment.refreshAllData();
+//            else goToActual();
+//        }
+        db.loadState();
+        return super.onOptionsItemSelected(item);
+    }
+
+    // TODO: jelenleg csak placeholder megjelenítésre
+    private void showSnackBarMessage(String message) {
+        Snackbar.make(mainLayout, message, Snackbar.LENGTH_LONG).show();
     }
 }

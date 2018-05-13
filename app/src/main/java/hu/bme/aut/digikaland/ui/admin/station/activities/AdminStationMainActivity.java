@@ -60,6 +60,8 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        uiReady = false;
+        postLoad = false;
         db = AdminEngine.getInstance(this);
         db.loadState();
         setContentView(R.layout.activity_admin_main);
