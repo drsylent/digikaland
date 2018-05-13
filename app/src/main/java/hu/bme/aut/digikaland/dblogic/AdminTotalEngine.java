@@ -187,7 +187,7 @@ public class AdminTotalEngine {
 
         private void stationLoaded(EvaluationStatus status){
             if(errorFree) {
-                if (status == EvaluationStatus.Evaluated) evaluated++;
+                if (status == EvaluationStatus.Evaluated){ evaluated++; done++; }
                 else if (status == EvaluationStatus.Done) done++;
                 if (++counter == stationSum) {
                     statistics = new EvaluationStatistics(evaluated, done, stationSum);
