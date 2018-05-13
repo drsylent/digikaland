@@ -18,13 +18,17 @@ import android.widget.LinearLayout;
 import java.util.ArrayList;
 import java.util.Date;
 
+import hu.bme.aut.digikaland.AdminStationEngine;
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.dblogic.AdminTotalEngine;
 import hu.bme.aut.digikaland.dblogic.ErrorType;
 import hu.bme.aut.digikaland.dblogic.ResultsEngine;
 import hu.bme.aut.digikaland.dblogic.enumeration.RaceState;
+import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.entities.EvaluationStatistics;
 import hu.bme.aut.digikaland.entities.Location;
+import hu.bme.aut.digikaland.entities.Team;
+import hu.bme.aut.digikaland.entities.station.StationAdminPerspective;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminHelpActivity;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminStationsActivity;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminTeamsActivity;
@@ -36,7 +40,8 @@ import hu.bme.aut.digikaland.ui.common.fragments.ResultsFragment;
 import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
 public class AdminTotalMainActivity extends AppCompatActivity implements ResultsFragment.ResultsFragmentListener,
-        AdminRunningFragment.AdminRunningListener, AdminRaceStarterFragment.AdminStarterListener, AdminTotalEngine.CommunicationInterface, ResultsEngine.CommunicationInterface {
+        AdminRunningFragment.AdminRunningListener, AdminRaceStarterFragment.AdminStarterListener, AdminTotalEngine.CommunicationInterface, ResultsEngine.CommunicationInterface,
+        AdminStationEngine.CommunicationInterface{
 
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
@@ -67,7 +72,7 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
                         startMap();
                         break;
                     case R.id.adminStations:
-                        startStations();
+                        prepareStations();
                         break;
                     case R.id.adminTeams:
                         startTeams();
@@ -192,9 +197,24 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
         startActivity(i);
     }
 
-    private void startStations(){
+    private void prepareStations(){
+        AdminStationEngine.getInstance(this).loadStationDatas(db.getTeamSum());
+    }
+
+    @Override
+    public void allStationLoadCompleted(ArrayList<StationAdminPerspective> list) {
+        setStations(list);
+    }
+
+    private void setStations(ArrayList<StationAdminPerspective> list){
+        Bundle stationData = new Bundle();
+        stationData.putSerializable(AdminStationsActivity.ARGS_STATIONS , list);
+        goToStations(stationData);
+    }
+
+    private void goToStations(Bundle stationsData){
         Intent i = new Intent(AdminTotalMainActivity.this, AdminStationsActivity.class);
-        i.putExtra(AdminStationsActivity.ARGS_STATIONS, MockGenerator.mockAdminStationsSummaryList());
+        i.putExtra(AdminStationsActivity.ARGS_STATIONS, stationsData);
         i.putExtra(AdminStationsActivity.ARG_SUMMARY, true);
         startActivity(i);
     }
@@ -245,5 +265,20 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
     // TODO: jelenleg csak placeholder megjelenítésre
     private void showSnackBarMessage(String message) {
         Snackbar.make(mainLayout, message, Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void adminStationError(ErrorType type) {
+        showSnackBarMessage(type.getDefaultMessage());
+    }
+
+    @Override
+    public void stationSummaryLoaded(String stationId, Location location, ArrayList<Contact> stationAdmins) {
+
+    }
+
+    @Override
+    public void allTeamStatusLoaded(ArrayList<Team> teams) {
+
     }
 }

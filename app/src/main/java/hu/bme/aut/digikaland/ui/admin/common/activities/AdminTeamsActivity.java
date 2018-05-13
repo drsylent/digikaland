@@ -81,12 +81,14 @@ public class AdminTeamsActivity extends AppCompatActivity implements AdminTeamsA
     private void setEvaluation(ArrayList<Solution> solutions, int penalty, Date time, String teamName){
         Intent i = new Intent(AdminTeamsActivity.this, AdminEvaluateActivity.class);
         i.putExtra(AdminEvaluateActivity.ARG_SOLUTIONS, solutions);
-        String userStationId = RacePermissionHandler.getInstance().getStationReference().getId();
         i.putExtra(AdminEvaluateActivity.ARG_STATION, Integer.valueOf(stationId));
         i.putExtra(AdminEvaluateActivity.ARG_TIME, time);
         i.putExtra(AdminEvaluateActivity.ARG_TEAM, teamName);
         i.putExtra(AdminEvaluateActivity.ARG_PENALTY, penalty);
-        i.putExtra(AdminEvaluateActivity.ARG_SEND, userStationId.equals(stationId));
+        boolean evaluatable;
+        if(RacePermissionHandler.getInstance().getAdminMode() == RacePermissionHandler.AdminMode.Total) evaluatable = true;
+        else evaluatable = RacePermissionHandler.getInstance().getStationReference().getId().equals(stationId);
+        i.putExtra(AdminEvaluateActivity.ARG_SEND, evaluatable);
         i.putExtra(AdminEvaluateActivity.ARG_TEAMID, lastTeamId);
         goToEvaluation(i);
     }
