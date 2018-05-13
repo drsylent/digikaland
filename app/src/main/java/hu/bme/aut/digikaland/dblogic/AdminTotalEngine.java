@@ -54,7 +54,7 @@ public class AdminTotalEngine {
                             switch (RaceState.valueOf(document.getString("status"))){
                                 case NotStarted: loadStartingState(); break;
                                 case Started: loadRunningState(); break;
-//                                case Ended: endingStateLoaded(); break;
+                                case Ended: endingStateLoaded(); break;
                             }
                         }catch (IllegalArgumentException e){
                             comm.totalAdminError(ErrorType.DatabaseError);
@@ -252,6 +252,11 @@ public class AdminTotalEngine {
         comm.runningStateLoaded();
     }
 
+    private void endingStateLoaded(){
+        loadResult = LoadResult.Ending;
+        comm.endingStateLoaded();
+    }
+
     private void resetData(){
         loadResult = null;
         stationSum = -1;
@@ -273,5 +278,6 @@ public class AdminTotalEngine {
         void startingStateLoaded();
         void statusUpdateSuccessful();
         void runningStateLoaded();
+        void endingStateLoaded();
     }
 }

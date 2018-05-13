@@ -15,11 +15,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.dblogic.AdminTotalEngine;
 import hu.bme.aut.digikaland.dblogic.ErrorType;
+import hu.bme.aut.digikaland.dblogic.ResultsEngine;
 import hu.bme.aut.digikaland.dblogic.enumeration.RaceState;
 import hu.bme.aut.digikaland.entities.EvaluationStatistics;
 import hu.bme.aut.digikaland.entities.Location;
@@ -34,7 +36,7 @@ import hu.bme.aut.digikaland.ui.common.fragments.ResultsFragment;
 import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
 public class AdminTotalMainActivity extends AppCompatActivity implements ResultsFragment.ResultsFragmentListener,
-        AdminRunningFragment.AdminRunningListener, AdminRaceStarterFragment.AdminStarterListener, AdminTotalEngine.CommunicationInterface {
+        AdminRunningFragment.AdminRunningListener, AdminRaceStarterFragment.AdminStarterListener, AdminTotalEngine.CommunicationInterface, ResultsEngine.CommunicationInterface {
 
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
@@ -86,8 +88,8 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
     private void executePostLoad(){
         switch (db.getLoadResult()){
             case Starting: startingStateLoaded(); break;
-//            case Running: runningStateLoaded(); break;
-//            case Ending: endingStateLoaded(); break;
+            case Running: runningStateLoaded(); break;
+            case Ending: endingStateLoaded(); break;
         }
     }
 
@@ -114,12 +116,12 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
     @Override
     public void statusUpdateSuccessful() {
         showSnackBarMessage("Feltöltés sikeres");
-        //db.loadState();
+        db.loadState();
     }
 
     @Override
     public void onEndPressed() {
-        setFinished();
+        prepareStatusUpdate(RaceState.Ended);
     }
 
     @Override
@@ -166,9 +168,22 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
                 AdminRunningFragment.newInstance(loc, time, statistics)).commit();
     }
 
-    private void setFinished(){
-        getSupportFragmentManager().beginTransaction().replace(R.id.adminStationContent,
-                ResultsFragment.newInstance(MockGenerator.mockResultNames(), MockGenerator.mockResultPoints())).commit();
+    @Override
+    public void endingStateLoaded() {
+        if(uiReady) {
+            ResultsEngine.getInstance(this).loadResults();
+        }
+        else postLoad = true;
+    }
+
+    @Override
+    public void resultsLoaded(ArrayList<String> teamNames, ArrayList<Integer> teamPoints) {
+        getSupportFragmentManager().beginTransaction().replace(R.id.adminStationContent, ResultsFragment.newInstance(teamNames, teamPoints)).commit();
+    }
+
+    @Override
+    public void resultsError(ErrorType type) {
+        showSnackBarMessage(type.getDefaultMessage());
     }
 
     private void startMap(){
