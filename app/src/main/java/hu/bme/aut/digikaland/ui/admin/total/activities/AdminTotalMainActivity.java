@@ -17,10 +17,12 @@ import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import hu.bme.aut.digikaland.AdminStationEngine;
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.dblogic.AdminTotalEngine;
+import hu.bme.aut.digikaland.dblogic.ContactsEngineFull;
 import hu.bme.aut.digikaland.dblogic.ErrorType;
 import hu.bme.aut.digikaland.dblogic.ResultsEngine;
 import hu.bme.aut.digikaland.dblogic.enumeration.RaceState;
@@ -41,7 +43,7 @@ import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
 public class AdminTotalMainActivity extends AppCompatActivity implements ResultsFragment.ResultsFragmentListener,
         AdminRunningFragment.AdminRunningListener, AdminRaceStarterFragment.AdminStarterListener, AdminTotalEngine.CommunicationInterface, ResultsEngine.CommunicationInterface,
-        AdminStationEngine.CommunicationInterface{
+        AdminStationEngine.CommunicationInterface, ContactsEngineFull.CommunicationInterface{
 
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
@@ -131,9 +133,31 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
 
     @Override
     public void onHelpPressed() {
+        ContactsEngineFull.getInstance(this).loadAllData();
+    }
+
+    @Override
+    public void allDataLoaded(ArrayList<Contact> totalAdmins, HashMap<String, ArrayList<Contact>> stationAdmins, HashMap<String, Contact> captains) {
+        setHelp(totalAdmins, stationAdmins, captains);
+    }
+
+    private void setHelp(ArrayList<Contact> totalAdmins, HashMap<String, ArrayList<Contact>> stationAdmins, HashMap<String, Contact> captains){
+        Bundle i = new Bundle();
+        i.putSerializable(AdminHelpActivity.ARG_OBJECTADMINS, stationAdmins);
+        i.putSerializable(AdminHelpActivity.ARG_TOTALADMINS, totalAdmins);
+        i.putSerializable(AdminHelpActivity.ARG_CAPTAINS, captains);
+        goToHelp(i);
+    }
+
+    private void goToHelp(Bundle helpBundle){
         Intent i = new Intent(AdminTotalMainActivity.this, AdminHelpActivity.class);
-        i.putExtra(AdminHelpActivity.ARG_HELPDATA, MockGenerator.mockAdminHelpData());
+        i.putExtra(AdminHelpActivity.ARG_HELPDATA, helpBundle);
         startActivity(i);
+    }
+
+    @Override
+    public void contactsError(ErrorType type) {
+        showSnackBarMessage(type.getDefaultMessage());
     }
 
     @Override
