@@ -77,7 +77,7 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
                         prepareStations();
                         break;
                     case R.id.adminTeams:
-                        startTeams();
+                        prepareTeams();
                         break;
                 }
                 invalidateOptionsMenu();
@@ -243,11 +243,33 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
         startActivity(i);
     }
 
-    private void startTeams(){
-        // TODO: ez nem ugyanaz a csapat activity lesz! (vagy más módban fut?)
+//    private void startTeams(){
+//        // TODO: ez nem ugyanaz a csapat activity lesz! (vagy más módban fut?)
+//        Intent i = new Intent(AdminTotalMainActivity.this, AdminTeamsActivity.class);
+//        i.putExtra(AdminTeamsActivity.ARG_TEAMS, MockGenerator.mockAdminTeamsList());
+//        i.putExtra(AdminTeamsActivity.ARG_SUMMARY, true);
+//        startActivity(i);
+//    }
+
+    private void prepareTeams(){
+        db.loadTeamList();
+    }
+
+    @Override
+    public void teamListLoaded(ArrayList<Team> teams) {
+        setTeams(teams);
+    }
+
+    private void setTeams(ArrayList<Team> teams){
         Intent i = new Intent(AdminTotalMainActivity.this, AdminTeamsActivity.class);
-        i.putExtra(AdminTeamsActivity.ARG_TEAMS, MockGenerator.mockAdminTeamsList());
         i.putExtra(AdminTeamsActivity.ARG_SUMMARY, true);
+        Bundle teamData = new Bundle();
+        teamData.putSerializable(AdminTeamsActivity.ARG_TEAMS, teams);
+        i.putExtra(AdminTeamsActivity.ARG_TEAMS, teamData);
+        goToTeams(i);
+    }
+
+    private void goToTeams(Intent i){
         startActivity(i);
     }
 

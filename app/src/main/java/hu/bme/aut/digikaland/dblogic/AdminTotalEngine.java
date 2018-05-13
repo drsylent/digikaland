@@ -14,12 +14,14 @@ import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import hu.bme.aut.digikaland.dblogic.enumeration.LoadResult;
 import hu.bme.aut.digikaland.dblogic.enumeration.RaceState;
 import hu.bme.aut.digikaland.entities.EvaluationStatistics;
 import hu.bme.aut.digikaland.entities.Location;
+import hu.bme.aut.digikaland.entities.Team;
 import hu.bme.aut.digikaland.entities.enumeration.EvaluationStatus;
 
 /**
@@ -214,6 +216,30 @@ public class AdminTotalEngine {
                 });
     }
 
+    public void loadTeamList(){
+        CollectionReference teamsRef = RacePermissionHandler.getInstance().getRaceReference().collection("teams");
+        teamsRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    try {
+                        ArrayList<Team> teams = new ArrayList<>();
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Team team = new Team(document.getString("name"), EvaluationStatus.NotArrivedYet);
+                            team.id = document.getId();
+                            teams.add(team);
+                        }
+                        comm.teamListLoaded(teams);
+                    } catch (RuntimeException e){
+                        comm.totalAdminError(ErrorType.DatabaseError);
+                    }
+                } else {
+                    comm.totalAdminError(ErrorType.NoContact);
+                }
+            }
+        });
+    }
+
     public LoadResult getLoadResult() {
         return loadResult;
     }
@@ -279,5 +305,6 @@ public class AdminTotalEngine {
         void statusUpdateSuccessful();
         void runningStateLoaded();
         void endingStateLoaded();
+        void teamListLoaded(ArrayList<Team> teams);
     }
 }
