@@ -13,7 +13,7 @@ import java.util.Date;
 
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.dblogic.AdminStationEngine;
-import hu.bme.aut.digikaland.dblogic.ErrorType;
+import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
 import hu.bme.aut.digikaland.dblogic.RacePermissionHandler;
 import hu.bme.aut.digikaland.dblogic.SolutionDownloadEngine;
 import hu.bme.aut.digikaland.entities.Contact;
@@ -22,7 +22,6 @@ import hu.bme.aut.digikaland.entities.Team;
 import hu.bme.aut.digikaland.entities.objectives.solutions.Solution;
 import hu.bme.aut.digikaland.entities.station.StationAdminPerspective;
 import hu.bme.aut.digikaland.ui.admin.common.fragments.AdminTeamsAdapter;
-import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
 public class AdminTeamsActivity extends AppCompatActivity implements AdminTeamsAdapter.AdminTeamsListener, SolutionDownloadEngine.CommunicationInterface,
             AdminStationEngine.CommunicationInterface {

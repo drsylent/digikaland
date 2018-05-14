@@ -20,12 +20,13 @@ import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 
+import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
+import hu.bme.aut.digikaland.dblogic.enumeration.ObjectiveType;
 import hu.bme.aut.digikaland.entities.objectives.MultipleChoiceObjective;
 import hu.bme.aut.digikaland.entities.objectives.Objective;
 import hu.bme.aut.digikaland.entities.objectives.PictureObjective;

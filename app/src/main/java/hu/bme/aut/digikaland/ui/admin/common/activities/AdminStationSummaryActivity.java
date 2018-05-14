@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 import hu.bme.aut.digikaland.dblogic.AdminStationEngine;
 import hu.bme.aut.digikaland.R;
-import hu.bme.aut.digikaland.dblogic.ErrorType;
+import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
 import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.entities.EvaluationStatistics;
 import hu.bme.aut.digikaland.entities.Location;

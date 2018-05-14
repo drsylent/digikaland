@@ -17,11 +17,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.dblogic.CodeHandler;
-import hu.bme.aut.digikaland.dblogic.ErrorType;
+import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
 import hu.bme.aut.digikaland.dblogic.RacePermissionHandler;
 import hu.bme.aut.digikaland.ui.admin.total.activities.AdminTotalMainActivity;
 import hu.bme.aut.digikaland.ui.admin.station.activities.AdminStationMainActivity;

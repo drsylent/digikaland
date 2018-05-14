@@ -1,4 +1,4 @@
-package hu.bme.aut.digikaland.dblogic;
+package hu.bme.aut.digikaland.dblogic.enumeration;
 
 import hu.bme.aut.digikaland.entities.objectives.CustomAnswerObjective;
 import hu.bme.aut.digikaland.entities.objectives.MultipleChoiceObjective;

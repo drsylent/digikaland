@@ -23,7 +23,7 @@ import hu.bme.aut.digikaland.dblogic.AdminStationEngine;
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.dblogic.AdminEngine;
 import hu.bme.aut.digikaland.dblogic.ContactsEngineFull;
-import hu.bme.aut.digikaland.dblogic.ErrorType;
+import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
 import hu.bme.aut.digikaland.dblogic.ObjectiveEngine;
 import hu.bme.aut.digikaland.dblogic.ResultsEngine;
 import hu.bme.aut.digikaland.dblogic.SolutionDownloadEngine;

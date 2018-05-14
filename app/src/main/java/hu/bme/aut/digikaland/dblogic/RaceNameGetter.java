@@ -1,13 +1,14 @@
 package hu.bme.aut.digikaland.dblogic;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
 
 public class RaceNameGetter {
     private static final RaceNameGetter ourInstance = new RaceNameGetter();

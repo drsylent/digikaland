@@ -2,13 +2,14 @@ package hu.bme.aut.digikaland.dblogic;
 
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
 
 public class RacePermissionHandler {
     private static final RacePermissionHandler ourInstance = new RacePermissionHandler();

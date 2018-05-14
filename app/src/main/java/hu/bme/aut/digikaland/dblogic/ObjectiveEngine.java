@@ -14,6 +14,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
+import hu.bme.aut.digikaland.dblogic.enumeration.ObjectiveType;
 import hu.bme.aut.digikaland.entities.objectives.MultipleChoiceObjective;
 import hu.bme.aut.digikaland.entities.objectives.Objective;
 import hu.bme.aut.digikaland.entities.objectives.PictureObjective;

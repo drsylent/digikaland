@@ -24,12 +24,11 @@ import java.util.Date;
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.dblogic.ClientEngine;
 import hu.bme.aut.digikaland.dblogic.ContactsEngine;
-import hu.bme.aut.digikaland.dblogic.ErrorType;
+import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
 import hu.bme.aut.digikaland.dblogic.ObjectiveEngine;
 import hu.bme.aut.digikaland.dblogic.RacePermissionHandler;
 import hu.bme.aut.digikaland.dblogic.ResultsEngine;
 import hu.bme.aut.digikaland.dblogic.StationsEngine;
-import hu.bme.aut.digikaland.dblogic.enumeration.LoadResult;
 import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.entities.objectives.Objective;
 import hu.bme.aut.digikaland.entities.station.StationClientPerspective;
@@ -39,7 +38,6 @@ import hu.bme.aut.digikaland.ui.client.fragments.ClientStatusFragment;
 import hu.bme.aut.digikaland.ui.common.activities.MapsActivity;
 import hu.bme.aut.digikaland.ui.common.activities.SplashActivity;
 import hu.bme.aut.digikaland.ui.common.fragments.ResultsFragment;
-import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
 public class ClientMainActivity extends AppCompatActivity implements ClientActualFragment.ClientActualMainListener, ClientObjectiveFragment.ClientActiveObjectiveListener,
         ResultsFragment.ResultsFragmentListener, ClientEngine.CommunicationInterface, ResultsEngine.CommunicationInterface, ContactsEngine.CommunicationInterface,

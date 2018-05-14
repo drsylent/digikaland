@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
+import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
 import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.entities.Location;
 import hu.bme.aut.digikaland.entities.Team;

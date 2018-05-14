@@ -11,7 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import java.util.ArrayList;
 import hu.bme.aut.digikaland.R;
-import hu.bme.aut.digikaland.dblogic.ErrorType;
+import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
 import hu.bme.aut.digikaland.dblogic.ObjectiveEngine;
 import hu.bme.aut.digikaland.dblogic.RacePermissionHandler;
 import hu.bme.aut.digikaland.dblogic.StationsEngine;

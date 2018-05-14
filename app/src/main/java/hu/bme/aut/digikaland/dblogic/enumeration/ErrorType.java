@@ -1,4 +1,4 @@
-package hu.bme.aut.digikaland.dblogic;
+package hu.bme.aut.digikaland.dblogic.enumeration;
 
 public enum ErrorType {
     NoContact,

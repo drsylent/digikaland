@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.dblogic.CodeHandler;
-import hu.bme.aut.digikaland.dblogic.ErrorType;
+import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
 import hu.bme.aut.digikaland.dblogic.RaceNameGetter;
 import hu.bme.aut.digikaland.dblogic.RacePermissionHandler;
 import hu.bme.aut.digikaland.ui.admin.total.activities.AdminTotalMainActivity;
