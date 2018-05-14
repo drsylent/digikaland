@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import hu.bme.aut.digikaland.AdminStationEngine;
+import hu.bme.aut.digikaland.dblogic.AdminStationEngine;
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.dblogic.ErrorType;
 import hu.bme.aut.digikaland.entities.Contact;
@@ -114,6 +114,11 @@ public class AdminStationSummaryActivity extends AppCompatActivity implements Ad
     @Override
     public void adminStationError(ErrorType type) {
         showSnackBarMessage(type.getDefaultMessage());
+    }
+
+    @Override
+    public void stationTeamDataLoaded(ArrayList<StationAdminPerspective> stations) {
+
     }
 
     @Override

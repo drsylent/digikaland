@@ -10,7 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import java.util.ArrayList;
 
-import hu.bme.aut.digikaland.AdminStationEngine;
+import hu.bme.aut.digikaland.dblogic.AdminStationEngine;
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.dblogic.ErrorType;
 import hu.bme.aut.digikaland.entities.Contact;
@@ -86,6 +86,11 @@ public class AdminStationsActivity extends AppCompatActivity implements AdminSta
     @Override
     public void adminStationError(ErrorType type) {
         showSnackBarMessage(type.getDefaultMessage());
+    }
+
+    @Override
+    public void stationTeamDataLoaded(ArrayList<StationAdminPerspective> stations) {
+
     }
 
     @Override

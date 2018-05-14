@@ -1,4 +1,4 @@
-package hu.bme.aut.digikaland;
+package hu.bme.aut.digikaland.dblogic;
 
 import android.support.annotation.NonNull;
 
@@ -14,9 +14,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-import hu.bme.aut.digikaland.dblogic.ContactsEngine;
-import hu.bme.aut.digikaland.dblogic.ErrorType;
-import hu.bme.aut.digikaland.dblogic.RacePermissionHandler;
 import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.entities.Location;
 import hu.bme.aut.digikaland.entities.Team;
@@ -24,6 +21,7 @@ import hu.bme.aut.digikaland.entities.enumeration.EvaluationStatus;
 import hu.bme.aut.digikaland.entities.station.Station;
 import hu.bme.aut.digikaland.entities.station.StationAdminPerspective;
 import hu.bme.aut.digikaland.entities.station.StationAdminPerspectiveSummary;
+import hu.bme.aut.digikaland.entities.station.StationAdminPerspectiveTeam;
 
 /**
  * Created by Sylent on 2018. 05. 11..
@@ -248,8 +246,77 @@ public class AdminStationEngine {
         }
     }
 
+    private int stationSum;
+    private boolean errorFreeStationTeam = true;
+    private ArrayList<StationAdminPerspective> stationTeams = new ArrayList<>();
+
+    public void loadStationDataForTeam(final String teamId){
+        stationTeams.clear();
+        final CollectionReference stationRef = RacePermissionHandler.getInstance().getRaceReference().collection("teams")
+                .document(teamId).collection("stations");
+        stationRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    try {
+                        stationSum = task.getResult().size();
+                        int i = 0;
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            DocumentReference stationRef = document.getDocumentReference("station");
+                            Station station = new Station(stationRef.getId(), i++);
+                            loadEvaluationDataForTeam(teamId, station);
+                        }
+                    } catch (RuntimeException e){
+                        comm.adminStationError(ErrorType.DatabaseError);
+                    }
+                } else {
+                    comm.adminStationError(ErrorType.NoContact);
+                }
+            }
+        });
+    }
+
+    private void loadEvaluationDataForTeam(String teamId, final Station station){
+        RacePermissionHandler.getInstance().getRaceReference().collection("stations")
+                .document(station.id).collection("teams")
+                .whereEqualTo("reference", RacePermissionHandler.getInstance().getRaceReference().collection("teams").document(teamId))
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            if(task.getResult().getDocuments().size() != 1)
+                                errorEvaluationDataForTeam(ErrorType.DatabaseError);
+                            else{
+                                DocumentSnapshot stationData = task.getResult().getDocuments().get(0);
+                                EvaluationStatus status = EvaluationStatus.valueOf(stationData.getString("status"));
+                                stationTeamDataLoaded(new StationAdminPerspectiveTeam(station, status));
+                            }
+                        } else {
+                            errorEvaluationDataForTeam(ErrorType.NoContact);
+                        }
+                    }
+                });
+    }
+
+    private void errorEvaluationDataForTeam(ErrorType type){
+        if(errorFreeStationTeam) comm.adminStationError(type);
+        else errorFreeStationTeam = false;
+    }
+
+    private void stationTeamDataLoaded(StationAdminPerspectiveTeam station){
+        if(errorFreeStationTeam){
+            stationTeams.add(station);
+            if(stationTeams.size() == stationSum){
+                Collections.sort(stationTeams);
+                comm.stationTeamDataLoaded(stationTeams);
+            }
+        }
+    }
+
     public interface CommunicationInterface {
         void adminStationError(ErrorType type);
+        void stationTeamDataLoaded(ArrayList<StationAdminPerspective> stations);
         void allStationLoadCompleted(ArrayList<StationAdminPerspective> list);
         void stationSummaryLoaded(String stationId, Location location, ArrayList<Contact> stationAdmins);
         void allTeamStatusLoaded(ArrayList<Team> teams);

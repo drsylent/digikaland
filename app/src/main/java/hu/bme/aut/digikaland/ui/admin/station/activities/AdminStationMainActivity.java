@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
-import hu.bme.aut.digikaland.AdminStationEngine;
+import hu.bme.aut.digikaland.dblogic.AdminStationEngine;
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.dblogic.AdminEngine;
 import hu.bme.aut.digikaland.dblogic.ContactsEngineFull;
@@ -209,6 +209,11 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
     @Override
     public void adminStationError(ErrorType type) {
         showSnackBarMessage(type.getDefaultMessage());
+    }
+
+    @Override
+    public void stationTeamDataLoaded(ArrayList<StationAdminPerspective> stations) {
+
     }
 
     @Override

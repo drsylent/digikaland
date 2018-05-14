@@ -12,15 +12,20 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import hu.bme.aut.digikaland.R;
+import hu.bme.aut.digikaland.dblogic.AdminStationEngine;
 import hu.bme.aut.digikaland.dblogic.ErrorType;
 import hu.bme.aut.digikaland.dblogic.RacePermissionHandler;
 import hu.bme.aut.digikaland.dblogic.SolutionDownloadEngine;
+import hu.bme.aut.digikaland.entities.Contact;
+import hu.bme.aut.digikaland.entities.Location;
 import hu.bme.aut.digikaland.entities.Team;
 import hu.bme.aut.digikaland.entities.objectives.solutions.Solution;
+import hu.bme.aut.digikaland.entities.station.StationAdminPerspective;
 import hu.bme.aut.digikaland.ui.admin.common.fragments.AdminTeamsAdapter;
 import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
-public class AdminTeamsActivity extends AppCompatActivity implements AdminTeamsAdapter.AdminTeamsListener, SolutionDownloadEngine.CommunicationInterface {
+public class AdminTeamsActivity extends AppCompatActivity implements AdminTeamsAdapter.AdminTeamsListener, SolutionDownloadEngine.CommunicationInterface,
+            AdminStationEngine.CommunicationInterface {
     public final static String ARG_TEAMS = "teams";
     public final static String ARG_SUMMARY = "summary";
     public final static String ARG_STATIONID = "stationid";
@@ -60,15 +65,38 @@ public class AdminTeamsActivity extends AppCompatActivity implements AdminTeamsA
     @Override
     public void onTeamClicked(Team team) {
         if(summaryMode){
-            Intent i = new Intent(AdminTeamsActivity.this, AdminStationsActivity.class);
-            i.putExtra(AdminStationsActivity.ARGS_STATIONS, MockGenerator.mockAdminStationsEvaluateList());
-            i.putExtra(AdminStationsActivity.ARG_SUMMARY, false);
-            startActivity(i);
+            prepareStations(team);
         }
-        // TODO: nincs még adatfolyam
         else{
             prepareEvaluation(team);
         }
+    }
+
+    private void prepareStations(Team team){
+        AdminStationEngine.getInstance(this).loadStationDataForTeam(team.id);
+    }
+
+    @Override
+    public void adminStationError(ErrorType type) {
+        showSnackBarMessage(type.getDefaultMessage());
+    }
+
+    @Override
+    public void stationTeamDataLoaded(ArrayList<StationAdminPerspective> stations) {
+        setStations(stations);
+    }
+
+    private void setStations(ArrayList<StationAdminPerspective> stations){
+        Bundle stationData = new Bundle();
+        stationData.putSerializable(AdminStationsActivity.ARGS_STATIONS , stations);
+        goToStations(stationData);
+    }
+
+    private void goToStations(Bundle stationData){
+        Intent i = new Intent(AdminTeamsActivity.this, AdminStationsActivity.class);
+        i.putExtra(AdminStationsActivity.ARGS_STATIONS, stationData);
+        i.putExtra(AdminStationsActivity.ARG_SUMMARY, false);
+        startActivity(i);
     }
 
     private String lastTeamId;
@@ -110,5 +138,20 @@ public class AdminTeamsActivity extends AppCompatActivity implements AdminTeamsA
     // TODO: jelenleg csak placeholder megjelenítésre
     private void showSnackBarMessage(String message) {
         Snackbar.make(mainLayout, message, Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void allStationLoadCompleted(ArrayList<StationAdminPerspective> list) {
+
+    }
+
+    @Override
+    public void stationSummaryLoaded(String stationId, Location location, ArrayList<Contact> stationAdmins) {
+
+    }
+
+    @Override
+    public void allTeamStatusLoaded(ArrayList<Team> teams) {
+
     }
 }
