@@ -73,6 +73,7 @@ public class AdminTeamsActivity extends AppCompatActivity implements AdminTeamsA
     }
 
     private void prepareStations(Team team){
+        lastTeamId = team.id;
         AdminStationEngine.getInstance(this).loadStationDataForTeam(team.id);
     }
 
@@ -96,6 +97,7 @@ public class AdminTeamsActivity extends AppCompatActivity implements AdminTeamsA
         Intent i = new Intent(AdminTeamsActivity.this, AdminStationsActivity.class);
         i.putExtra(AdminStationsActivity.ARGS_STATIONS, stationData);
         i.putExtra(AdminStationsActivity.ARG_SUMMARY, false);
+        i.putExtra(AdminStationsActivity.ARG_TEAM, lastTeamId);
         startActivity(i);
     }
 
