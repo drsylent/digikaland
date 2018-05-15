@@ -31,7 +31,11 @@ import hu.bme.aut.digikaland.dblogic.ResultsEngine;
 import hu.bme.aut.digikaland.dblogic.StationsEngine;
 import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.entities.objectives.Objective;
+import hu.bme.aut.digikaland.entities.station.Station;
+import hu.bme.aut.digikaland.entities.station.StationAdminPerspective;
+import hu.bme.aut.digikaland.entities.station.StationAdminPerspectiveSummary;
 import hu.bme.aut.digikaland.entities.station.StationClientPerspective;
+import hu.bme.aut.digikaland.entities.station.StationMapData;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientActualFragment;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientObjectiveFragment;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientStatusFragment;
@@ -389,16 +393,16 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
 
     void goToMap(GeoPoint geo){
         Intent i = new Intent(ClientMainActivity.this, MapsActivity.class);
+        ArrayList<StationMapData> stations = new ArrayList<>();
+        StationMapData data = new StationMapData(new Station(0,0), geo);
+        data.setSpecialName("Következő állomás");
+        stations.add(data);
         Bundle locationData = new Bundle();
-//        double latitudes[] = { geo.getLatitude() };
-//        double longitudes[] = { geo.getLongitude() };
-//        ArrayList<String> names = new ArrayList<>();
-//        names.add("Következő állomás");
-//        locationData.putStringArrayList(MapsActivity.MARKER_NAMES, names);
-//        locationData.putDoubleArray(MapsActivity.ARGS_LATITUDE, latitudes);
-//        locationData.putDoubleArray(MapsActivity.ARGS_LONGITUDE, longitudes);
-//        i.putExtra(MapsActivity.MARKER_LOCATIONS, locationData);
-//        startActivity(i);
+        locationData.putSerializable(MapsActivity.MARKER_LOCATIONS, stations);
+        locationData.putBoolean(MapsActivity.MARKER_INTERACTIVITY, false);
+        locationData.putInt(MapsActivity.MARKER_SPECIAL, 0);
+        i.putExtra(MapsActivity.MARKER_LOCATIONS, locationData);
+        startActivity(i);
     }
 
     @Override
