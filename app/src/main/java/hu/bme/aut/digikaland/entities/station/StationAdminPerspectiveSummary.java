@@ -9,12 +9,14 @@ import hu.bme.aut.digikaland.entities.EvaluationStatistics;
  */
 
 public class StationAdminPerspectiveSummary extends StationAdminPerspective {
-    public GeoPoint location;
+    public double latitude;
+    public double longitude;
     public EvaluationStatistics statistics;
 
     public StationAdminPerspectiveSummary(Station s, EvaluationStatistics stats, GeoPoint l){
         station = s;
         statistics = stats;
-        location = l;
+        latitude = l.getLatitude();
+        longitude = l.getLongitude();
     }
 }

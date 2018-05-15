@@ -21,10 +21,10 @@ public class StationMapData implements Serializable{
             return station.id + ". állomás";
         else return specialName;
     }
-    public StationMapData(Station s, GeoPoint l, EvaluationStatistics stats){
+    public StationMapData(Station s, double lat, double lon, EvaluationStatistics stats){
         station = s;
-        latitude = l.getLatitude();
-        longitude = l.getLongitude();
+        latitude = lat;
+        longitude = lon;
         statistics = stats;
     }
     public void setSpecialName(String name){
