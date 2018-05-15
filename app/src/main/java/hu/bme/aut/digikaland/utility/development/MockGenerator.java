@@ -71,40 +71,4 @@ public class MockGenerator {
             }
         }).create();
     }
-
-    public static Bundle mockMapData(){
-        Bundle locationData = new Bundle();
-//        double latitudes[] = {47.473372, 52.546739, 46.538830 };
-//        double longitudes[] = {19.059731, 13.218779, 24.558987 };
-//        locationData.putDoubleArray(MapsActivity.ARGS_LATITUDE, latitudes);
-//        locationData.putDoubleArray(MapsActivity.ARGS_LONGITUDE, longitudes);
-        return locationData;
-    }
-
-    public static Bundle mockMapBigData(){
-        Bundle locationData = new Bundle();
-//        double latitudes[] = {47.473372, 47.47338, 52.546739, 46.538830 };
-//        double longitudes[] = {19.059731, 19.06, 13.218779, 24.558987 };
-//        ArrayList<Integer> ids = new ArrayList<>();
-//        for(int i = 0; i < 4; i++) ids.add(i);
-//        locationData.putIntegerArrayList(MapsActivity.MARKER_IDS, ids);
-//        locationData.putDoubleArray(MapsActivity.ARGS_LATITUDE, latitudes);
-//        locationData.putDoubleArray(MapsActivity.ARGS_LONGITUDE, longitudes);
-//        ArrayList<String> names = new ArrayList<>();
-//        names.add("BME1");
-//        names.add("BME2");
-//        names.add("Berlin");
-//        names.add("Targu Mures");
-//        locationData.putStringArrayList(MapsActivity.MARKER_NAMES, names);
-//        locationData.putInt(MapsActivity.MARKER_SPECIAL, 1);
-        return locationData;
-    }
-
-    public static Intent adminStationSummaryGenerator(Intent placeData){
-        placeData.putExtra(AdminStationSummaryActivity.ARG_STATUS, new EvaluationStatistics(1, 2, 3));
-        placeData.putExtra(AdminStationSummaryActivity.ARG_LOCATION, new Location("Teszt helyszín", "Ami valahol van"));
-        placeData.putExtra(AdminStationSummaryActivity.ARG_STATIONID, 8);
-        placeData.putExtra(AdminStationSummaryActivity.ARG_CONTACT, new Contact("Illés Ilona", "+23 23 232 2323"));
-        return placeData;
-    }
 }
