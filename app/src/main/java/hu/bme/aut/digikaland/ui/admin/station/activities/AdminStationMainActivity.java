@@ -33,12 +33,15 @@ import hu.bme.aut.digikaland.entities.Team;
 import hu.bme.aut.digikaland.entities.objectives.Objective;
 import hu.bme.aut.digikaland.entities.objectives.solutions.Solution;
 import hu.bme.aut.digikaland.entities.station.StationAdminPerspective;
+import hu.bme.aut.digikaland.entities.station.StationAdminPerspectiveSummary;
+import hu.bme.aut.digikaland.entities.station.StationMapData;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminEvaluateActivity;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminHelpActivity;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminStationsActivity;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminTeamsActivity;
 import hu.bme.aut.digikaland.ui.admin.common.fragments.AdminRaceStarterFragment;
 import hu.bme.aut.digikaland.ui.admin.station.fragments.AdminStationActualFragment;
+import hu.bme.aut.digikaland.ui.admin.total.activities.AdminTotalMainActivity;
 import hu.bme.aut.digikaland.ui.client.activities.ClientObjectiveActivity;
 import hu.bme.aut.digikaland.ui.common.activities.MapsActivity;
 import hu.bme.aut.digikaland.ui.common.activities.SplashActivity;
@@ -74,7 +77,7 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
                 drawerLayout.closeDrawers();
                 switch(item.getItemId()){
                     case R.id.adminMap:
-                        startMap();
+                        prepareMap();
                         break;
                     case R.id.adminStations:
                         prepareStations();
@@ -96,6 +99,7 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
     }
 
     private void prepareStations() {
+        loadStationsForMap = false;
         AdminStationEngine.getInstance(this).loadStationDatas(db.getTeamSum());
     }
 
@@ -208,7 +212,8 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
 
     @Override
     public void allStationLoadCompleted(ArrayList<StationAdminPerspective> list) {
-        setStations(list);
+        if(loadStationsForMap) setMap(list);
+        else setStations(list);
     }
 
     @Override
@@ -282,12 +287,36 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
         startActivity(i);
     }
 
+    private boolean loadStationsForMap;
 
+    private void prepareMap(){
+        loadStationsForMap = true;
+        AdminStationEngine.getInstance(this).loadStationDatas(db.getTeamSum());
+    }
+
+    private void setMap(ArrayList<StationAdminPerspective> stationPerspectives){
+        ArrayList<StationMapData> stations = new ArrayList<>();
+        int myIndex = -1;
+        for(int i = 0; i < stationPerspectives.size(); i++){
+            StationAdminPerspectiveSummary summary = (StationAdminPerspectiveSummary) stationPerspectives.get(i);
+            if(summary.station.id.equals(db.getMyStationId()))
+                myIndex = i;
+            stations.add(new StationMapData(summary.station, summary.location));
+        }
+        Bundle locationData = new Bundle();
+        locationData.putSerializable(MapsActivity.MARKER_LOCATIONS, stations);
+        locationData.putBoolean(MapsActivity.MARKER_INTERACTIVITY, true);
+        locationData.putInt(MapsActivity.MARKER_SPECIAL, myIndex);
+        goToMap(locationData);
+    }
+
+    private void goToMap(Bundle locationData){
+        Intent i = new Intent(AdminStationMainActivity.this, MapsActivity.class);
+        i.putExtra(MapsActivity.MARKER_LOCATIONS, locationData);
+        startActivity(i);
+    }
 
     private void prepareTeams(){
-//        Intent i = new Intent(AdminStationMainActivity.this, AdminTeamsActivity.class);
-//        i.putExtra(AdminTeamsActivity.ARG_TEAMS, MockGenerator.mockAdminTeamsList());
-//        startActivity(i);
         AdminStationEngine.getInstance(this).loadTeamList(db.getMyStationId());
     }
 
