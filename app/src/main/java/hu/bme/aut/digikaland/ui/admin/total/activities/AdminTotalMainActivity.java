@@ -15,6 +15,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.google.firebase.firestore.GeoPoint;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -31,6 +33,8 @@ import hu.bme.aut.digikaland.entities.EvaluationStatistics;
 import hu.bme.aut.digikaland.entities.Location;
 import hu.bme.aut.digikaland.entities.Team;
 import hu.bme.aut.digikaland.entities.station.StationAdminPerspective;
+import hu.bme.aut.digikaland.entities.station.StationAdminPerspectiveSummary;
+import hu.bme.aut.digikaland.entities.station.StationMapData;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminHelpActivity;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminStationsActivity;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminTeamsActivity;
@@ -71,7 +75,7 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
                 drawerLayout.closeDrawers();
                 switch(item.getItemId()){
                     case R.id.adminMap:
-                        startMap();
+                        prepareMap();
                         break;
                     case R.id.adminStations:
                         prepareStations();
@@ -215,19 +219,40 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
         showSnackBarMessage(type.getDefaultMessage());
     }
 
-    private void startMap(){
+    private boolean loadStationsForMap;
+
+    private void prepareMap(){
+        loadStationsForMap = true;
+        AdminStationEngine.getInstance(this).loadStationDatas(db.getTeamSum());
+    }
+
+    private void setMap(ArrayList<StationAdminPerspective> stationPerspectives){
+        ArrayList<StationMapData> stations = new ArrayList<>();
+        for(StationAdminPerspective station : stationPerspectives){
+            StationAdminPerspectiveSummary summary = (StationAdminPerspectiveSummary) station;
+            stations.add(new StationMapData(summary.station, summary.location));
+        }
+        Bundle locationData = new Bundle();
+        locationData.putSerializable(MapsActivity.MARKER_LOCATIONS, stations);
+        locationData.putBoolean(MapsActivity.MARKER_INTERACTIVITY, true);
+        goToMap(locationData);
+    }
+
+    private void goToMap(Bundle locationData){
         Intent i = new Intent(AdminTotalMainActivity.this, MapsActivity.class);
-        i.putExtra(MapsActivity.MARKER_LOCATIONS, MockGenerator.mockMapBigData());
+        i.putExtra(MapsActivity.MARKER_LOCATIONS, locationData);
         startActivity(i);
     }
 
     private void prepareStations(){
+        loadStationsForMap = false;
         AdminStationEngine.getInstance(this).loadStationDatas(db.getTeamSum());
     }
 
     @Override
     public void allStationLoadCompleted(ArrayList<StationAdminPerspective> list) {
-        setStations(list);
+        if(loadStationsForMap) setMap(list);
+        else setStations(list);
     }
 
     private void setStations(ArrayList<StationAdminPerspective> list){
@@ -242,14 +267,6 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
         i.putExtra(AdminStationsActivity.ARG_SUMMARY, true);
         startActivity(i);
     }
-
-//    private void startTeams(){
-//        // TODO: ez nem ugyanaz a csapat activity lesz! (vagy más módban fut?)
-//        Intent i = new Intent(AdminTotalMainActivity.this, AdminTeamsActivity.class);
-//        i.putExtra(AdminTeamsActivity.ARG_TEAMS, MockGenerator.mockAdminTeamsList());
-//        i.putExtra(AdminTeamsActivity.ARG_SUMMARY, true);
-//        startActivity(i);
-//    }
 
     private void prepareTeams(){
         db.loadTeamList();
@@ -298,12 +315,6 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         showSnackBarMessage(getResources().getString(R.string.refresh));
-//        MockGenerator.adminStationCycleStep();
-//        if(MockGenerator.adminStationIsResultsActive()) setResults();
-//        else{
-//            if(state == ContentState.Actual) fragment.refreshAllData();
-//            else goToActual();
-//        }
         db.loadState();
         return super.onOptionsItemSelected(item);
     }

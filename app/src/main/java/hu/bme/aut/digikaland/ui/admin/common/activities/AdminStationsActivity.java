@@ -113,7 +113,7 @@ public class AdminStationsActivity extends AppCompatActivity implements AdminSta
 
     private void prepareStationSummary(StationAdminPerspective item){
         StationAdminPerspectiveSummary summary = (StationAdminPerspectiveSummary) item;
-        statistics = new EvaluationStatistics(summary.evaluated, summary.done, summary.sum);
+        statistics = summary.statistics;
         AdminStationEngine.getInstance(this).loadStationData(item.station.id);
     }
 

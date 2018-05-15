@@ -9,9 +9,10 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import hu.bme.aut.digikaland.R;
-import hu.bme.aut.digikaland.entities.station.StationAdminPerspectiveTeam;
+import hu.bme.aut.digikaland.entities.EvaluationStatistics;
 import hu.bme.aut.digikaland.entities.station.StationAdminPerspective;
 import hu.bme.aut.digikaland.entities.station.StationAdminPerspectiveSummary;
+import hu.bme.aut.digikaland.entities.station.StationAdminPerspectiveTeam;
 import hu.bme.aut.digikaland.ui.common.fragments.StationViewHolder;
 
 public class AdminStationAdapter extends RecyclerView.Adapter<StationViewHolder>  {
@@ -52,7 +53,8 @@ public class AdminStationAdapter extends RecyclerView.Adapter<StationViewHolder>
     public void onBindViewHolder(StationViewHolder holder, int position) {
         if(summaryMode){
             final StationAdminPerspectiveSummary item = (StationAdminPerspectiveSummary) stations.get(position);
-            holder.station.setText( ((Context) activity).getString(R.string.station_admin_list_item_summary, Integer.parseInt(item.station.id), item.evaluated, item.done, item.sum) );
+            EvaluationStatistics stats = item.statistics;
+            holder.station.setText( ((Context) activity).getString(R.string.station_admin_list_item_summary, Integer.parseInt(item.station.id), stats.evaluated, stats.done, stats.all) );
             holder.station.setBackgroundColor(colorNeutral);
             holder.station.setOnClickListener(new View.OnClickListener() {
                 @Override

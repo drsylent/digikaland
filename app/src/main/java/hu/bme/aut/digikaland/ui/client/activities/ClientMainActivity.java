@@ -390,15 +390,15 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     void goToMap(GeoPoint geo){
         Intent i = new Intent(ClientMainActivity.this, MapsActivity.class);
         Bundle locationData = new Bundle();
-        double latitudes[] = { geo.getLatitude() };
-        double longitudes[] = { geo.getLongitude() };
-        ArrayList<String> names = new ArrayList<>();
-        names.add("Következő állomás");
-        locationData.putStringArrayList(MapsActivity.MARKER_NAMES, names);
-        locationData.putDoubleArray(MapsActivity.ARGS_LATITUDE, latitudes);
-        locationData.putDoubleArray(MapsActivity.ARGS_LONGITUDE, longitudes);
-        i.putExtra(MapsActivity.MARKER_LOCATIONS, locationData);
-        startActivity(i);
+//        double latitudes[] = { geo.getLatitude() };
+//        double longitudes[] = { geo.getLongitude() };
+//        ArrayList<String> names = new ArrayList<>();
+//        names.add("Következő állomás");
+//        locationData.putStringArrayList(MapsActivity.MARKER_NAMES, names);
+//        locationData.putDoubleArray(MapsActivity.ARGS_LATITUDE, latitudes);
+//        locationData.putDoubleArray(MapsActivity.ARGS_LONGITUDE, longitudes);
+//        i.putExtra(MapsActivity.MARKER_LOCATIONS, locationData);
+//        startActivity(i);
     }
 
     @Override

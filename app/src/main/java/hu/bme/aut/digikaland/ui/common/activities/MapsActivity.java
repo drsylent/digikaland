@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import hu.bme.aut.digikaland.R;
+import hu.bme.aut.digikaland.entities.station.StationMapData;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminStationSummaryActivity;
 import hu.bme.aut.digikaland.utility.development.MockGenerator;
 import permissions.dispatcher.NeedsPermission;
@@ -32,20 +33,17 @@ import permissions.dispatcher.RuntimePermissions;
 @RuntimePermissions
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    public static final String ARGS_LATITUDE = "latitude";
-    public static final String ARGS_LONGITUDE = "longitude";
     public static final String MARKER_LOCATIONS = "markerlocations";
     public static final String MARKER_SPECIAL = "indexofspecial";
-    public static final String MARKER_NAMES = "markernames";
-    // wut is dis
-    public static final String MARKER_IDS = "markerids";
+    public static final String MARKER_INTERACTIVITY = "interactivity";
 
     private GoogleMap mMap;
     private final LatLng bme = new LatLng(47.473372, 19.059731);
-    private ArrayList<LatLng> coordinates = new ArrayList<>();
-    int specialindex;
-    private ArrayList<String> markerNames = null;
-    private ArrayList<Integer> markerIds = null;
+    //private ArrayList<LatLng> coordinates = new ArrayList<>();
+    private ArrayList<StationMapData> stations;
+    private int specialindex;
+//    private ArrayList<String> markerNames = null;
+//    private ArrayList<Integer> markerIds = null;
     private boolean interactive = false;
     private boolean newactivity;
 
@@ -54,16 +52,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         newactivity = savedInstanceState == null;
         Bundle starter = getIntent().getBundleExtra(MARKER_LOCATIONS);
-        double latitudes[] = starter.getDoubleArray(ARGS_LATITUDE);
-        double longitudes[] = starter.getDoubleArray(ARGS_LONGITUDE);
-        markerNames = starter.getStringArrayList(MARKER_NAMES);
-        markerIds = starter.getIntegerArrayList(MARKER_IDS);
-        if(markerIds != null) interactive = true;
-        if(latitudes != null && longitudes != null)
-        for(int i = 0; i < latitudes.length; i++){
-            coordinates.add(new LatLng(latitudes[i], longitudes[i]));
-        }
-        specialindex = starter.getInt(MARKER_SPECIAL);
+        stations = (ArrayList<StationMapData>) starter.getSerializable(MARKER_LOCATIONS);
+//        double latitudes[] = starter.getDoubleArray(ARGS_LATITUDE);
+//        double longitudes[] = starter.getDoubleArray(ARGS_LONGITUDE);
+//        markerNames = starter.getStringArrayList(MARKER_NAMES);
+//        markerIds = starter.getIntegerArrayList(MARKER_IDS);
+//        if(markerIds != null) interactive = true;
+//        if(latitudes != null && longitudes != null)
+//        for(int i = 0; i < latitudes.length; i++){
+//            coordinates.add(new LatLng(latitudes[i], longitudes[i]));
+//        }
+        interactive = starter.getBoolean(MARKER_INTERACTIVITY, false);
+        specialindex = starter.getInt(MARKER_SPECIAL, -1);
         setContentView(R.layout.activity_maps);
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -89,9 +89,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public boolean onMarkerClick(Marker marker) {
                 if(interactive){
-                    int id = (int) marker.getTag();
+                    String  id = (String) marker.getTag();
                     // TODO: megfelelő állomás összesítő activityre ugrani
-                    Log.e("ID AMIRE UGRANI KELL", Integer.toString(id));
+                    Log.e("ID AMIRE UGRANI KELL", id);
                     Intent i = new Intent(MapsActivity.this, AdminStationSummaryActivity.class);
                     startActivity(MockGenerator.adminStationSummaryGenerator(i));
                 }
@@ -99,16 +99,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 return false;
             }
         });
-        for(int i = 0; i < coordinates.size(); i++){
+        for(int i = 0; i < stations.size(); i++){
+            StationMapData station = stations.get(i);
             MarkerOptions options = new MarkerOptions();
-            String name = markerNames == null ? "Bundle test" : markerNames.get(i);
-            options.position(coordinates.get(i)).title(name);
+            options.position(station.getLocation()).title(station.getStationName());
             if(i == specialindex) {
                 options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
                 options.zIndex(1.0f);
             }
-            int id = markerIds == null ? 0 : markerIds.get(i);
-            mMap.addMarker(options).setTag(id);
+            mMap.addMarker(options).setTag(station.station.id);
         }
         mMap.setMinZoomPreference(13.0f);
         MapsActivityPermissionsDispatcher.startupWithPermissionCheck(this);

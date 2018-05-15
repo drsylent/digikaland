@@ -7,6 +7,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -16,6 +17,7 @@ import java.util.HashMap;
 
 import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
 import hu.bme.aut.digikaland.entities.Contact;
+import hu.bme.aut.digikaland.entities.EvaluationStatistics;
 import hu.bme.aut.digikaland.entities.Location;
 import hu.bme.aut.digikaland.entities.Team;
 import hu.bme.aut.digikaland.entities.enumeration.EvaluationStatus;
@@ -58,7 +60,8 @@ public class AdminStationEngine {
                         for (QueryDocumentSnapshot stationDoc : task.getResult()) {
                             String id = stationDoc.getId();
                             Station station = new Station(id, stationNumber++);
-                            loadEvaluationDatas(station);
+                            GeoPoint point = stationDoc.getGeoPoint("geodata");
+                            loadEvaluationDatas(station, point);
                         }
                     } catch (RuntimeException e) {
                         comm.adminStationError(ErrorType.DatabaseError);
@@ -70,7 +73,7 @@ public class AdminStationEngine {
         });
     }
 
-    private void loadEvaluationDatas(final Station station){
+    private void loadEvaluationDatas(final Station station, final GeoPoint point){
         final CollectionReference stationRef = RacePermissionHandler.getInstance().getRaceReference().collection("stations")
                 .document(station.id).collection("teams");
         stationRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -87,7 +90,8 @@ public class AdminStationEngine {
                                 case Evaluated: done++; evaluated++; break;
                             }
                         }
-                        stationLoaded(new StationAdminPerspectiveSummary(station, evaluated, done, teamSum));
+                        EvaluationStatistics stats = new EvaluationStatistics(evaluated, done, teamSum);
+                        stationLoaded(new StationAdminPerspectiveSummary(station, stats, point));
                     } catch (RuntimeException e){
                         comm.adminStationError(ErrorType.DatabaseError);
                     }

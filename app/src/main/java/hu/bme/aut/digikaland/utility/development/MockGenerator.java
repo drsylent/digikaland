@@ -7,42 +7,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
-import hu.bme.aut.digikaland.entities.station.StationAdminPerspectiveTeam;
 import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.entities.EvaluationStatistics;
 import hu.bme.aut.digikaland.entities.Location;
-import hu.bme.aut.digikaland.entities.station.Station;
-import hu.bme.aut.digikaland.entities.station.StationAdminPerspective;
-import hu.bme.aut.digikaland.entities.station.StationAdminPerspectiveSummary;
-import hu.bme.aut.digikaland.entities.station.StationClientPerspective;
-import hu.bme.aut.digikaland.entities.Team;
-import hu.bme.aut.digikaland.entities.enumeration.EvaluationStatus;
-import hu.bme.aut.digikaland.entities.enumeration.StationStatusFromClient;
-import hu.bme.aut.digikaland.entities.objectives.CustomAnswerObjective;
-import hu.bme.aut.digikaland.entities.objectives.MultipleChoiceObjective;
-import hu.bme.aut.digikaland.entities.objectives.Objective;
-import hu.bme.aut.digikaland.entities.objectives.PhysicalObjective;
-import hu.bme.aut.digikaland.entities.objectives.PictureObjective;
-import hu.bme.aut.digikaland.entities.objectives.TrueFalseObjective;
-import hu.bme.aut.digikaland.entities.objectives.solutions.CustomAnswerSolution;
-import hu.bme.aut.digikaland.entities.objectives.solutions.MultipleChoiceSolution;
-import hu.bme.aut.digikaland.entities.objectives.solutions.PhysicalSolution;
-import hu.bme.aut.digikaland.entities.objectives.solutions.PictureSolution;
-import hu.bme.aut.digikaland.entities.objectives.solutions.Solution;
-import hu.bme.aut.digikaland.entities.objectives.solutions.TrueFalseSolution;
-import hu.bme.aut.digikaland.ui.admin.common.activities.AdminEvaluateActivity;
-import hu.bme.aut.digikaland.ui.admin.common.activities.AdminHelpActivity;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminStationSummaryActivity;
-import hu.bme.aut.digikaland.ui.admin.common.activities.AdminStationsActivity;
-import hu.bme.aut.digikaland.ui.admin.common.activities.AdminTeamsActivity;
-import hu.bme.aut.digikaland.ui.client.activities.ClientHelpActivity;
-import hu.bme.aut.digikaland.ui.client.activities.ClientStationsActivity;
-import hu.bme.aut.digikaland.ui.client.fragments.ClientActualFragment;
-import hu.bme.aut.digikaland.ui.client.fragments.ClientStatusFragment;
 import hu.bme.aut.digikaland.ui.common.activities.MapsActivity;
 
 public class MockGenerator {
@@ -105,29 +74,29 @@ public class MockGenerator {
 
     public static Bundle mockMapData(){
         Bundle locationData = new Bundle();
-        double latitudes[] = {47.473372, 52.546739, 46.538830 };
-        double longitudes[] = {19.059731, 13.218779, 24.558987 };
-        locationData.putDoubleArray(MapsActivity.ARGS_LATITUDE, latitudes);
-        locationData.putDoubleArray(MapsActivity.ARGS_LONGITUDE, longitudes);
+//        double latitudes[] = {47.473372, 52.546739, 46.538830 };
+//        double longitudes[] = {19.059731, 13.218779, 24.558987 };
+//        locationData.putDoubleArray(MapsActivity.ARGS_LATITUDE, latitudes);
+//        locationData.putDoubleArray(MapsActivity.ARGS_LONGITUDE, longitudes);
         return locationData;
     }
 
     public static Bundle mockMapBigData(){
         Bundle locationData = new Bundle();
-        double latitudes[] = {47.473372, 47.47338, 52.546739, 46.538830 };
-        double longitudes[] = {19.059731, 19.06, 13.218779, 24.558987 };
-        ArrayList<Integer> ids = new ArrayList<>();
-        for(int i = 0; i < 4; i++) ids.add(i);
-        locationData.putIntegerArrayList(MapsActivity.MARKER_IDS, ids);
-        locationData.putDoubleArray(MapsActivity.ARGS_LATITUDE, latitudes);
-        locationData.putDoubleArray(MapsActivity.ARGS_LONGITUDE, longitudes);
-        ArrayList<String> names = new ArrayList<>();
-        names.add("BME1");
-        names.add("BME2");
-        names.add("Berlin");
-        names.add("Targu Mures");
-        locationData.putStringArrayList(MapsActivity.MARKER_NAMES, names);
-        locationData.putInt(MapsActivity.MARKER_SPECIAL, 1);
+//        double latitudes[] = {47.473372, 47.47338, 52.546739, 46.538830 };
+//        double longitudes[] = {19.059731, 19.06, 13.218779, 24.558987 };
+//        ArrayList<Integer> ids = new ArrayList<>();
+//        for(int i = 0; i < 4; i++) ids.add(i);
+//        locationData.putIntegerArrayList(MapsActivity.MARKER_IDS, ids);
+//        locationData.putDoubleArray(MapsActivity.ARGS_LATITUDE, latitudes);
+//        locationData.putDoubleArray(MapsActivity.ARGS_LONGITUDE, longitudes);
+//        ArrayList<String> names = new ArrayList<>();
+//        names.add("BME1");
+//        names.add("BME2");
+//        names.add("Berlin");
+//        names.add("Targu Mures");
+//        locationData.putStringArrayList(MapsActivity.MARKER_NAMES, names);
+//        locationData.putInt(MapsActivity.MARKER_SPECIAL, 1);
         return locationData;
     }
 

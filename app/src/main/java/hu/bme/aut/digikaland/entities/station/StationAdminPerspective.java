@@ -2,9 +2,13 @@ package hu.bme.aut.digikaland.entities.station;
 
 import android.support.annotation.NonNull;
 
+import com.google.firebase.firestore.GeoPoint;
+
 import java.io.Serializable;
 
-public abstract class StationAdminPerspective implements Serializable, Comparable<StationAdminPerspective> {
+import hu.bme.aut.digikaland.entities.EvaluationStatistics;
+
+public class StationAdminPerspective implements Serializable, Comparable<StationAdminPerspective> {
     public Station station;
 
     @Override

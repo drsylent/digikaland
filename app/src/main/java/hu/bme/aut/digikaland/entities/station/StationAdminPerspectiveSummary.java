@@ -1,18 +1,20 @@
 package hu.bme.aut.digikaland.entities.station;
 
+import com.google.firebase.firestore.GeoPoint;
+
+import hu.bme.aut.digikaland.entities.EvaluationStatistics;
+
 /**
  * Created by Sylent on 2018. 04. 04..
  */
 
 public class StationAdminPerspectiveSummary extends StationAdminPerspective {
-    public int evaluated;
-    public int done;
-    public int sum;
+    public GeoPoint location;
+    public EvaluationStatistics statistics;
 
-    public StationAdminPerspectiveSummary(Station s, int e, int d, int su){
+    public StationAdminPerspectiveSummary(Station s, EvaluationStatistics stats, GeoPoint l){
         station = s;
-        evaluated = e;
-        done = d;
-        sum = su;
+        statistics = stats;
+        location = l;
     }
 }
