@@ -1,10 +1,7 @@
 package hu.bme.aut.digikaland.dblogic;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.NonNull;
-import android.support.v4.content.FileProvider;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -16,14 +13,12 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 
 import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
 import hu.bme.aut.digikaland.dblogic.enumeration.ObjectiveType;
@@ -199,7 +194,7 @@ public class SolutionDownloadEngine {
                                             case Physical: downloadQuestionObjective(objectiveRef, type);
                                                            downloadStringAnswerSolutionData(solutionRef, type); break;
                                             case Picture: downloadPictureObjective(objectiveRef);
-                                                          downloadPictureAnswerSolutionData(solutionRef);  break;
+                                                          new PictureSolutionDownloader().downloadPictureAnswerSolutionData(solutionRef);  break;
                                         }
                                     }
                                 }catch (RuntimeException e){
@@ -353,103 +348,102 @@ public class SolutionDownloadEngine {
             });
         }
 
-        private void downloadPictureAnswerSolutionData(DocumentReference ref){
-            ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document != null && document.exists()) {
-                            try {
-                                int currentPoints = 0;
-                                if(document.contains("points")) currentPoints = document.getLong("points").intValue();
-                                int maxPoints = document.getLong("maxpoints").intValue();
-                                ArrayList<String> answer = (ArrayList<String>) document.get("answer");
-                                PictureSolution sol = new PictureSolution(currentPoints, maxPoints, answer);
-                                sol.setId(document.getId());
-                                preparePictures(sol);
-                            }catch(Exception e){
-                                loaderError(ErrorType.DatabaseError);
+        private class PictureSolutionDownloader{
+            private ArrayList<String> downloadPaths;
+            private PictureSolution solution;
+
+            private void downloadPictureAnswerSolutionData(DocumentReference ref){
+                ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document != null && document.exists()) {
+                                try {
+                                    int currentPoints = 0;
+                                    if(document.contains("points")) currentPoints = document.getLong("points").intValue();
+                                    int maxPoints = document.getLong("maxpoints").intValue();
+                                    downloadPaths = (ArrayList<String>) document.get("answer");
+                                    solution = new PictureSolution(currentPoints, maxPoints);
+                                    solution.setId(document.getId());
+                                    preparePictures();
+                                }catch(Exception e){
+                                    loaderError(ErrorType.DatabaseError);
+                                }
+                            } else {
+                                loaderError(ErrorType.RaceNotExists);
                             }
                         } else {
-                            loaderError(ErrorType.RaceNotExists);
+                            loaderError(ErrorType.NoContact);
                         }
-                    } else {
-                        loaderError(ErrorType.NoContact);
-                    }
-                }
-            });
-        }
-
-        private String fileNameGetter(String onlinePath){
-            String[] parts = onlinePath.split("/");
-            return parts[parts.length-1];
-        }
-
-        private String directoryCreator(){
-            return getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/Digikaland/downloads/";
-        }
-
-        private String filePathCreator(String fileName){
-            return directoryCreator() + fileName;
-        }
-
-        private void preparePictures(PictureSolution pictureSolution){
-            // TODO: használni cache-t, ha lehet!
-            for(String onlinePath : pictureSolution.getAnswer()) {
-                String name = fileNameGetter(onlinePath);
-                File file = new File(filePathCreator(name));
-                if(file.exists()) continue;
-                else{
-                    downloadPicture(onlinePath, pictureSolution);
-                }
-            }
-        }
-
-        private HashMap<String, Integer> pictureDownloadDB = new HashMap<>();
-
-        private void pictureDownloadCompleted(PictureSolution solution){
-            String solutionId = solution.getId();
-            if(pictureDownloadDB.containsKey(solutionId))
-                pictureDownloadDB.put(solutionId, pictureDownloadDB.get(solutionId)+1);
-            else pictureDownloadDB.put(solutionId, 1);
-            if(pictureDownloadDB.get(solutionId) == solution.getAnswer().size())
-                solutionProgressMade(solution);
-        }
-// TODO: uriknak kéne lenniük file:///
-        private void downloadPicture(final String onlinePath, final PictureSolution solution){
-            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(onlinePath);
-            File storageDir = new File(directoryCreator());
-            if(!storageDir.exists()) storageDir.mkdir();
-            try {
-                //final File imageFile = new File(filePathCreator(fileNameGetter(onlinePath)));
-                String imageFileName = fileNameGetter(onlinePath).split("\\.")[0];
-//                imageFile.createNewFile();
-                final File imageFile = File.createTempFile(
-                        imageFileName,  /* prefix */
-                        ".jpg",         /* suffix */
-                        storageDir      /* directory */
-                );
-                Uri photoUri = FileProvider.getUriForFile((Context) comm,
-                        "hu.bme.aut.digikaland.fileprovider",
-                        imageFile);
-                storageReference.getFile(photoUri).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                        pictureDownloadCompleted(solution);
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        int code = ((StorageException) e).getHttpResultCode();
-                        imageFile.delete();
-                        loaderError(ErrorType.DownloadError);
                     }
                 });
-            }catch (Exception e){
-                loaderError(ErrorType.DownloadError);
             }
+
+            private String fileNameGetter(String onlinePath){
+                String[] parts = onlinePath.split("/");
+                return parts[parts.length-1];
+            }
+
+            private String directoryCreator(){
+                return getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/Digikaland/downloads/";
+            }
+
+            private String filePathCreator(String fileName){
+                return directoryCreator() + fileName;
+            }
+
+            private void preparePictures(){
+                for(String onlinePath : downloadPaths) {
+                    String name = fileNameGetter(onlinePath);
+                    File file = new File(filePathCreator(name));
+                    if(file.exists()) pictureDownloadCompleted();
+                    else{
+                        downloadPicture(onlinePath);
+                    }
+                }
+            }
+
+            private int counter = 0;
+
+            private void pictureDownloadCompleted(){
+                if(++counter == downloadPaths.size()) {
+                    ArrayList<String> filePaths = new ArrayList<>();
+                    for(String onlinePath : downloadPaths)
+                        filePaths.add(filePathCreator(fileNameGetter(onlinePath)));
+                    solution.setAnswers(filePaths);
+                    solution.uriizeFilePaths();
+                    solutionProgressMade(solution);
+                }
+            }
+
+            // TODO: engedélyt kell kérni a fájl létrehozásához
+            private void downloadPicture(final String onlinePath){
+                StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(onlinePath);
+                File storageDir = new File(directoryCreator());
+                if(!storageDir.exists()) storageDir.mkdir();
+                try {
+                    final File imageFile = new File(filePathCreator(fileNameGetter(onlinePath)));
+                    imageFile.createNewFile();
+                    storageReference.getFile(imageFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                            pictureDownloadCompleted();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            imageFile.delete();
+                            loaderError(ErrorType.DownloadError);
+                        }
+                    });
+                }catch (Exception e){
+                    loaderError(ErrorType.DownloadError);
+                }
+            }
+
         }
+
 
         private void downloadStringAnswerSolutionData(DocumentReference ref, final ObjectiveType type){
             ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

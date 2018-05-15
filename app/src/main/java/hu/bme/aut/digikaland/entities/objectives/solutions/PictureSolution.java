@@ -10,16 +10,27 @@ public class PictureSolution extends Solution {
         return answer;
     }
 
+    public void setAnswers(ArrayList<String> answer) {
+        this.answer = answer;
+    }
+
     private ArrayList<String> answer;
+
+    public void uriizeFilePaths(){
+        ArrayList<String> newanswer = new ArrayList<>();
+        for(String file : answer){
+            newanswer.add("file:///" + file);
+        }
+        answer = newanswer;
+    }
 
     public PictureSolution(PictureObjective o, int curr, int max, ArrayList<String> ans){
         super(o, curr, max);
         answer = ans;
     }
 
-    public PictureSolution(int curr, int max, ArrayList<String> ans){
+    public PictureSolution(int curr, int max){
         super(curr, max);
-        answer = ans;
     }
 
     @Override

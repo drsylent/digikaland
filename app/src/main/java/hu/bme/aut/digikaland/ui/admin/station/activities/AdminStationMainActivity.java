@@ -197,16 +197,6 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
     }
 
     @Override
-    public void solutionsLoaded(ArrayList<Solution> solutions, int penalty, Date uploadTime, String teamName) {
-        setEvaluator(solutions, penalty, uploadTime, teamName);
-    }
-
-    @Override
-    public void solutionsLoadError(ErrorType type) {
-        showSnackBarMessage(type.getDefaultMessage());
-    }
-
-    @Override
     public void adminStationError(ErrorType type) {
         showSnackBarMessage(type.getDefaultMessage());
     }
@@ -382,6 +372,16 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
         else showSnackBarMessage("Nincs kiértékelésre váró csapat!");
     }
 
+    @Override
+    public void solutionsLoaded(ArrayList<Solution> solutions, int penalty, Date uploadTime, String teamName) {
+        setEvaluator(solutions, penalty, uploadTime, teamName);
+    }
+
+    @Override
+    public void solutionsLoadError(ErrorType type) {
+        showSnackBarMessage(type.getDefaultMessage());
+    }
+
     private void setEvaluator(ArrayList<Solution> solutions, int penalty, Date time, String teamName){
         Intent i = new Intent(AdminStationMainActivity.this, AdminEvaluateActivity.class);
         i.putExtra(AdminEvaluateActivity.ARG_SOLUTIONS, solutions);
@@ -389,7 +389,6 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
         i.putExtra(AdminEvaluateActivity.ARG_TIME, time);
         i.putExtra(AdminEvaluateActivity.ARG_TEAM, teamName);
         i.putExtra(AdminEvaluateActivity.ARG_PENALTY, penalty);
-        // TODO: ezt lekezelni
         i.putExtra(AdminEvaluateActivity.ARG_SEND, true);
         i.putExtra(AdminEvaluateActivity.ARG_TEAMID, db.getNextEvaluateTeamId());
         goToEvaluation(i);
