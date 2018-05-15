@@ -230,7 +230,7 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
         ArrayList<StationMapData> stations = new ArrayList<>();
         for(StationAdminPerspective station : stationPerspectives){
             StationAdminPerspectiveSummary summary = (StationAdminPerspectiveSummary) station;
-            stations.add(new StationMapData(summary.station, summary.location));
+            stations.add(new StationMapData(summary.station, summary.location, summary.statistics));
         }
         Bundle locationData = new Bundle();
         locationData.putSerializable(MapsActivity.MARKER_LOCATIONS, stations);

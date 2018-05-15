@@ -30,6 +30,7 @@ import hu.bme.aut.digikaland.dblogic.RacePermissionHandler;
 import hu.bme.aut.digikaland.dblogic.ResultsEngine;
 import hu.bme.aut.digikaland.dblogic.StationsEngine;
 import hu.bme.aut.digikaland.entities.Contact;
+import hu.bme.aut.digikaland.entities.EvaluationStatistics;
 import hu.bme.aut.digikaland.entities.objectives.Objective;
 import hu.bme.aut.digikaland.entities.station.Station;
 import hu.bme.aut.digikaland.entities.station.StationAdminPerspective;
@@ -394,7 +395,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     void goToMap(GeoPoint geo){
         Intent i = new Intent(ClientMainActivity.this, MapsActivity.class);
         ArrayList<StationMapData> stations = new ArrayList<>();
-        StationMapData data = new StationMapData(new Station(0,0), geo);
+        StationMapData data = new StationMapData(new Station(0,0), geo, new EvaluationStatistics(0,0,0));
         data.setSpecialName("Következő állomás");
         stations.add(data);
         Bundle locationData = new Bundle();

@@ -301,7 +301,7 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
             StationAdminPerspectiveSummary summary = (StationAdminPerspectiveSummary) stationPerspectives.get(i);
             if(summary.station.id.equals(db.getMyStationId()))
                 myIndex = i;
-            stations.add(new StationMapData(summary.station, summary.location));
+            stations.add(new StationMapData(summary.station, summary.location, summary.statistics));
         }
         Bundle locationData = new Bundle();
         locationData.putSerializable(MapsActivity.MARKER_LOCATIONS, stations);

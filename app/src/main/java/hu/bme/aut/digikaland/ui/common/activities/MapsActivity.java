@@ -4,9 +4,12 @@ import android.Manifest;
 import android.content.Intent;
 import android.location.Location;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -23,15 +26,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import hu.bme.aut.digikaland.R;
+import hu.bme.aut.digikaland.dblogic.AdminStationEngine;
+import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
+import hu.bme.aut.digikaland.entities.Contact;
+import hu.bme.aut.digikaland.entities.EvaluationStatistics;
+import hu.bme.aut.digikaland.entities.Team;
+import hu.bme.aut.digikaland.entities.station.StationAdminPerspective;
+import hu.bme.aut.digikaland.entities.station.StationAdminPerspectiveSummary;
 import hu.bme.aut.digikaland.entities.station.StationMapData;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminStationSummaryActivity;
+import hu.bme.aut.digikaland.ui.admin.common.activities.AdminStationsActivity;
 import hu.bme.aut.digikaland.utility.development.MockGenerator;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnPermissionDenied;
 import permissions.dispatcher.RuntimePermissions;
 
 @RuntimePermissions
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, AdminStationEngine.CommunicationInterface {
 
     public static final String MARKER_LOCATIONS = "markerlocations";
     public static final String MARKER_SPECIAL = "indexofspecial";
@@ -39,13 +50,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     private final LatLng bme = new LatLng(47.473372, 19.059731);
-    //private ArrayList<LatLng> coordinates = new ArrayList<>();
     private ArrayList<StationMapData> stations;
     private int specialindex;
-//    private ArrayList<String> markerNames = null;
-//    private ArrayList<Integer> markerIds = null;
     private boolean interactive = false;
     private boolean newactivity;
+    private View mainLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,15 +62,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         newactivity = savedInstanceState == null;
         Bundle starter = getIntent().getBundleExtra(MARKER_LOCATIONS);
         stations = (ArrayList<StationMapData>) starter.getSerializable(MARKER_LOCATIONS);
-//        double latitudes[] = starter.getDoubleArray(ARGS_LATITUDE);
-//        double longitudes[] = starter.getDoubleArray(ARGS_LONGITUDE);
-//        markerNames = starter.getStringArrayList(MARKER_NAMES);
-//        markerIds = starter.getIntegerArrayList(MARKER_IDS);
-//        if(markerIds != null) interactive = true;
-//        if(latitudes != null && longitudes != null)
-//        for(int i = 0; i < latitudes.length; i++){
-//            coordinates.add(new LatLng(latitudes[i], longitudes[i]));
-//        }
         interactive = starter.getBoolean(MARKER_INTERACTIVITY, false);
         specialindex = starter.getInt(MARKER_SPECIAL, -1);
         setContentView(R.layout.activity_maps);
@@ -69,6 +69,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
+        mainLayout = findViewById(R.id.map);
         mapFragment.getMapAsync(this);
     }
 
@@ -89,13 +90,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public boolean onMarkerClick(Marker marker) {
                 if(interactive){
-                    String  id = (String) marker.getTag();
-                    // TODO: megfelelő állomás összesítő activityre ugrani
-                    Log.e("ID AMIRE UGRANI KELL", id);
-                    Intent i = new Intent(MapsActivity.this, AdminStationSummaryActivity.class);
-                    startActivity(MockGenerator.adminStationSummaryGenerator(i));
+                    prepareStationSummary((StationMapData) marker.getTag());
                 }
-                else Log.e("NINCS HOVA UGRANI", "NINCS");
                 return false;
             }
         });
@@ -107,11 +103,42 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
                 options.zIndex(1.0f);
             }
-            mMap.addMarker(options).setTag(station.station.id);
+            mMap.addMarker(options).setTag(station);
         }
         mMap.setMinZoomPreference(13.0f);
         MapsActivityPermissionsDispatcher.startupWithPermissionCheck(this);
     }
+
+    private EvaluationStatistics statistics;
+
+    private void prepareStationSummary(StationMapData item){
+        statistics = item.statistics;
+        AdminStationEngine.getInstance(this).loadStationData(item.station.id);
+    }
+
+    @Override
+    public void stationSummaryLoaded(String stationId, hu.bme.aut.digikaland.entities.Location location, ArrayList<Contact> stationAdmins) {
+        setStationSummary(stationId, location, stationAdmins);
+    }
+
+    @Override
+    public void adminStationError(ErrorType type) {
+        showSnackBarMessage(type.getDefaultMessage());
+    }
+
+    private void setStationSummary(String stationId, hu.bme.aut.digikaland.entities.Location location, ArrayList<Contact> stationAdmins){
+        Intent placeData = new Intent(MapsActivity.this, AdminStationSummaryActivity.class);
+        placeData.putExtra(AdminStationSummaryActivity.ARG_STATUS, statistics);
+        placeData.putExtra(AdminStationSummaryActivity.ARG_LOCATION, location);
+        placeData.putExtra(AdminStationSummaryActivity.ARG_STATIONID, Integer.parseInt(stationId));
+        placeData.putExtra(AdminStationSummaryActivity.ARG_CONTACT, stationAdmins);
+        goToStationSummary(placeData);
+    }
+
+    private void goToStationSummary(Intent i){
+        startActivity(i);
+    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -183,4 +210,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
     }
 
+    // TODO: jelenleg csak placeholder megjelenítésre
+    private void showSnackBarMessage(String message) {
+        Snackbar.make(mainLayout, message, Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void stationTeamDataLoaded(ArrayList<StationAdminPerspective> stations) {
+
+    }
+
+    @Override
+    public void allStationLoadCompleted(ArrayList<StationAdminPerspective> list) {
+
+    }
+
+    @Override
+    public void allTeamStatusLoaded(ArrayList<Team> teams) {
+
+    }
 }
