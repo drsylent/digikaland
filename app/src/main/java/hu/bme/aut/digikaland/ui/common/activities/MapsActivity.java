@@ -110,9 +110,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private EvaluationStatistics statistics;
+    private LatLng loc;
 
     private void prepareStationSummary(StationMapData item){
         statistics = item.statistics;
+        loc = item.getLocation();
         AdminStationEngine.getInstance(this).loadStationData(item.station.id);
     }
 
@@ -132,6 +134,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         placeData.putExtra(AdminStationSummaryActivity.ARG_LOCATION, location);
         placeData.putExtra(AdminStationSummaryActivity.ARG_STATIONID, Integer.parseInt(stationId));
         placeData.putExtra(AdminStationSummaryActivity.ARG_CONTACT, stationAdmins);
+        placeData.putExtra(AdminStationSummaryActivity.ARG_LATITUDE, loc.latitude);
+        placeData.putExtra(AdminStationSummaryActivity.ARG_LONGITUDE, loc.longitude);
         goToStationSummary(placeData);
     }
 

@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.firebase.firestore.GeoPoint;
+
 import java.util.ArrayList;
 
 import hu.bme.aut.digikaland.dblogic.AdminStationEngine;
@@ -20,7 +22,10 @@ import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.entities.EvaluationStatistics;
 import hu.bme.aut.digikaland.entities.Location;
 import hu.bme.aut.digikaland.entities.Team;
+import hu.bme.aut.digikaland.entities.station.Station;
 import hu.bme.aut.digikaland.entities.station.StationAdminPerspective;
+import hu.bme.aut.digikaland.entities.station.StationMapData;
+import hu.bme.aut.digikaland.ui.client.activities.ClientMainActivity;
 import hu.bme.aut.digikaland.ui.common.activities.MapsActivity;
 import hu.bme.aut.digikaland.ui.common.fragments.ContactFragment;
 import hu.bme.aut.digikaland.ui.common.fragments.TextFragment;
@@ -31,9 +36,13 @@ public class AdminStationSummaryActivity extends AppCompatActivity implements Ad
     public final static String ARG_LOCATION = "loc";
     public final static String ARG_CONTACT = "contact";
     public final static String ARG_STATUS = "status";
+    public final static String ARG_LATITUDE = "latitude";
+    public final static String ARG_LONGITUDE = "longitude";
 
     private LinearLayout mainLayout;
     private int stationId;
+    private double lat;
+    private double lon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +58,8 @@ public class AdminStationSummaryActivity extends AppCompatActivity implements Ad
         Location location = (Location) getIntent().getSerializableExtra(ARG_LOCATION);
         ArrayList<Contact> contacts = (ArrayList<Contact>) getIntent().getSerializableExtra(ARG_CONTACT);
         EvaluationStatistics status = (EvaluationStatistics) getIntent().getSerializableExtra(ARG_STATUS);
+        lat = getIntent().getDoubleExtra(ARG_LATITUDE, 10);
+        lon = getIntent().getDoubleExtra(ARG_LONGITUDE, 10);
         TextView tvStationId = findViewById(R.id.adminStationSummaryId);
         tvStationId.setText(getResources().getString(R.string.station_id, stationId));
         TextView tvLocation = findViewById(R.id.adminStationSummaryLocation);
@@ -89,10 +100,16 @@ public class AdminStationSummaryActivity extends AppCompatActivity implements Ad
         });
     }
 
-    public void startMap(){
+    void startMap(){
         Intent i = new Intent(AdminStationSummaryActivity.this, MapsActivity.class);
-        // TODO: mindig a megfelelő állomásnak a helyszíne jelnjen itt meg
-        i.putExtra(MapsActivity.MARKER_LOCATIONS, MockGenerator.mockMapData());
+        ArrayList<StationMapData> stations = new ArrayList<>();
+        StationMapData data = new StationMapData(new Station(Integer.toString(stationId),0), lat, lon, new EvaluationStatistics(0,0,0));
+        stations.add(data);
+        Bundle locationData = new Bundle();
+        locationData.putSerializable(MapsActivity.MARKER_LOCATIONS, stations);
+        locationData.putBoolean(MapsActivity.MARKER_INTERACTIVITY, false);
+        locationData.putInt(MapsActivity.MARKER_SPECIAL, 0);
+        i.putExtra(MapsActivity.MARKER_LOCATIONS, locationData);
         startActivity(i);
     }
 

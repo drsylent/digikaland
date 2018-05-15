@@ -110,10 +110,14 @@ public class AdminStationsActivity extends AppCompatActivity implements AdminSta
     }
 
     private EvaluationStatistics statistics;
+    private double lastLat;
+    private double lastLon;
 
     private void prepareStationSummary(StationAdminPerspective item){
         StationAdminPerspectiveSummary summary = (StationAdminPerspectiveSummary) item;
         statistics = summary.statistics;
+        lastLat = summary.latitude;
+        lastLon = summary.longitude;
         AdminStationEngine.getInstance(this).loadStationData(item.station.id);
     }
 
@@ -153,6 +157,8 @@ public class AdminStationsActivity extends AppCompatActivity implements AdminSta
         placeData.putExtra(AdminStationSummaryActivity.ARG_LOCATION, location);
         placeData.putExtra(AdminStationSummaryActivity.ARG_STATIONID, Integer.parseInt(stationId));
         placeData.putExtra(AdminStationSummaryActivity.ARG_CONTACT, stationAdmins);
+        placeData.putExtra(AdminStationSummaryActivity.ARG_LATITUDE, lastLat);
+        placeData.putExtra(AdminStationSummaryActivity.ARG_LONGITUDE, lastLon);
         goToStationSummary(placeData);
     }
 

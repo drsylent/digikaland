@@ -271,20 +271,8 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         showSnackBarMessage(getResources().getString(R.string.refresh));
-//        MockGenerator.adminStationCycleStep();
-//        if(MockGenerator.adminStationIsResultsActive()) setResults();
-//        else{
-//            if(state == ContentState.Actual) fragment.refreshAllData();
-//            else goToActual();
-//        }
         db.loadState();
         return super.onOptionsItemSelected(item);
-    }
-
-    private void startMap(){
-        Intent i = new Intent(AdminStationMainActivity.this, MapsActivity.class);
-        i.putExtra(MapsActivity.MARKER_LOCATIONS, MockGenerator.mockMapBigData());
-        startActivity(i);
     }
 
     private boolean loadStationsForMap;
