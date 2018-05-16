@@ -89,6 +89,7 @@ public class SolutionUploadEngine {
                 StatusUpdater statusUpdater = new StatusUpdater(stationId);
                 statusUpdater.updateStationStatus();
                 statusUpdater.updateTeamStationStatus();
+                statusUpdater.updateTeamStationNumber();
             }
         }
 
@@ -234,7 +235,24 @@ public class SolutionUploadEngine {
         }
 
         private void statusUploadCompleted(){
-            if(++statusDone == 2) comm.uploadCompleted();
+            if(++statusDone == 3) comm.uploadCompleted();
+        }
+
+        private void updateTeamStationNumber(){
+            RacePermissionHandler.getInstance().getTeamReference()
+                    .update("stationnumber", ClientEngine.getInstance().getStationNumber()+1)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            statusUploadCompleted();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            comm.uploadError(ErrorType.DatabaseError);
+                        }
+                    });
         }
 
         private void updateTeamStationStatus(){

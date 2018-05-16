@@ -2,6 +2,7 @@ package hu.bme.aut.digikaland.ui.client.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -11,11 +12,18 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
@@ -48,6 +56,7 @@ import hu.bme.aut.digikaland.ui.common.activities.SplashActivity;
 import hu.bme.aut.digikaland.ui.common.activities.StartupActivity;
 import hu.bme.aut.digikaland.ui.common.fragments.NewRaceStarter;
 import hu.bme.aut.digikaland.ui.common.fragments.ResultsFragment;
+import hu.bme.aut.digikaland.utility.DistanceCalculator;
 
 public class ClientMainActivity extends AppCompatActivity implements ClientActualFragment.ClientActualMainListener, ClientObjectiveFragment.ClientActiveObjectiveListener,
         ResultsFragment.ResultsFragmentListener, ClientEngine.CommunicationInterface, ResultsEngine.CommunicationInterface, ContactsEngine.CommunicationInterface,
@@ -231,14 +240,18 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     @Override
     public void runningStateLoaded() {
         if(uiReady) {
-            Bundle runningBundle = new Bundle();
-            runningBundle.putInt(ClientActualFragment.ARG_STATION_NUMBER, db.getLastLoadedStationNumber());
-            runningBundle.putInt(ClientActualFragment.ARG_STATIONS, db.getStationSum());
-            runningBundle.putSerializable(ClientActualFragment.ARG_LOCATION, db.getLastLoadedLocation());
-            runningBundle.putSerializable(ClientActualFragment.ARG_TIME, db.getLastLoadedStartingTime());
-            goToActual(runningBundle);
+            loadLocation();
         }
         else postLoad = true;
+    }
+
+    private void loadRunningUi(){
+        Bundle runningBundle = new Bundle();
+        runningBundle.putInt(ClientActualFragment.ARG_STATION_NUMBER, db.getLastLoadedStationNumber());
+        runningBundle.putInt(ClientActualFragment.ARG_STATIONS, db.getStationSum());
+        runningBundle.putSerializable(ClientActualFragment.ARG_LOCATION, db.getLastLoadedLocation());
+        runningBundle.putSerializable(ClientActualFragment.ARG_TIME, db.getLastLoadedStartingTime());
+        goToActual(runningBundle);
     }
 
     @Override
@@ -465,5 +478,48 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
 
     private void prepareNewRace(){
         NewRaceStarter.getNewRaceDialog(this).show();
+    }
+
+    private double currentLatitude;
+    private double currentLongitude;
+
+    // TODO: Permission
+    private void loadLocation(){
+        FusedLocationProviderClient locationProvider = LocationServices.getFusedLocationProviderClient(this);
+        try {
+            Task locationResult = locationProvider.getLastLocation();
+            locationResult.addOnCompleteListener(this, new OnCompleteListener<Location>() {
+                @Override
+                public void onComplete(@NonNull Task<Location> task) {
+                    if (task.isSuccessful()) {
+                        // Set the map's camera position to the current location of the device.
+                        Location location = task.getResult();
+                        currentLatitude = location.getLatitude();
+                        currentLongitude = location.getLongitude();
+                        checkDistance();
+                    } else {
+                        Log.e("locationerror", "Exception: %s", task.getException());
+                        showSnackBarMessage("Nem állapítható meg a jelenlegi helyzeted");
+                    }
+                }
+            });
+        } catch (SecurityException e)  {
+            Log.e("Exception: %s", e.getMessage());
+        }
+
+    }
+
+    private void checkDistance(){
+        GeoPoint station = db.getLastLoadedGeoPoint();
+        double distance = 100.0;
+        if(distance > DistanceCalculator.calculate(currentLatitude, currentLongitude, station.getLatitude(), station.getLongitude())) {
+            db.startStation();
+        }
+        else loadRunningUi();
+    }
+
+    @Override
+    public void stationStarted() {
+        db.loadState();
     }
 }

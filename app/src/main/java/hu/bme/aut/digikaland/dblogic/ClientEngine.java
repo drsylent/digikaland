@@ -3,6 +3,8 @@ package hu.bme.aut.digikaland.dblogic;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -10,8 +12,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.ServerTimestamp;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
 import hu.bme.aut.digikaland.dblogic.enumeration.LoadResult;
@@ -24,6 +29,10 @@ import hu.bme.aut.digikaland.entities.Location;
 
 public class ClientEngine {
     private static final ClientEngine ourInstance = new ClientEngine();
+
+    static ClientEngine getInstance(){
+        return ourInstance;
+    }
 
     public static ClientEngine getInstance(CommunicationInterface c) {
         ourInstance.comm = c;
@@ -304,6 +313,10 @@ public class ClientEngine {
         return stationSum;
     }
 
+    public int getStationNumber() {
+        return stationNumber;
+    }
+
     private int stationNumber = -1;
 
     private int completedStations = -1;
@@ -359,6 +372,52 @@ public class ClientEngine {
         return geoPoint;
     }
 
+    @ServerTimestamp
+    private Date serverTime = new Date();
+
+    public void startStation(){
+        final DocumentReference stationRef = RacePermissionHandler.getInstance().getRaceReference().collection("stations").document(stationId);
+        stationRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null && document.exists()) {
+                        try {
+                            uploadStationStart(document.getLong("time"));
+                        } catch (RuntimeException e){
+                            comm.clientError(ErrorType.DatabaseError);
+                        }
+                    } else {
+                        comm.clientError(ErrorType.RaceNotExists);
+                    }
+                } else {
+                    comm.clientError(ErrorType.NoContact);
+                }
+            }
+        });
+    }
+
+    private void uploadStationStart(long secondsLimit){
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(serverTime);
+        calendar.add(Calendar.SECOND, Long.valueOf(secondsLimit).intValue());
+        RacePermissionHandler.getInstance().getTeamReference().collection("stations").document(Integer.toString(stationNumber))
+                .update("timeend", calendar.getTime())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        comm.stationStarted();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        comm.clientError(ErrorType.DatabaseError);
+                    }
+                });
+    }
+
     public interface CommunicationInterface{
         void clientError(ErrorType type);
         void startingStateLoaded();
@@ -367,5 +426,6 @@ public class ClientEngine {
         void endingStateLoaded();
         void teamNameLoaded();
         void completedStationsLoaded();
+        void stationStarted();
     }
 }
