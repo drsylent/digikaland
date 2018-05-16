@@ -135,5 +135,6 @@ public class StartupActivity extends AppCompatActivity implements PrimaryCodeFra
             }
         }
         startActivity(intent);
+        finishAffinity();
     }
 }

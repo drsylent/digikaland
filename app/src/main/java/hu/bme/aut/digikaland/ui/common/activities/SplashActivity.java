@@ -50,7 +50,7 @@ public class SplashActivity extends AppCompatActivity implements RacePermissionH
         mainLayout = findViewById(R.id.splash_layout);
 
         // elinditasa a megfelelo activitynek gombnyomasra
-        setEvents();
+        //setEvents();
 
         //getData();
         if(!RacePermissionHandler.getInstance(this).startUp(getSharedPreferences(CodeHandler.SharedPreferencesName ,MODE_PRIVATE))){
@@ -61,6 +61,7 @@ public class SplashActivity extends AppCompatActivity implements RacePermissionH
     private void firstEnter(){
         Intent intent = new Intent(SplashActivity.this, StartupActivity.class);
         startActivity(intent);
+        finishAffinity();
     }
 
     private void adminTotalEnter(){
