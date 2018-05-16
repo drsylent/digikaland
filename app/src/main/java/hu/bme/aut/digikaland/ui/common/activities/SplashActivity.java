@@ -39,20 +39,10 @@ public class SplashActivity extends AppCompatActivity implements RacePermissionH
         super.onCreate(savedInstanceState);
         // itt lesz az adatbazis betoltese, es annak eldontese
         // melyik kepernyo keruljon betoltesre
-//        try{
-//            Thread.sleep(500);
-//        }catch(InterruptedException e){
-//            e.printStackTrace();
-//        }
-        // jelenleg csak szimulalunk
         setContentView(R.layout.activity_splash);
 
         mainLayout = findViewById(R.id.splash_layout);
 
-        // elinditasa a megfelelo activitynek gombnyomasra
-        //setEvents();
-
-        //getData();
         if(!RacePermissionHandler.getInstance(this).startUp(getSharedPreferences(CodeHandler.SharedPreferencesName ,MODE_PRIVATE))){
             firstEnter();
         }
@@ -67,122 +57,29 @@ public class SplashActivity extends AppCompatActivity implements RacePermissionH
     private void adminTotalEnter(){
         // mintha teljes admin lenne aki belep
         Intent intent = new Intent(SplashActivity.this, AdminTotalMainActivity.class);
-        // TODO: teljes adminsag
         startActivity(intent);
+        finishAffinity();
     }
 
     private void adminStationEnter(){
         // mintha feladat admin lenne
         Intent intent = new Intent(SplashActivity.this, AdminStationMainActivity.class);
-        // TODO: feladat adminsag - átadni, hogy melyik feladatnak az adminja!
         startActivity(intent);
+        finishAffinity();
     }
 
     private void clientCaptainEnter(){
         // mintha kapitány kliens lenne
         Intent intent = new Intent(SplashActivity.this, ClientMainActivity.class);
-        // TODO: kapitanysag
         startActivity(intent);
+        finishAffinity();
     }
 
     private void clientNormalEnter(){
         // mintha egyszeru kliens lenne
         Intent intent = new Intent(SplashActivity.this, ClientMainActivity.class);
-        // TODO: sima kliens
         startActivity(intent);
-    }
-
-    /**
-     * Esemenykezelok megalkotasa
-     */
-    private void setEvents(){
-        final Button firstEnter = findViewById(R.id.devFirstEnter);
-        Button adminTotal = findViewById(R.id.devAdminTotalEnter);
-        Button adminSimple = findViewById(R.id.devAdminObjectiveEnter);
-        Button clientCaptain = findViewById(R.id.devClientCaptainEnter);
-        Button clientSimple = findViewById(R.id.devClientSimpleEnter);
-        testButton = findViewById(R.id.devFirebaseTest);
-
-        firstEnter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                firstEnter();
-            }
-        });
-
-        adminTotal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                adminTotalEnter();
-            }
-        });
-
-        adminSimple.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            adminStationEnter();
-            }
-        });
-
-        clientCaptain.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            clientCaptainEnter();
-            }
-        });
-
-        clientSimple.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            clientNormalEnter();
-            }
-        });
-
-        if(milestoneVersion == 1){
-            adminTotal.setEnabled(false);
-            adminSimple.setEnabled(false);
-            clientSimple.setEnabled(false);
-            final Context that = this;
-            MockGenerator.introDialog(this, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    MockGenerator.milestoneOneDialog(that).show();
-                }
-            }).show();
-        }
-        if(milestoneVersion == 2){
-            final Context that = this;
-            MockGenerator.introDialog(this, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    MockGenerator.milestoneTwoDialog(that).show();
-                }
-            }).show();
-        }
-    }
-
-    private void setTestButtonText(String text){
-        testButton.setText(text);
-    }
-
-    private void getData(){
-        DocumentReference docRef = db.collection("test").document("testdocument");
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document != null && document.exists()) {
-                        Log.e("Firebase", "DocumentSnapshot data: " + document.getData().get("teststring"));
-                        setTestButtonText((String) document.getData().get("teststring"));
-                    } else {
-                        Log.e("Firabase", "No such document");
-                    }
-                } else {
-                    Log.e("Firabase", "get failed with ", task.getException());
-                }
-            }
-        });
+        finishAffinity();
     }
 
     // TODO: jelenleg csak placeholder megjelenítésre
