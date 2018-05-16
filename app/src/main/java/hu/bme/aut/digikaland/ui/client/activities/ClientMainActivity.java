@@ -1,5 +1,6 @@
 package hu.bme.aut.digikaland.ui.client.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -23,6 +24,7 @@ import java.util.Date;
 
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.dblogic.ClientEngine;
+import hu.bme.aut.digikaland.dblogic.CodeHandler;
 import hu.bme.aut.digikaland.dblogic.ContactsEngine;
 import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
 import hu.bme.aut.digikaland.dblogic.ObjectiveEngine;
@@ -37,11 +39,14 @@ import hu.bme.aut.digikaland.entities.station.StationAdminPerspective;
 import hu.bme.aut.digikaland.entities.station.StationAdminPerspectiveSummary;
 import hu.bme.aut.digikaland.entities.station.StationClientPerspective;
 import hu.bme.aut.digikaland.entities.station.StationMapData;
+import hu.bme.aut.digikaland.ui.admin.total.activities.AdminTotalMainActivity;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientActualFragment;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientObjectiveFragment;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientStatusFragment;
 import hu.bme.aut.digikaland.ui.common.activities.MapsActivity;
 import hu.bme.aut.digikaland.ui.common.activities.SplashActivity;
+import hu.bme.aut.digikaland.ui.common.activities.StartupActivity;
+import hu.bme.aut.digikaland.ui.common.fragments.NewRaceStarter;
 import hu.bme.aut.digikaland.ui.common.fragments.ResultsFragment;
 
 public class ClientMainActivity extends AppCompatActivity implements ClientActualFragment.ClientActualMainListener, ClientObjectiveFragment.ClientActiveObjectiveListener,
@@ -333,6 +338,9 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
                     case R.id.clientStatus:
                         prepareStatus();
                         break;
+                    case R.id.clientNewRace:
+                        prepareNewRace();
+                        break;
                 }
                 invalidateOptionsMenu();
                 return false;
@@ -453,5 +461,9 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     // TODO: jelenleg csak placeholder megjelenítésre
     private void showSnackBarMessage(String message) {
         Snackbar.make(mainLayout, message, Snackbar.LENGTH_LONG).show();
+    }
+
+    private void prepareNewRace(){
+        NewRaceStarter.getNewRaceDialog(this).show();
     }
 }

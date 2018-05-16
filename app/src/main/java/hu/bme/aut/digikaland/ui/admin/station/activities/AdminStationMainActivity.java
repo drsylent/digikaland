@@ -1,5 +1,6 @@
 package hu.bme.aut.digikaland.ui.admin.station.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -22,6 +23,7 @@ import java.util.HashMap;
 import hu.bme.aut.digikaland.dblogic.AdminStationEngine;
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.dblogic.AdminEngine;
+import hu.bme.aut.digikaland.dblogic.CodeHandler;
 import hu.bme.aut.digikaland.dblogic.ContactsEngineFull;
 import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
 import hu.bme.aut.digikaland.dblogic.ObjectiveEngine;
@@ -45,6 +47,8 @@ import hu.bme.aut.digikaland.ui.admin.total.activities.AdminTotalMainActivity;
 import hu.bme.aut.digikaland.ui.client.activities.ClientObjectiveActivity;
 import hu.bme.aut.digikaland.ui.common.activities.MapsActivity;
 import hu.bme.aut.digikaland.ui.common.activities.SplashActivity;
+import hu.bme.aut.digikaland.ui.common.activities.StartupActivity;
+import hu.bme.aut.digikaland.ui.common.fragments.NewRaceStarter;
 import hu.bme.aut.digikaland.ui.common.fragments.ResultsFragment;
 import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
@@ -84,6 +88,9 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
                         break;
                     case R.id.adminTeams:
                         prepareTeams();
+                        break;
+                    case R.id.adminNewRace:
+                        prepareNewRace();
                         break;
                 }
                 invalidateOptionsMenu();
@@ -450,4 +457,9 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
     public boolean isToEvaluate() {
         return done != evaluated;
     }
+
+    private void prepareNewRace(){
+        NewRaceStarter.getNewRaceDialog(this).show();
+    }
+
 }

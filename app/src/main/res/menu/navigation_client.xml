@@ -12,6 +12,9 @@
     <item android:title="@string/status"
         android:id="@+id/clientStatus"
         />
+    <item android:title="@string/new_race"
+        android:id="@+id/clientNewRace"
+        />
 
 
 </menu>

@@ -353,30 +353,7 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
     }
 
     private void prepareNewRace(){
-//        new AlertDialog.Builder(this).setTitle("Új verseny").setMessage("Biztos új versenyt szeretnél kezdeni?")
-//                .setPositiveButton("Igen", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//                        goToNewRace();
-//                    }
-//                })
-//                .setNegativeButton("Nem", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//
-//                    }
-//                }).show();
-        new NewRaceStarter(this).getNewRaceDialog(new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                goToNewRace();
-            }
-        }).show();
+        NewRaceStarter.getNewRaceDialog(this).show();
     }
 
-    private void goToNewRace(){
-        CodeHandler.getInstance().deleteCodes(getSharedPreferences(CodeHandler.SharedPreferencesName, MODE_PRIVATE));
-        Intent intent = new Intent(AdminTotalMainActivity.this, StartupActivity.class);
-        startActivity(intent);
-    }
 }
