@@ -1,5 +1,6 @@
 package hu.bme.aut.digikaland.ui.client.activities;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
@@ -57,7 +58,11 @@ import hu.bme.aut.digikaland.ui.common.activities.StartupActivity;
 import hu.bme.aut.digikaland.ui.common.fragments.NewRaceStarter;
 import hu.bme.aut.digikaland.ui.common.fragments.ResultsFragment;
 import hu.bme.aut.digikaland.utility.DistanceCalculator;
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.OnPermissionDenied;
+import permissions.dispatcher.RuntimePermissions;
 
+@RuntimePermissions
 public class ClientMainActivity extends AppCompatActivity implements ClientActualFragment.ClientActualMainListener, ClientObjectiveFragment.ClientActiveObjectiveListener,
         ResultsFragment.ResultsFragmentListener, ClientEngine.CommunicationInterface, ResultsEngine.CommunicationInterface, ContactsEngine.CommunicationInterface,
         ObjectiveEngine.CommunicationInterface, StationsEngine.CommunicationInterface{
@@ -240,7 +245,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     @Override
     public void runningStateLoaded() {
         if(uiReady) {
-            loadLocation();
+            ClientMainActivityPermissionsDispatcher.loadLocationWithPermissionCheck(this);
         }
         else postLoad = true;
     }
@@ -483,8 +488,8 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     private double currentLatitude;
     private double currentLongitude;
 
-    // TODO: Permission
-    private void loadLocation(){
+    @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+    public void loadLocation(){
         FusedLocationProviderClient locationProvider = LocationServices.getFusedLocationProviderClient(this);
         try {
             Task locationResult = locationProvider.getLastLocation();
@@ -511,7 +516,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
 
     private void checkDistance(){
         GeoPoint station = db.getLastLoadedGeoPoint();
-        double distance = 100.0;
+        double distance = 10000.0;
         if(distance > DistanceCalculator.calculate(currentLatitude, currentLongitude, station.getLatitude(), station.getLongitude())) {
             db.startStation();
         }
@@ -521,5 +526,18 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     @Override
     public void stationStarted() {
         db.loadState();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        // NOTE: delegate the permission handling to generated method
+        ClientMainActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+    }
+
+    @OnPermissionDenied(Manifest.permission.ACCESS_FINE_LOCATION)
+    public void locationPermissionDenied(){
+        showSnackBarMessage("Nem állapítható meg a jelenlegi helyzeted.");
+        loadRunningUi();
     }
 }
