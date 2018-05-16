@@ -133,7 +133,7 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
 
     @Override
     public void onNewRaceStart() {
-        startActivity(new Intent(AdminStationMainActivity.this, SplashActivity.class));
+        prepareNewRace();
     }
 
     @Override

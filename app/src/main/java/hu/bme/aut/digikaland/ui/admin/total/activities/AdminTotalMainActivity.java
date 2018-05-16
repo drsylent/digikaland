@@ -120,7 +120,7 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
 
     @Override
     public void onNewRaceStart() {
-        startActivity(new Intent(AdminTotalMainActivity.this, SplashActivity.class));
+        prepareNewRace();
     }
 
     @Override

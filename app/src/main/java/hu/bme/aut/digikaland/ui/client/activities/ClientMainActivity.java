@@ -189,7 +189,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
 
     @Override
     public void onNewRaceStart() {
-        startActivity(new Intent(ClientMainActivity.this, SplashActivity.class));
+        prepareNewRace();
     }
 
     @Override
