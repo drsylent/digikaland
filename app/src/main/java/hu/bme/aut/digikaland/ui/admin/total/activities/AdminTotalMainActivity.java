@@ -1,5 +1,6 @@
 package hu.bme.aut.digikaland.ui.admin.total.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -7,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -24,6 +26,7 @@ import java.util.HashMap;
 import hu.bme.aut.digikaland.dblogic.AdminStationEngine;
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.dblogic.AdminTotalEngine;
+import hu.bme.aut.digikaland.dblogic.CodeHandler;
 import hu.bme.aut.digikaland.dblogic.ContactsEngineFull;
 import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
 import hu.bme.aut.digikaland.dblogic.ResultsEngine;
@@ -42,6 +45,8 @@ import hu.bme.aut.digikaland.ui.admin.common.fragments.AdminRaceStarterFragment;
 import hu.bme.aut.digikaland.ui.admin.total.fragments.AdminRunningFragment;
 import hu.bme.aut.digikaland.ui.common.activities.MapsActivity;
 import hu.bme.aut.digikaland.ui.common.activities.SplashActivity;
+import hu.bme.aut.digikaland.ui.common.activities.StartupActivity;
+import hu.bme.aut.digikaland.ui.common.fragments.NewRaceStarter;
 import hu.bme.aut.digikaland.ui.common.fragments.ResultsFragment;
 import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
@@ -82,6 +87,9 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
                         break;
                     case R.id.adminTeams:
                         prepareTeams();
+                        break;
+                    case R.id.adminNewRace:
+                        prepareNewRace();
                         break;
                 }
                 invalidateOptionsMenu();
@@ -342,5 +350,33 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
     @Override
     public void allTeamStatusLoaded(ArrayList<Team> teams) {
 
+    }
+
+    private void prepareNewRace(){
+//        new AlertDialog.Builder(this).setTitle("Új verseny").setMessage("Biztos új versenyt szeretnél kezdeni?")
+//                .setPositiveButton("Igen", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//                        goToNewRace();
+//                    }
+//                })
+//                .setNegativeButton("Nem", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//
+//                    }
+//                }).show();
+        new NewRaceStarter(this).getNewRaceDialog(new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                goToNewRace();
+            }
+        }).show();
+    }
+
+    private void goToNewRace(){
+        CodeHandler.getInstance().deleteCodes(getSharedPreferences(CodeHandler.SharedPreferencesName, MODE_PRIVATE));
+        Intent intent = new Intent(AdminTotalMainActivity.this, StartupActivity.class);
+        startActivity(intent);
     }
 }
