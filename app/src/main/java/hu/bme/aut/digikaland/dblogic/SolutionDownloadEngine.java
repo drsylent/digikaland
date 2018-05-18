@@ -330,9 +330,14 @@ public class SolutionDownloadEngine {
                         if (document != null && document.exists()) {
                             try {
                                 int currentPoints = 0;
-                                // TODO: automata megoldás itt
+                                boolean answer = document.getBoolean("answer");
+                                int maxpoints = document.getLong("maxpoints").intValue();
+                                if(document.contains("auto")){
+                                    boolean auto = document.getBoolean("auto");
+                                    if(auto == answer) currentPoints = maxpoints;
+                                }
                                 if(document.contains("points")) currentPoints = document.getLong("points").intValue();
-                                Solution sol = new TrueFalseSolution(currentPoints, document.getLong("maxpoints").intValue(), document.getBoolean("answer"));
+                                Solution sol = new TrueFalseSolution(currentPoints, maxpoints, answer);
                                 sol.setId(document.getId());
                                 solutionProgressMade(sol);
                             }catch(Exception e){
@@ -483,9 +488,15 @@ public class SolutionDownloadEngine {
                         if (document != null && document.exists()) {
                             try {
                                 int currentPoints = 0;
+                                int maxpoints = document.getLong("maxpoints").intValue();
+                                int answer = document.getLong("answer").intValue();
+                                if(document.contains("auto")){
+                                    int auto = document.getLong("auto").intValue();
+                                    if(auto == answer) currentPoints = maxpoints;
+                                }
                                 // TODO: automata megoldás itt
                                 if(document.contains("points")) currentPoints = document.getLong("points").intValue();
-                                Solution sol = new MultipleChoiceSolution(currentPoints, document.getLong("maxpoints").intValue(), document.getLong("answer").intValue());
+                                Solution sol = new MultipleChoiceSolution(currentPoints, maxpoints, answer);
                                 sol.setId(document.getId());
                                 solutionProgressMade(sol);
                             }catch(Exception e){
