@@ -150,6 +150,11 @@ public class AdminStationsActivity extends AppCompatActivity implements AdminSta
     }
 
     @Override
+    public void stationStarted() {
+
+    }
+
+    @Override
     public void adminStationError(ErrorType type) {
         showSnackBarMessage(type.getDefaultMessage());
     }

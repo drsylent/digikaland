@@ -124,6 +124,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     @Override
+    public void stationStarted() {
+
+    }
+
+    @Override
     public void adminStationError(ErrorType type) {
         showSnackBarMessage(type.getDefaultMessage());
     }

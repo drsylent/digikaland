@@ -3,6 +3,8 @@ package hu.bme.aut.digikaland.dblogic;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -10,9 +12,13 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.ServerTimestamp;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 
 import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
@@ -319,7 +325,94 @@ public class AdminStationEngine {
         }
     }
 
+    public void startStation(String stationId, Team team){
+        new StationStarter(stationId, team).startStation();
+    }
+
+    private class StationStarter{
+        @ServerTimestamp
+        private Date serverTime = new Date();
+        private String stationId;
+        private Team team;
+        private String currentStationId;
+        private long secondsLimit;
+        private StationStarter(String stId, Team t){
+            stationId = stId;
+            team = t;
+        }
+
+        private void startStation(){
+            final DocumentReference stationRef = RacePermissionHandler.getInstance().getRaceReference().collection("stations").document(stationId);
+            stationRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document != null && document.exists()) {
+                            try {
+                                secondsLimit = document.getLong("time");
+                                getStationNumber();
+                            } catch (RuntimeException e){
+                                comm.adminStationError(ErrorType.DatabaseError);
+                            }
+                        } else {
+                            comm.adminStationError(ErrorType.RaceNotExists);
+                        }
+                    } else {
+                        comm.adminStationError(ErrorType.NoContact);
+                    }
+                }
+            });
+        }
+
+        private void getStationNumber(){
+            RacePermissionHandler.getInstance().getRaceReference().collection("teams")
+                    .document(team.id).collection("stations")
+                    .whereEqualTo("station", RacePermissionHandler.getInstance().getRaceReference().collection("stations").document(stationId))
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                if(task.getResult().getDocuments().size() != 1)
+                                    comm.adminStationError(ErrorType.DatabaseError);
+                                else{
+                                    DocumentSnapshot stationData = task.getResult().getDocuments().get(0);
+                                    currentStationId = stationData.getId();
+                                    uploadStationStart();
+                                }
+                            } else {
+                                comm.adminStationError(ErrorType.NoContact);
+                            }
+                        }
+                    });
+        }
+
+        private void uploadStationStart(){
+            Calendar calendar = new GregorianCalendar();
+            calendar.setTime(serverTime);
+            calendar.add(Calendar.SECOND, Long.valueOf(secondsLimit).intValue());
+            RacePermissionHandler.getInstance().getRaceReference().collection("teams").document(team.id).collection("stations").document(currentStationId)
+                    .update("timeend", calendar.getTime())
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            comm.stationStarted();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            comm.adminStationError(ErrorType.DatabaseError);
+                        }
+                    });
+        }
+
+    }
+
+
     public interface CommunicationInterface {
+        void stationStarted();
         void adminStationError(ErrorType type);
         void stationTeamDataLoaded(ArrayList<StationAdminPerspective> stations);
         void allStationLoadCompleted(ArrayList<StationAdminPerspective> list);

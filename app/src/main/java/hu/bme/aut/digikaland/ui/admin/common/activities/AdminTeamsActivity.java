@@ -1,11 +1,13 @@
 package hu.bme.aut.digikaland.ui.admin.common.activities;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -80,9 +82,30 @@ public class AdminTeamsActivity extends AppCompatActivity implements AdminTeamsA
         }
     }
 
+    @Override
+    public void onTeamActivation(final Team team) {
+        new AlertDialog.Builder(this).setMessage("Szeretnéd elindítani ezt az állomást ennek a csapatnak?")
+                .setPositiveButton("Igen", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        AdminStationEngine.getInstance(AdminTeamsActivity.this).startStation(stationId, team);
+                    }
+                }).setNegativeButton("Mégse", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        }).show();
+    }
+
     private void prepareStations(Team team){
         lastTeamId = team.id;
         AdminStationEngine.getInstance(this).loadStationDataForTeam(team.id);
+    }
+
+    @Override
+    public void stationStarted() {
+        showSnackBarMessage("Az állomás elindítása sikeres volt.");
     }
 
     @Override

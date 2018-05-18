@@ -356,6 +356,11 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
     }
 
     @Override
+    public void stationStarted() {
+
+    }
+
+    @Override
     public void adminStationError(ErrorType type) {
         showSnackBarMessage(type.getDefaultMessage());
     }

@@ -82,6 +82,13 @@ public class AdminTeamsAdapter extends RecyclerView.Adapter<StationViewHolder> {
                     break;
                 case NotArrivedYet:
                     color = colorNotStarted;
+                    holder.station.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View view) {
+                            activity.onTeamActivation(item);
+                            return false;
+                        }
+                    });
                     break;
                 default:
                     color = 0;
@@ -98,5 +105,6 @@ public class AdminTeamsAdapter extends RecyclerView.Adapter<StationViewHolder> {
 
     public interface AdminTeamsListener {
         void onTeamClicked(Team team);
+        void onTeamActivation(Team team);
     }
 }

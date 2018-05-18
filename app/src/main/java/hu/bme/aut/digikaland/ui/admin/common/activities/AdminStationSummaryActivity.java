@@ -129,6 +129,11 @@ public class AdminStationSummaryActivity extends AppCompatActivity implements Ad
     }
 
     @Override
+    public void stationStarted() {
+
+    }
+
+    @Override
     public void adminStationError(ErrorType type) {
         showSnackBarMessage(type.getDefaultMessage());
     }
