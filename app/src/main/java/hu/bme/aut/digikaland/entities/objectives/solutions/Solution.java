@@ -43,6 +43,10 @@ public abstract class Solution implements Serializable, Comparable<Solution>{
         return maxPoints;
     }
 
+    public void setCurrentPoints(int currentPoints) {
+        this.currentPoints = currentPoints;
+    }
+
     private int currentPoints;
     private int maxPoints;
 

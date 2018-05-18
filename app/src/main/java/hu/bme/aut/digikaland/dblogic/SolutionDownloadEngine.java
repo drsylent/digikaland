@@ -304,6 +304,7 @@ public class SolutionDownloadEngine {
 
         private void solutionProgressMade(Solution sol){
             if(!errorEnded) {
+                sol.setPenalty(penalty);
                 solutions.add(sol);
                 if (++solutionNumber == solutionSum) {
                     // visszarendezzük megfelelő sorrendbe, aszinkronitás miatt felborulhatott

@@ -59,7 +59,7 @@
     <string name="station_show_mock">%1$d. állomás (%2$d id)</string>
     <string name="station_show">%1$d. állomás (%2$s id)</string>
     <string name="position_number">%1$d.</string>
-    <string name="point_number">%1$dp</string>
+    <string name="point_number">%1$.2fp</string>
     <string name="evaluate">Értékelés</string>
     <string name="station">Állomás</string>
     <string name="total_admins">Teljes Adminok:</string>

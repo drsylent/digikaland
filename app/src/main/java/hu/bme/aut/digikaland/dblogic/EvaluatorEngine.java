@@ -16,6 +16,7 @@ import java.util.Map;
 
 import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
 import hu.bme.aut.digikaland.entities.enumeration.EvaluationStatus;
+import hu.bme.aut.digikaland.entities.objectives.solutions.Solution;
 
 /**
  * Created by Sylent on 2018. 05. 12..
@@ -35,9 +36,12 @@ public class EvaluatorEngine {
     private EvaluatorEngine() {
     }
 
-    public void uploadEvaluation(String solutionId, int points){
-        RacePermissionHandler.getInstance().getRaceReference().collection("solutions").document(solutionId)
-                .update("points", points)
+    public void uploadEvaluation(Solution solution){
+        Map<String, Object> updateData = new HashMap<>();
+        updateData.put("points", solution.getCurrentPoints());
+        updateData.put("truepoints", solution.getCurrentPoints()*(1-solution.getPenalty()*0.01));
+        RacePermissionHandler.getInstance().getRaceReference().collection("solutions").document(solution.getId())
+                .update(updateData)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

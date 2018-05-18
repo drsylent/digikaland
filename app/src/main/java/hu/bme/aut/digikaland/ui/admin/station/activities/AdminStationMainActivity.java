@@ -177,7 +177,7 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
     }
 
     @Override
-    public void resultsLoaded(ArrayList<String> teamNames, ArrayList<Integer> teamPoints) {
+    public void resultsLoaded(ArrayList<String> teamNames, ArrayList<Double> teamPoints) {
         state = ContentState.Results;
         getSupportFragmentManager().beginTransaction().replace(R.id.adminStationContent, ResultsFragment.newInstance(teamNames, teamPoints)).commit();
     }

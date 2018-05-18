@@ -39,7 +39,7 @@ public class ResultsEngine {
                             try {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                     teams.add(document.getString("teamname"));
-                                    points.add(document.getLong("points").intValue());
+                                    points.add(document.getDouble("points"));
                                 }
                                 comm.resultsLoaded(teams, points);
                             }catch (RuntimeException e){
@@ -53,10 +53,10 @@ public class ResultsEngine {
     }
 
     private ArrayList<String> teams = new ArrayList<>();
-    private ArrayList<Integer> points = new ArrayList<>();
+    private ArrayList<Double> points = new ArrayList<>();
 
     public interface CommunicationInterface{
-        void resultsLoaded(ArrayList<String> teamNames, ArrayList<Integer> teamPoints);
+        void resultsLoaded(ArrayList<String> teamNames, ArrayList<Double> teamPoints);
         void resultsError(ErrorType type);
     }
 }

@@ -15,18 +15,18 @@ public class ResultsElementFragment extends Fragment {
 
     private int position;
     private String teamName;
-    private int points;
+    private double points;
 
     public ResultsElementFragment() {
         // Required empty public constructor
     }
 
-    public static ResultsElementFragment newInstance(int pos, String name, int point) {
+    public static ResultsElementFragment newInstance(int pos, String name, double point) {
         ResultsElementFragment fragment = new ResultsElementFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_POSITION, pos);
         args.putString(ARG_TEAMNAME, name);
-        args.putInt(ARG_POINTS, point);
+        args.putDouble(ARG_POINTS, point);
         fragment.setArguments(args);
         return fragment;
     }
@@ -37,7 +37,7 @@ public class ResultsElementFragment extends Fragment {
         if (getArguments() != null) {
             position = getArguments().getInt(ARG_POSITION);
             teamName = getArguments().getString(ARG_TEAMNAME);
-            points = getArguments().getInt(ARG_POINTS);
+            points = getArguments().getDouble(ARG_POINTS);
         }
     }
 

@@ -24,18 +24,18 @@ public class ResultsCalculatorEngine {
     private class Result implements Comparable<Result>{
         private String teamName;
         private String teamId;
-        private int points = 0;
+        private double points = 0;
         private Result(String id, String name){
             teamId = id;
             teamName = name;
         }
-        private void addPoints(int point){
+        private void addPoints(double point){
             points+=point;
         }
 
         @Override
         public int compareTo(@NonNull Result result) {
-            return this.points-result.points;
+            return Double.compare(this.points, result.points);
         }
     }
 
@@ -140,9 +140,9 @@ public class ResultsCalculatorEngine {
                         DocumentSnapshot document = task.getResult();
                         if (document != null && document.exists()) {
                             try {
-                                int points = 0;
-                                if(document.contains("points"))
-                                    points = document.getLong("points").intValue();
+                                double points = 0;
+                                if(document.contains("truepoints"))
+                                    points = document.getDouble("truepoints");
                                 addPoint(points);
                             } catch (RuntimeException e){
                                 comm.resultsUploadError(ErrorType.DatabaseError);
@@ -159,7 +159,7 @@ public class ResultsCalculatorEngine {
 
         private int counter = 0;
 
-        private void addPoint(int point){
+        private void addPoint(double point){
             result.addPoints(point);
             if(++counter == solutionNumber) pointsDownloaded();
         }

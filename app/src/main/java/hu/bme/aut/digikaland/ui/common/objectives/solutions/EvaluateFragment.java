@@ -56,6 +56,7 @@ public abstract class EvaluateFragment extends SolutionFragment {
 
     public void setPoint(int points){
         currentPoints = points;
+        getSolution().setCurrentPoints(points);
         pointHolder.setPoints(points);
         Log.e("PointHolder Tag", pointHolder.getTag());
     }

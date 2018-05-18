@@ -108,7 +108,7 @@ public class AdminEvaluateActivity extends AppCompatActivity implements PictureF
         showSnackBarMessage("Elküldés");
         EvaluatorEngine db = EvaluatorEngine.getInstance(this);
         for(EvaluateFragment fragment : evaluators){
-            db.uploadEvaluation(fragment.getSolution().getId(), fragment.getCurrentPoints());
+            db.uploadEvaluation(fragment.getSolution());
             db.updateEvaluationStatus(stationId, teamId);
         }
     }

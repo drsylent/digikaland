@@ -20,7 +20,7 @@
         style="@style/StringFormatInformation"
         android:id="@+id/resultsTeamName"
         android:paddingStart="@dimen/xs_margin"
-        android:layout_weight="8"
+        android:layout_weight="7"
         android:gravity="start"
         tools:text="Teszt csapat"/>
 
@@ -29,8 +29,8 @@
         android:layout_height="match_parent"
         android:id="@+id/resultsPoint"
         style="@style/StringFormatInformation"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:gravity="end"
-        tools:text="20p"/>
+        tools:text="20.52p"/>
 
 </LinearLayout>

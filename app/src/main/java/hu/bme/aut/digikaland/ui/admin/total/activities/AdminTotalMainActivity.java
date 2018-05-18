@@ -241,7 +241,7 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
     }
 
     @Override
-    public void resultsLoaded(ArrayList<String> teamNames, ArrayList<Integer> teamPoints) {
+    public void resultsLoaded(ArrayList<String> teamNames, ArrayList<Double> teamPoints) {
         getSupportFragmentManager().beginTransaction().replace(R.id.adminStationContent, ResultsFragment.newInstance(teamNames, teamPoints)).commit();
     }
 

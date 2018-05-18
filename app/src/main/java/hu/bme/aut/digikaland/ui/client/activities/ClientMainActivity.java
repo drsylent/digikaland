@@ -214,7 +214,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     private boolean uiReady = false;
 
     @Override
-    public void resultsLoaded(ArrayList<String> teamNames, ArrayList<Integer> teamPoints) {
+    public void resultsLoaded(ArrayList<String> teamNames, ArrayList<Double> teamPoints) {
         setResults(teamNames, teamPoints);
     }
 
@@ -406,7 +406,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         getSupportFragmentManager().beginTransaction().replace(R.id.clientContent, ClientActualFragment.newInstance(bundle)).commit();
     }
 
-    private void setResults(ArrayList<String> teams, ArrayList<Integer> points){
+    private void setResults(ArrayList<String> teams, ArrayList<Double> points){
         toolbar.setTitle(R.string.actual);
         getSupportFragmentManager().beginTransaction().replace(R.id.clientContent, ResultsFragment.newInstance(teams, points)).commit();
     }

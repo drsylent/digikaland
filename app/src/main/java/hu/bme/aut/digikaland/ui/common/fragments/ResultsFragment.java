@@ -19,7 +19,7 @@ public class ResultsFragment extends Fragment {
 //    private String[] teamList;
 //    private int[] pointList;
     private ArrayList<String> teamList;
-    private ArrayList<Integer> pointList;
+    private ArrayList<Double> pointList;
 
     private ResultsFragmentListener activity;
 
@@ -31,11 +31,11 @@ public class ResultsFragment extends Fragment {
         return null;
     }
 
-    public static ResultsFragment newInstance(ArrayList<String> teams, ArrayList<Integer> points) {
+    public static ResultsFragment newInstance(ArrayList<String> teams, ArrayList<Double> points) {
         ResultsFragment fragment = new ResultsFragment();
         Bundle args = new Bundle();
         args.putStringArrayList(ARG_TEAMS, teams);
-        args.putIntegerArrayList(ARG_POINTS, points);
+        args.putSerializable(ARG_POINTS, points);
         fragment.setArguments(args);
         return fragment;
     }
@@ -47,7 +47,7 @@ public class ResultsFragment extends Fragment {
 //            teamList = getArguments().getStringArray(ARG_TEAMS);
 //            pointList = getArguments().getIntArray(ARG_POINTS);
             teamList = getArguments().getStringArrayList(ARG_TEAMS);
-            pointList = getArguments().getIntegerArrayList(ARG_POINTS);
+            pointList = (ArrayList<Double>) getArguments().getSerializable(ARG_POINTS);
         }
     }
 
