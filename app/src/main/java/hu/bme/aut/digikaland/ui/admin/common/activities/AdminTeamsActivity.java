@@ -1,7 +1,9 @@
 package hu.bme.aut.digikaland.ui.admin.common.activities;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -22,7 +24,11 @@ import hu.bme.aut.digikaland.entities.Team;
 import hu.bme.aut.digikaland.entities.objectives.solutions.Solution;
 import hu.bme.aut.digikaland.entities.station.StationAdminPerspective;
 import hu.bme.aut.digikaland.ui.admin.common.fragments.AdminTeamsAdapter;
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.OnPermissionDenied;
+import permissions.dispatcher.RuntimePermissions;
 
+@RuntimePermissions
 public class AdminTeamsActivity extends AppCompatActivity implements AdminTeamsAdapter.AdminTeamsListener, SolutionDownloadEngine.CommunicationInterface,
             AdminStationEngine.CommunicationInterface {
     public final static String ARG_TEAMS = "teams";
@@ -61,13 +67,16 @@ public class AdminTeamsActivity extends AppCompatActivity implements AdminTeamsA
         }
     }
 
+    private boolean ignoredPermission = false;
+
     @Override
     public void onTeamClicked(Team team) {
         if(summaryMode){
             prepareStations(team);
         }
         else{
-            prepareEvaluation(team);
+            if(ignoredPermission) prepareEvaluation(team);
+            else AdminTeamsActivityPermissionsDispatcher.prepareEvaluationWithPermissionCheck(this, team);
         }
     }
 
@@ -102,9 +111,23 @@ public class AdminTeamsActivity extends AppCompatActivity implements AdminTeamsA
 
     private String lastTeamId;
 
-    private void prepareEvaluation(Team team){
+    @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    public void prepareEvaluation(Team team){
         lastTeamId = team.id;
         SolutionDownloadEngine.getInstance(this).loadSolutions(stationId, lastTeamId);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        // NOTE: delegate the permission handling to generated method
+        AdminTeamsActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+    }
+
+    @OnPermissionDenied(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    public void picturesCantLoad(){
+        showSnackBarMessage("A képek így nem tudnak megjelenni.");
+        ignoredPermission = true;
     }
 
     private void setEvaluation(ArrayList<Solution> solutions, int penalty, Date time, String teamName){

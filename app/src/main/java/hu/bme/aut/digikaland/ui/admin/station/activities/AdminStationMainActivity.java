@@ -1,5 +1,6 @@
 package hu.bme.aut.digikaland.ui.admin.station.activities;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -51,7 +52,11 @@ import hu.bme.aut.digikaland.ui.common.activities.StartupActivity;
 import hu.bme.aut.digikaland.ui.common.fragments.NewRaceStarter;
 import hu.bme.aut.digikaland.ui.common.fragments.ResultsFragment;
 import hu.bme.aut.digikaland.utility.development.MockGenerator;
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.OnPermissionDenied;
+import permissions.dispatcher.RuntimePermissions;
 
+@RuntimePermissions
 public class AdminStationMainActivity extends AppCompatActivity implements AdminStationActualFragment.AdminActivityInterface, ResultsFragment.ResultsFragmentListener,
         AdminRaceStarterFragment.AdminStarterListener, AdminEngine.CommunicationInterface, ResultsEngine.CommunicationInterface, ObjectiveEngine.CommunicationInterface,
         ContactsEngineFull.CommunicationInterface, SolutionDownloadEngine.CommunicationInterface, AdminStationEngine.CommunicationInterface {
@@ -386,14 +391,33 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
         return teamContact;
     }
 
+    private boolean ignoredPermission = false;
+
     @Override
     public void onEvaluateActivation() {
         if(isToEvaluate()) {
-//            Intent i = new Intent(AdminStationMainActivity.this, AdminEvaluateActivity.class);
-//            startActivity(MockGenerator.mockEvaluateIntent(i));
-            SolutionDownloadEngine.getInstance(this).loadSolutions(db.getMyStationId(), db.getNextEvaluateTeamId());
+            if(ignoredPermission) prepareEvaluation();
+            else AdminStationMainActivityPermissionsDispatcher.prepareEvaluationWithPermissionCheck(this);
         }
         else showSnackBarMessage("Nincs kiértékelésre váró csapat!");
+    }
+
+    @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    public void prepareEvaluation(){
+        SolutionDownloadEngine.getInstance(this).loadSolutions(db.getMyStationId(), db.getNextEvaluateTeamId());
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        // NOTE: delegate the permission handling to generated method
+        AdminStationMainActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+    }
+
+    @OnPermissionDenied(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    public void picturesCantLoad(){
+        showSnackBarMessage("A képek így nem tudnak megjelenni.");
+        ignoredPermission = true;
     }
 
     @Override
