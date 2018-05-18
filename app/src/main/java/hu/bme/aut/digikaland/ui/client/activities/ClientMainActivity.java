@@ -516,7 +516,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
 
     private void checkDistance(){
         GeoPoint station = db.getLastLoadedGeoPoint();
-        double distance = 10000.0;
+        double distance = 100.0;
         if(distance > DistanceCalculator.calculate(currentLatitude, currentLongitude, station.getLatitude(), station.getLongitude())) {
             db.startStation();
         }

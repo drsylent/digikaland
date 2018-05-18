@@ -28,6 +28,7 @@ import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.dblogic.AdminTotalEngine;
 import hu.bme.aut.digikaland.dblogic.CodeHandler;
 import hu.bme.aut.digikaland.dblogic.ContactsEngineFull;
+import hu.bme.aut.digikaland.dblogic.ResultsCalculatorEngine;
 import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
 import hu.bme.aut.digikaland.dblogic.ResultsEngine;
 import hu.bme.aut.digikaland.dblogic.enumeration.RaceState;
@@ -52,7 +53,7 @@ import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
 public class AdminTotalMainActivity extends AppCompatActivity implements ResultsFragment.ResultsFragmentListener,
         AdminRunningFragment.AdminRunningListener, AdminRaceStarterFragment.AdminStarterListener, AdminTotalEngine.CommunicationInterface, ResultsEngine.CommunicationInterface,
-        AdminStationEngine.CommunicationInterface, ContactsEngineFull.CommunicationInterface{
+        AdminStationEngine.CommunicationInterface, ContactsEngineFull.CommunicationInterface, ResultsCalculatorEngine.CommunicationInterface{
 
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
@@ -140,7 +141,29 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
 
     @Override
     public void onEndPressed() {
+        new AlertDialog.Builder(this).setMessage("Biztos le akarod zárni a versenyt? Ezt a műveletet nem tudod visszavonni!")
+                .setPositiveButton("Igen", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        showSnackBarMessage("Eredmények összesítése...");
+                        new ResultsCalculatorEngine(AdminTotalMainActivity.this, db.getStationSum()).uploadResults();
+                    }
+                }).setNegativeButton("Mégse", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        }).show();
+    }
+
+    @Override
+    public void resultsUploaded() {
         prepareStatusUpdate(RaceState.Ended);
+    }
+
+    @Override
+    public void resultsUploadError(ErrorType type) {
+        showSnackBarMessage(type.getDefaultMessage());
     }
 
     @Override
