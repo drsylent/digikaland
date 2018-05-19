@@ -4,6 +4,7 @@ import android.app.DialogFragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -72,6 +73,11 @@ public class AdminEvaluateActivity extends AppCompatActivity implements PictureF
                 EvaluateFragment fragment = o.createFragment();
                 evaluators.add(fragment);
                 getSupportFragmentManager().beginTransaction().add(R.id.adminEvaluateContent, fragment, EvaluateFragment.generateTag()).commit();
+            }
+        }
+        else{
+            for(Fragment f : getSupportFragmentManager().getFragments()){
+                evaluators.add((EvaluateFragment) f);
             }
         }
         Button sendButton = findViewById(R.id.adminEvaluateSend);
