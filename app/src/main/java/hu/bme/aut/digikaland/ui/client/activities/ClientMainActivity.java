@@ -162,7 +162,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     }
 
     private void setActual(){
-        changeState(ViewState.Actual);
+        setActualMain();
         executePostLoad();
     }
 
@@ -333,7 +333,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         // elindítjuk itt, hogy amíg a felület beállítódik, stb, addig is menjen a letöltés
         // persze ha előbb végez, akkor gáz van, ezért figyelünk
         db = ClientEngine.getInstance(this);
-        db.loadState();
+        if(savedInstanceState == null) db.loadState();
         setContentView(R.layout.activity_client_main);
         mainLayout = findViewById(R.id.clientContent);
         drawerLayout = findViewById(R.id.clientDrawer);
@@ -368,17 +368,13 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         if(savedInstanceState == null) {
             state = ViewState.Actual;
             changeState(ViewState.Actual);
-//            actualStatus = ActualStatus.normal;
-//            setActualMock();
+        }
+        else{
+            state = ViewState.valueOf(savedInstanceState.getString(ARG_VIEWSTATE));
+            changeState(state);
         }
         uiReady = true;
         if(postLoad) executePostLoad();
-
-//        else{
-//            state = ViewState.valueOf(savedInstanceState.getString(ARG_VIEWSTATE));
-//            actualStatus = ActualStatus.valueOf(savedInstanceState.getString(ARG_ACTUALSTATE));
-//            getActiveItem().setChecked(true);
-//        }
     }
 
     private void executePostLoad(){
@@ -402,12 +398,13 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
 
     private void goToActual(Bundle bundle){
         toolbar.setTitle(R.string.actual);
-        state = ViewState.Actual;
+        setActualMain();
         getSupportFragmentManager().beginTransaction().replace(R.id.clientContent, ClientActualFragment.newInstance(bundle)).commit();
     }
 
     private void setResults(ArrayList<String> teams, ArrayList<Double> points){
         toolbar.setTitle(R.string.actual);
+        setActualMain();
         getSupportFragmentManager().beginTransaction().replace(R.id.clientContent, ResultsFragment.newInstance(teams, points)).commit();
     }
 
