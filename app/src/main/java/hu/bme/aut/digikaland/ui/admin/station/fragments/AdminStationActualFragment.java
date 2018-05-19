@@ -92,9 +92,9 @@ public class AdminStationActualFragment extends Fragment {
         }
     }
 
-    public void refreshAllData(){
+    public void refreshAllData(boolean newFragment){
         setStationStatusValues();
-        setNextTeamValues();
+        if(newFragment) setNextTeamValues();
         buttonEvaluate();
     }
 
@@ -128,7 +128,7 @@ public class AdminStationActualFragment extends Fragment {
                 activity.onHelpActivation();
             }
         });
-        refreshAllData();
+        refreshAllData(savedInstanceState == null);
         return root;
     }
 

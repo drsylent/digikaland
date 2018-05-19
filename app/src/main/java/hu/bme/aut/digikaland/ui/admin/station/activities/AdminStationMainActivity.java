@@ -69,13 +69,20 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
     private boolean uiReady = false;
     private boolean postLoad = false;
 
+    private final static String ARG_EVALUATED = "eval";
+    private final static String ARG_DONE = "done";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         uiReady = false;
         postLoad = false;
         db = AdminEngine.getInstance(this);
-        db.loadState();
+        if(savedInstanceState == null) db.loadState();
+        else{
+            evaluated = savedInstanceState.getInt(ARG_EVALUATED);
+            done = savedInstanceState.getInt(ARG_DONE);
+        }
         setContentView(R.layout.activity_admin_main);
         mainLayout = findViewById(R.id.adminStationContent);
         drawerLayout = findViewById(R.id.adminDrawer);
@@ -108,6 +115,13 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
         uiReady = true;
         if(postLoad) executePostLoad();
         //if(savedInstanceState == null) setNotStarted();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(ARG_DONE, done);
+        outState.putInt(ARG_EVALUATED, evaluated);
     }
 
     private void prepareStations() {
@@ -282,7 +296,7 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
             fragment = AdminStationActualFragment.newInstance(location);
             getSupportFragmentManager().beginTransaction().replace(R.id.adminStationContent, fragment).commit();
         }
-        else fragment.refreshAllData();
+        else fragment.refreshAllData(false);
     }
 
     @Override
