@@ -10,6 +10,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +25,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
 import hu.bme.aut.digikaland.dblogic.RacePermissionHandler;
@@ -52,17 +55,24 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_client_objective);
-        objectives = (ArrayList<Objective>) getIntent().getSerializableExtra(ARGS_OBJECTIVES);
         ActionBar toolbar = getSupportActionBar();
         if(toolbar != null){
             toolbar.setDisplayHomeAsUpEnabled(true);
             toolbar.setTitle(R.string.objective);
         }
-        if(savedInstanceState == null)
-        for(Objective o : objectives){
-            ObjectiveFragment fragment = o.createFragment();
-            fragments.add(fragment);
-            getSupportFragmentManager().beginTransaction().add(R.id.clientQuestionContent, fragment, ObjectiveFragment.generateTag()).commit();
+        if(savedInstanceState == null) {
+            objectives = (ArrayList<Objective>) getIntent().getSerializableExtra(ARGS_OBJECTIVES);
+            for (Objective o : objectives) {
+                ObjectiveFragment fragment = o.createFragment();
+                fragments.add(fragment);
+                getSupportFragmentManager().beginTransaction().add(R.id.clientQuestionContent, fragment, ObjectiveFragment.generateTag()).commit();
+            }
+        }
+        else{
+            objectives = (ArrayList<Objective>) savedInstanceState.getSerializable(ARGS_OBJECTIVES);
+            for(Fragment f : getSupportFragmentManager().getFragments()){
+                fragments.add((ObjectiveFragment) f);
+            }
         }
         send = findViewById(R.id.clientQuestionSend);
         // Ha nem lehet elküldeni, akkor ez az onclick listener lesz
@@ -78,6 +88,12 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
             disableButton(send);
         }
         mainLayout = findViewById(R.id.clientObjectiveMain);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(ARGS_OBJECTIVES, objectives);
     }
 
     private void disableButton(Button send){
