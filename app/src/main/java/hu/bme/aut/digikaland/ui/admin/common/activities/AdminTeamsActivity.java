@@ -88,7 +88,7 @@ public class AdminTeamsActivity extends AppCompatActivity implements AdminTeamsA
                 .setPositiveButton("Igen", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        AdminStationEngine.getInstance(AdminTeamsActivity.this).startStation(stationId, team);
+                        AdminStationEngine.getInstance(AdminTeamsActivity.this).startStation(stationId, team.id);
                     }
                 }).setNegativeButton("Mégse", new DialogInterface.OnClickListener() {
             @Override

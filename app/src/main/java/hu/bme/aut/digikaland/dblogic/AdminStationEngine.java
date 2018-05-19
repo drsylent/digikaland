@@ -325,20 +325,20 @@ public class AdminStationEngine {
         }
     }
 
-    public void startStation(String stationId, Team team){
-        new StationStarter(stationId, team).startStation();
+    public void startStation(String stationId, String teamId){
+        new StationStarter(stationId, teamId).startStation();
     }
 
     private class StationStarter{
         @ServerTimestamp
         private Date serverTime = new Date();
         private String stationId;
-        private Team team;
+        private String teamId;
         private String currentStationId;
         private long secondsLimit;
-        private StationStarter(String stId, Team t){
+        private StationStarter(String stId, String tId){
             stationId = stId;
-            team = t;
+            teamId = tId;
         }
 
         private void startStation(){
@@ -367,7 +367,7 @@ public class AdminStationEngine {
 
         private void getStationNumber(){
             RacePermissionHandler.getInstance().getRaceReference().collection("teams")
-                    .document(team.id).collection("stations")
+                    .document(teamId).collection("stations")
                     .whereEqualTo("station", RacePermissionHandler.getInstance().getRaceReference().collection("stations").document(stationId))
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -392,7 +392,7 @@ public class AdminStationEngine {
             Calendar calendar = new GregorianCalendar();
             calendar.setTime(serverTime);
             calendar.add(Calendar.SECOND, Long.valueOf(secondsLimit).intValue());
-            RacePermissionHandler.getInstance().getRaceReference().collection("teams").document(team.id).collection("stations").document(currentStationId)
+            RacePermissionHandler.getInstance().getRaceReference().collection("teams").document(teamId).collection("stations").document(currentStationId)
                     .update("timeend", calendar.getTime())
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override

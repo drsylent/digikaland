@@ -1,11 +1,13 @@
 package hu.bme.aut.digikaland.ui.admin.common.activities;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -70,6 +72,27 @@ public class AdminStationsActivity extends AppCompatActivity implements AdminSta
     }
 
     private boolean ignoredPermission = false;
+
+    @Override
+    public void onNotStartedStationLongClick(final StationAdminPerspective station) {
+        new AlertDialog.Builder(this).setMessage("Szeretnéd elindítani ezt az állomást ennek a csapatnak?")
+                .setPositiveButton("Igen", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        AdminStationEngine.getInstance(AdminStationsActivity.this).startStation(station.station.id, teamId);
+                    }
+                }).setNegativeButton("Mégse", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        }).show();
+    }
+
+    @Override
+    public void stationStarted() {
+        showSnackBarMessage("Az állomás elindítása sikeres volt.");
+    }
 
     @Override
     public void onStationClick(StationAdminPerspective item) {
@@ -147,11 +170,6 @@ public class AdminStationsActivity extends AppCompatActivity implements AdminSta
     // TODO: jelenleg csak placeholder megjelenítésre
     private void showSnackBarMessage(String message) {
         Snackbar.make(mainLayout, message, Snackbar.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void stationStarted() {
-
     }
 
     @Override

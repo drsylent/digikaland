@@ -88,6 +88,13 @@ public class AdminStationAdapter extends RecyclerView.Adapter<StationViewHolder>
                     break;
                 case NotArrivedYet:
                     color = colorNotStarted;
+                    holder.station.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View view) {
+                            activity.onNotStartedStationLongClick(item);
+                            return false;
+                        }
+                    });
                     break;
                 default:
                     color = 0;
@@ -104,6 +111,7 @@ public class AdminStationAdapter extends RecyclerView.Adapter<StationViewHolder>
     }
 
     public interface AdminStationListener{
+        void onNotStartedStationLongClick(StationAdminPerspective station);
         void onStationClick(StationAdminPerspective station);
     }
 }
