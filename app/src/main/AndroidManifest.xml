@@ -29,6 +29,11 @@
         <activity
             android:name=".ui.common.activities.SplashActivity"
             android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
         </activity>
         <activity
@@ -81,21 +86,7 @@
         <activity android:name=".ui.admin.common.activities.AdminStationSummaryActivity" />
         <activity android:name=".ui.admin.common.activities.AdminStationsActivity" />
         <activity android:name=".ui.admin.common.activities.AdminTeamsActivity" />
-        <activity android:name=".ui.common.activities.NFCActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <!--<intent-filter>-->
-                <!--<action android:name="android.nfc.action.NDEF_DISCOVERED" />-->
-                <!--<category android:name="android.intent.category.DEFAULT" />-->
-                <!--<data-->
-                    <!--android:host="ext"-->
-                    <!--android:pathPrefix="/digikaland"-->
-                    <!--android:scheme="vnd.android.nfc" />-->
-            <!--</intent-filter>-->
-        </activity>
+        <activity android:name=".ui.common.activities.NFCActivity"/>
     </application>
 
 </manifest>

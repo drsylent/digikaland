@@ -1,9 +1,14 @@
 package hu.bme.aut.digikaland.ui.client.activities;
 
 import android.Manifest;
-import android.content.DialogInterface;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Location;
+import android.nfc.NfcAdapter;
+import android.nfc.Tag;
+import android.nfc.tech.Ndef;
+import android.os.PatternMatcher;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -21,12 +26,11 @@ import android.widget.LinearLayout;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.GeoPoint;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -44,17 +48,12 @@ import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.entities.EvaluationStatistics;
 import hu.bme.aut.digikaland.entities.objectives.Objective;
 import hu.bme.aut.digikaland.entities.station.Station;
-import hu.bme.aut.digikaland.entities.station.StationAdminPerspective;
-import hu.bme.aut.digikaland.entities.station.StationAdminPerspectiveSummary;
 import hu.bme.aut.digikaland.entities.station.StationClientPerspective;
 import hu.bme.aut.digikaland.entities.station.StationMapData;
-import hu.bme.aut.digikaland.ui.admin.total.activities.AdminTotalMainActivity;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientActualFragment;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientObjectiveFragment;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientStatusFragment;
 import hu.bme.aut.digikaland.ui.common.activities.MapsActivity;
-import hu.bme.aut.digikaland.ui.common.activities.SplashActivity;
-import hu.bme.aut.digikaland.ui.common.activities.StartupActivity;
 import hu.bme.aut.digikaland.ui.common.fragments.NewRaceStarter;
 import hu.bme.aut.digikaland.ui.common.fragments.ResultsFragment;
 import hu.bme.aut.digikaland.utility.DistanceCalculator;
@@ -74,6 +73,8 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     private DrawerLayout drawerLayout;
     private LinearLayout mainLayout;
     private ClientEngine db;
+
+    private NfcAdapter nfcAdapter;
 
     @Override
     public void mapActivation() {
@@ -233,6 +234,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     @Override
     public void startingStateLoaded() {
         if(uiReady) {
+            disableForegroundDispatching();
             Bundle startingBundle = new Bundle();
             startingBundle.putInt(ClientActualFragment.ARG_STATION_NUMBER, -1);
             startingBundle.putSerializable(ClientActualFragment.ARG_LOCATION, db.getLastLoadedLocation());
@@ -247,7 +249,10 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         if(uiReady) {
             if(db.isDistanceActivatable())
                 ClientMainActivityPermissionsDispatcher.loadLocationWithPermissionCheck(this);
-            else loadRunningUi();
+            else{
+                loadRunningUi();
+            }
+            if(db.isNfcActivatable()) enableForegroundDispatching();
         }
         else postLoad = true;
     }
@@ -267,6 +272,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
             prepareObjectivesAfterRefresh();
         }
         else if(uiReady) {
+            disableForegroundDispatching();
             goToObjective(db.getLastLoadedStationNumber(), db.getStationSum(), db.getLastLoadedEndingTime());
         }
         else postLoad = true;
@@ -276,6 +282,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     @Override
     public void endingStateLoaded() {
         if(uiReady) {
+            disableForegroundDispatching();
             ResultsEngine.getInstance(this).loadResults();
         }
         else postLoad = true;
@@ -375,6 +382,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
             state = ViewState.valueOf(savedInstanceState.getString(ARG_VIEWSTATE));
             changeState(state);
         }
+        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         uiReady = true;
         if(postLoad) executePostLoad();
     }
@@ -537,5 +545,84 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     public void locationPermissionDenied(){
         showSnackBarMessage("Nem állapítható meg a jelenlegi helyzeted.");
         loadRunningUi();
+    }
+
+    private boolean nfcWatching = false;
+
+    private void enableForegroundDispatching(){
+        nfcWatching = true;
+        initializePendingIntent();
+    }
+
+    private void disableForegroundDispatching(){
+        nfcWatching = false;
+        nfcAdapter.disableForegroundDispatch(this);
+    }
+
+    private void initializePendingIntent() {
+        if(nfcWatching) {
+            IntentFilter tagDetected = new IntentFilter(
+                    NfcAdapter.ACTION_NDEF_DISCOVERED);
+            tagDetected.addDataScheme("vnd.android.nfc");
+            tagDetected.addDataPath("/digikaland", PatternMatcher.PATTERN_PREFIX);
+            tagDetected.addDataAuthority("ext", null);
+            IntentFilter[] tagFilters = new IntentFilter[]{tagDetected};
+            PendingIntent nfcPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this,
+                    getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+            nfcAdapter.enableForegroundDispatch(this, nfcPendingIntent,
+                    tagFilters, null);
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        readNfc(intent);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initializePendingIntent();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        nfcAdapter.disableForegroundDispatch(this);
+    }
+
+    private void readNfc(Intent intent){
+        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
+            try {
+                Tag tagFromIntent = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+                Ndef ndef = Ndef.get(tagFromIntent);
+                ndef.connect();
+                String record = new String(ndef.getCachedNdefMessage().getRecords()[0].getPayload());
+                activateNfcObjective(record);
+            }catch (IOException e){
+                Log.e("io error", "I/O Failure");
+                showSnackBarMessage("Érintsd újra az NFC-t!");
+            }catch (NullPointerException e) {
+                Log.e("nullpointer", "Unable to read");
+                showSnackBarMessage("Érintsd újra az NFC-t!");
+            }
+        }
+    }
+
+    private void activateNfcObjective(String codes){
+        if(db.isNfcActivatable()) {
+            String[] codeCollection = codes.split("@");
+            String raceCode = codeCollection[0];
+            String stationCode = codeCollection[1];
+            if(CodeHandler.getInstance().getRaceCode().equals(raceCode) && db.getNfcCode().equals(stationCode)){
+                showSnackBarMessage("Feladatok betöltése...");
+                db.startStation();
+            }
+            else{
+                showSnackBarMessage("Helytelen NFC tag!");
+            }
+        }else{
+            showSnackBarMessage("Ezt a feladatot nem lehet NFC-vel aktiválni!");
+        }
     }
 }
