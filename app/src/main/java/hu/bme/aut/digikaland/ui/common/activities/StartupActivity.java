@@ -67,13 +67,14 @@ public class StartupActivity extends AppCompatActivity implements PrimaryCodeFra
         // tervezo modba lepes
         if(raceCode.toUpperCase().equals("PLANMACH"))
             return;
+        if(raceCode.toUpperCase().equals("NFC"))
+            startActivity(new Intent(StartupActivity.this, NFCActivity.class));
         button.setEnabled(false);
         this.raceCode = raceCode;
         disabledButton = button;
         RaceNameGetter.getInstance(this).loadRaceName(raceCode);
     }
 
-    // TODO: ne lehessen visszaterni erre az activityre
     @Override
     public void onSecondaryCodeHit(String roleCode, Button button) {
         if(!inputValidator(roleCode)){

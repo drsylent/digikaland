@@ -13,6 +13,6 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:id="@+id/nfctext"
-        android:text="Ide jön az nfc payload"/>
+        android:text="Racecode@Stationcode"/>
 
 </LinearLayout>
