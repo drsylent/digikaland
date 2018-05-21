@@ -330,8 +330,6 @@ public class AdminStationEngine {
     }
 
     private class StationStarter{
-        @ServerTimestamp
-        private Date serverTime = new Date();
         private String stationId;
         private String teamId;
         private String currentStationId;
@@ -390,7 +388,7 @@ public class AdminStationEngine {
 
         private void uploadStationStart(){
             Calendar calendar = new GregorianCalendar();
-            calendar.setTime(serverTime);
+            calendar.setTime(ServerTime.getTime());
             calendar.add(Calendar.SECOND, Long.valueOf(secondsLimit).intValue());
             RacePermissionHandler.getInstance().getRaceReference().collection("teams").document(teamId).collection("stations").document(currentStationId)
                     .update("timeend", calendar.getTime())

@@ -93,6 +93,9 @@ public class ClientEngine {
         endingTime = null;
         stationId = null;
         geoPoint = null;
+        distanceActivatable = false;
+        nfcCode = null;
+        activationDistance = -1;
     }
 
     public void loadState(){
@@ -397,9 +400,6 @@ public class ClientEngine {
 
     private String nfcCode = null;
 
-    @ServerTimestamp
-    private Date serverTime = new Date();
-
     public void startStation(){
         final DocumentReference stationRef = RacePermissionHandler.getInstance().getRaceReference().collection("stations").document(stationId);
         stationRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -425,7 +425,7 @@ public class ClientEngine {
 
     private void uploadStationStart(long secondsLimit){
         Calendar calendar = new GregorianCalendar();
-        calendar.setTime(serverTime);
+        calendar.setTime(ServerTime.getTime());
         calendar.add(Calendar.SECOND, Long.valueOf(secondsLimit).intValue());
         RacePermissionHandler.getInstance().getTeamReference().collection("stations").document(Integer.toString(stationNumber))
                 .update("timeend", calendar.getTime())

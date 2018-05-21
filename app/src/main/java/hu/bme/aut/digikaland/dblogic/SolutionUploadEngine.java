@@ -40,9 +40,6 @@ public class SolutionUploadEngine {
 
     private CommunicationInterface comm;
 
-    @ServerTimestamp
-    private Date serverTime = new Date();
-
     public static SolutionUploadEngine getInstance(CommunicationInterface c) {
         ourInstance.comm = c;
         return ourInstance;
@@ -278,7 +275,7 @@ public class SolutionUploadEngine {
         private void updateTeamStationStatus2(DocumentReference teamStationRef){
             Map<String, Object> updateData = new HashMap<>();
             updateData.put("done", true);
-            updateData.put("timedone", serverTime);
+            updateData.put("timedone", ServerTime.getTime());
             teamStationRef.set(updateData, SetOptions.merge())
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
