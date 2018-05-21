@@ -245,7 +245,9 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     @Override
     public void runningStateLoaded() {
         if(uiReady) {
-            ClientMainActivityPermissionsDispatcher.loadLocationWithPermissionCheck(this);
+            if(db.isDistanceActivatable())
+                ClientMainActivityPermissionsDispatcher.loadLocationWithPermissionCheck(this);
+            else loadRunningUi();
         }
         else postLoad = true;
     }
@@ -513,8 +515,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
 
     private void checkDistance(){
         GeoPoint station = db.getLastLoadedGeoPoint();
-        double distance = 100.0;
-        if(distance > DistanceCalculator.calculate(currentLatitude, currentLongitude, station.getLatitude(), station.getLongitude())) {
+        if(db.getActivationDistance() > DistanceCalculator.calculate(currentLatitude, currentLongitude, station.getLatitude(), station.getLongitude())) {
             db.startStation();
         }
         else loadRunningUi();

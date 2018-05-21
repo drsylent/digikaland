@@ -270,6 +270,9 @@ public class ClientEngine {
                         try {
                             location = new Location(document.getString("address"), document.getString("address-detailed"));
                             geoPoint = document.getGeoPoint("geodata");
+                            distanceActivatable = document.contains("distance");
+                            if(distanceActivatable) activationDistance = document.getDouble("distance");
+                            nfcCode = document.getString("nfccode");
                             if(onStation) stationStateLoaded();
                             else runningStateLoaded();
                         } catch (RuntimeException e){
@@ -371,6 +374,28 @@ public class ClientEngine {
     public GeoPoint getLastLoadedGeoPoint(){
         return geoPoint;
     }
+
+    public boolean isDistanceActivatable() {
+        return distanceActivatable;
+    }
+
+    public boolean isNfcActivatable(){
+        return nfcCode != null;
+    }
+
+    public double getActivationDistance() {
+        return activationDistance;
+    }
+
+    public String getNfcCode() {
+        return nfcCode;
+    }
+
+    private boolean distanceActivatable = false;
+
+    private double activationDistance = -1;
+
+    private String nfcCode = null;
 
     @ServerTimestamp
     private Date serverTime = new Date();
