@@ -105,7 +105,6 @@ public class PointDisplayFragment extends Fragment {
         mListener = null;
     }
 
-    // TODO: Kommunikáció a pontszámról feltöltéskor
     public interface PointHandleActivity {
         void settingPoint(String hostTag, int current, int max);
     }

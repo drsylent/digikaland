@@ -44,7 +44,7 @@ public class CustomAnswerObjectiveFragment extends ObjectiveFragment {
         }
     }
 
-    private boolean inputValidator(String string){
+    private boolean isInputValid(String string){
         return Pattern.matches("\\w{0,150}", string);
     }
 
@@ -52,12 +52,10 @@ public class CustomAnswerObjectiveFragment extends ObjectiveFragment {
     public void upload() {
         CustomAnswerObjective obj = (CustomAnswerObjective) getObjective();
         String answer = etAnswer.getText().toString();
-        if(inputValidator(answer))
+        if(isInputValid(answer))
             obj.setAnswer(answer);
         else objectiveActivity.inputValidationError();
     }
-
-    // TODO: TEST: minden Androidnál elmenti a szöveget?
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

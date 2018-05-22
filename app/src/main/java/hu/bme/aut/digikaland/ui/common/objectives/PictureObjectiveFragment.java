@@ -89,6 +89,10 @@ public class PictureObjectiveFragment extends ObjectiveFragment {
         return ((PictureObjective) getObjective()).getMaxPictures();
     }
 
+    /**
+     * Hány képet lehet még hozzáadni a megoldáshoz.
+     * @return A hozzáadható képek száma.
+     */
     public int getRemainingNumberOfPictures(){
         int free = 0;
         for(PictureFragment f : fragments){
@@ -120,6 +124,10 @@ public class PictureObjectiveFragment extends ObjectiveFragment {
         if(pf != null) pf.setPicture(uri);
     }
 
+    /**
+     * Van-e szabad hely még, ahova kép helyezhető.
+     * @return Van-e még üres képkeret.
+     */
     public boolean isFreePicture(){
         return getFirstFreeFragment() != null;
     }

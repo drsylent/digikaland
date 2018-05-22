@@ -4,6 +4,10 @@ import android.os.Bundle;
 import android.util.Log;
 import hu.bme.aut.digikaland.entities.objectives.solutions.Solution;
 
+/**
+ * Egy kiértékelő fragment, melyhez hozzátartozik a pontszámító is, illetve a feladat,
+ * melynek megoldását nem lehet szerkeszteni.
+ */
 public abstract class EvaluateFragment extends SolutionFragment {
     protected static final String ARG_CURRENTPOINTS = "cur";
     protected static final String ARG_MAXPOINTS = "max";
@@ -59,9 +63,5 @@ public abstract class EvaluateFragment extends SolutionFragment {
         getSolution().setCurrentPoints(points);
         pointHolder.setPoints(points);
         Log.e("PointHolder Tag", pointHolder.getTag());
-    }
-
-    public int getCurrentPoints(){
-        return currentPoints;
     }
 }

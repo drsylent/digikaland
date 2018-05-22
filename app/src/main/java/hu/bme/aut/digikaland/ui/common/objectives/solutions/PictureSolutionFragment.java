@@ -13,7 +13,9 @@ import hu.bme.aut.digikaland.entities.objectives.solutions.PictureSolution;
 import hu.bme.aut.digikaland.ui.common.fragments.PictureFragment;
 import hu.bme.aut.digikaland.utility.FragmentListSaver;
 
-
+/**
+ * A képeket megoldásként váró feladatok megoldási része.
+ */
 public class PictureSolutionFragment extends SolutionFragment {
     private static final String ARG_PICTUREFRAGMENTS = "pics";
     private ArrayList<PictureFragment> fragments = new ArrayList<>();
@@ -60,6 +62,4 @@ public class PictureSolutionFragment extends SolutionFragment {
     private int getMaxNumberOfPictures(){
         return ((PictureSolution) getSolution()).getAnswer().size();
     }
-
-
 }
