@@ -3,15 +3,14 @@ package hu.bme.aut.digikaland.entities.objectives;
 import android.support.annotation.NonNull;
 
 import java.io.Serializable;
-import java.util.Comparator;
 
 import hu.bme.aut.digikaland.ui.common.objectives.ObjectiveFragment;
 
 /**
- * Ez az osztály reprezentál egy feladatot, melyet végre kell hajtani. Absztrakt osztály, a leszármazottai valósítják meg, hogy mit kell tenni.
+ * Ez az osztály reprezentál egy feladatot, melyet végre kell hajtani.
+ * Absztrakt osztály, a leszármazottai valósítják meg, hogy mit kell tenni.
  */
 public abstract class Objective implements Serializable, Comparable<Objective>{
-    // TODO: konstruktorba beépíthető majd, de még a mockkal kompatibilisre hagyjuk
     private String id;
 
     public String getStationId() {
@@ -28,9 +27,6 @@ public abstract class Objective implements Serializable, Comparable<Objective>{
 
     public void setId(String id){ this.id = id; }
 
-    public Objective(){}
-
-    // Befejezési idő az állomáshoz lesz kötve!
     private String question;
 
     @Override

@@ -3,8 +3,6 @@ package hu.bme.aut.digikaland.entities.objectives;
 import android.net.Uri;
 
 import java.util.ArrayList;
-
-import hu.bme.aut.digikaland.entities.Picture;
 import hu.bme.aut.digikaland.ui.common.objectives.ObjectiveFragment;
 import hu.bme.aut.digikaland.ui.common.objectives.PictureObjectiveFragment;
 

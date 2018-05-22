@@ -6,27 +6,11 @@ import hu.bme.aut.digikaland.ui.common.objectives.MultipleChoiceObjectiveFragmen
 import hu.bme.aut.digikaland.ui.common.objectives.ObjectiveFragment;
 
 public class MultipleChoiceObjective extends Objective {
-    // TODO: mockolás miatt még itt hagyva
-    private String answer[];
-
-    public MultipleChoiceObjective(String q, String answers[]){
-        super(q);
-        answer = answers;
-    }
-
-    //    public String getAnswer(int index){
-//        return answer[index];
-//    }
-
-    /////
-
-
     public int getChosenIndex() {
         return chosenIndex;
     }
 
     private int chosenIndex;
-
 
     private ArrayList<String> answers;
 
@@ -35,11 +19,8 @@ public class MultipleChoiceObjective extends Objective {
         answers = a;
     }
 
-    // TODO: Mock off
     public String getAnswer(int index){
-        if(answers != null)
         return answers.get(index);
-        else return answer[index];
     }
 
     public void setChosen(int index){
