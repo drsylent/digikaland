@@ -17,7 +17,7 @@ public enum LoadResult {
      */
     Station,
     /**
-     * A verseny a végénél tart.
+     * A verseny már befejeződött.
      */
     Ending
 }
