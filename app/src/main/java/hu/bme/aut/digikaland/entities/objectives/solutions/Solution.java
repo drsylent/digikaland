@@ -7,6 +7,9 @@ import java.io.Serializable;
 import hu.bme.aut.digikaland.entities.objectives.Objective;
 import hu.bme.aut.digikaland.ui.common.objectives.solutions.EvaluateFragment;
 
+/**
+ * Egy megoldás reprezentációja, melyre értékelés adható.
+ */
 public abstract class Solution implements Serializable, Comparable<Solution>{
     public void setObjective(Objective objective) {
         this.objective = objective;
@@ -50,9 +53,6 @@ public abstract class Solution implements Serializable, Comparable<Solution>{
     private int currentPoints;
     private int maxPoints;
 
-    // TODO: deprecated
-    public Solution(Objective o, int curr, int max){ objective = o; currentPoints = curr; maxPoints = max; }
-
     public Solution(int curr, int max){ currentPoints = curr; maxPoints = max; }
 
     @Override
@@ -67,10 +67,6 @@ public abstract class Solution implements Serializable, Comparable<Solution>{
 
     public Objective getObjective(){
         return objective;
-    }
-
-    public void upload(int point){
-        // TODO: feltöltése a megadott pontszámnak
     }
 
     public abstract EvaluateFragment createFragment();

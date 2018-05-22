@@ -1,6 +1,5 @@
 package hu.bme.aut.digikaland.entities.objectives.solutions;
 
-import hu.bme.aut.digikaland.entities.objectives.TrueFalseObjective;
 import hu.bme.aut.digikaland.ui.common.objectives.solutions.TrueFalseEvaluateFragment;
 
 public class TrueFalseSolution extends Solution {
@@ -9,11 +8,6 @@ public class TrueFalseSolution extends Solution {
     }
 
     private boolean answer;
-
-    public TrueFalseSolution(TrueFalseObjective o, int curr, int max, boolean ans){
-        super(o, curr, max);
-        answer = ans;
-    }
 
     public TrueFalseSolution(int curr, int max, boolean ans){
         super(curr, max);

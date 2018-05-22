@@ -10,11 +10,6 @@ public class MultipleChoiceSolution extends Solution {
 
     private int answer;
 
-    public MultipleChoiceSolution(MultipleChoiceObjective o, int curr, int max, int ans){
-        super(o, curr, max);
-        answer = ans;
-    }
-
     public MultipleChoiceSolution(int curr, int max, int ans){
         super(curr, max);
         answer = ans;

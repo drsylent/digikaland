@@ -1,6 +1,5 @@
 package hu.bme.aut.digikaland.entities.objectives.solutions;
 
-import hu.bme.aut.digikaland.entities.objectives.CustomAnswerObjective;
 import hu.bme.aut.digikaland.ui.common.objectives.solutions.CustomAnswerEvaluateFragment;
 
 public class CustomAnswerSolution extends Solution {
@@ -9,11 +8,6 @@ public class CustomAnswerSolution extends Solution {
     }
 
     private String answer;
-
-    public CustomAnswerSolution(CustomAnswerObjective o, int curr, int max, String ans){
-        super(o, curr, max);
-        answer = ans;
-    }
 
     public CustomAnswerSolution(int curr, int max, String ans){
         super(curr, max);

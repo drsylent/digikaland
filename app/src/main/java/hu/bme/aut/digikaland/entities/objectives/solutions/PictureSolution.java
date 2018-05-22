@@ -24,11 +24,6 @@ public class PictureSolution extends Solution {
         answer = newanswer;
     }
 
-    public PictureSolution(PictureObjective o, int curr, int max, ArrayList<String> ans){
-        super(o, curr, max);
-        answer = ans;
-    }
-
     public PictureSolution(int curr, int max){
         super(curr, max);
     }
