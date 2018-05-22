@@ -9,7 +9,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
-
+/**
+ * Egy képet szimbolizáló osztály, melyet uriból fog megnyitni.
+ */
 public class Picture {
     private Uri uri;
 
@@ -19,6 +21,13 @@ public class Picture {
         return uri;
     }
 
+    /**
+     * Egy képet megnyit egy bitmapként, miközben megfelelő méretűre állítja.
+     * @param width A kívánt szélesség.
+     * @param height A kívánt magasság.
+     * @param resolver A ContentResolver, melynek segítségével a urit fel lehet oldani.
+     * @return A megnyitot bitmap.
+     */
     public Bitmap openSmall(int width, int height, ContentResolver resolver){
         InputStream stream;
         try{
