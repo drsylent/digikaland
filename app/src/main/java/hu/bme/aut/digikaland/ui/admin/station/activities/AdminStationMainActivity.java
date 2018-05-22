@@ -20,13 +20,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
+import hu.bme.aut.digikaland.dblogic.ResultsDownloaderEngine;
 import hu.bme.aut.digikaland.dblogic.StationAdminEngine;
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.dblogic.AdminStationEngine;
 import hu.bme.aut.digikaland.dblogic.ContactsEngineFull;
 import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
 import hu.bme.aut.digikaland.dblogic.ObjectiveEngine;
-import hu.bme.aut.digikaland.dblogic.ResultsEngine;
 import hu.bme.aut.digikaland.dblogic.SolutionDownloadEngine;
 import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.entities.Location;
@@ -52,7 +52,7 @@ import permissions.dispatcher.RuntimePermissions;
 
 @RuntimePermissions
 public class AdminStationMainActivity extends AppCompatActivity implements AdminStationActualFragment.AdminActivityInterface, ResultsFragment.ResultsFragmentListener,
-        AdminRaceStarterFragment.AdminStarterListener, AdminStationEngine.AdminStationCommunicationInterface, ResultsEngine.CommunicationInterface, ObjectiveEngine.ObjectiveCommunicationInterface,
+        AdminRaceStarterFragment.AdminStarterListener, AdminStationEngine.AdminStationCommunicationInterface, ResultsDownloaderEngine.ResultsDownloaderCommunicationInterface, ObjectiveEngine.ObjectiveCommunicationInterface,
         ContactsEngineFull.ContactsEngineFullCommunicationInterface, SolutionDownloadEngine.CommunicationInterface, StationAdminEngine.StationAdminCommunicationInterface {
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
@@ -184,7 +184,7 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
     @Override
     public void endingStateLoaded() {
         if(uiReady) {
-            ResultsEngine.getInstance(this).loadResults();
+            ResultsDownloaderEngine.getInstance(this).loadResults();
         }
         else postLoad = true;
     }

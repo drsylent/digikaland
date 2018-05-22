@@ -39,10 +39,10 @@ import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.dblogic.ClientEngine;
 import hu.bme.aut.digikaland.dblogic.CodeHandler;
 import hu.bme.aut.digikaland.dblogic.ContactsEngine;
+import hu.bme.aut.digikaland.dblogic.ResultsDownloaderEngine;
 import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
 import hu.bme.aut.digikaland.dblogic.ObjectiveEngine;
 import hu.bme.aut.digikaland.dblogic.RaceRoleHandler;
-import hu.bme.aut.digikaland.dblogic.ResultsEngine;
 import hu.bme.aut.digikaland.dblogic.StationsEngine;
 import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.entities.EvaluationStatistics;
@@ -63,7 +63,7 @@ import permissions.dispatcher.RuntimePermissions;
 
 @RuntimePermissions
 public class ClientMainActivity extends AppCompatActivity implements ClientActualFragment.ClientActualMainListener, ClientObjectiveFragment.ClientActiveObjectiveListener,
-        ResultsFragment.ResultsFragmentListener, ClientEngine.ClientCommunicationInterface, ResultsEngine.CommunicationInterface, ContactsEngine.ContactsEngineCommunicationInterface,
+        ResultsFragment.ResultsFragmentListener, ClientEngine.ClientCommunicationInterface, ResultsDownloaderEngine.ResultsDownloaderCommunicationInterface, ContactsEngine.ContactsEngineCommunicationInterface,
         ObjectiveEngine.ObjectiveCommunicationInterface, StationsEngine.CommunicationInterface{
 
     private static final String ARG_VIEWSTATE = "state";
@@ -221,7 +221,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
 
     @Override
     public void resultsError(ErrorType type) {
-        showSnackBarMessage("ResultsEngine: " + type.getDefaultMessage());
+        showSnackBarMessage("ResultsDownloaderEngine: " + type.getDefaultMessage());
     }
 
     @Override
@@ -283,7 +283,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     public void endingStateLoaded() {
         if(uiReady) {
             disableForegroundDispatching();
-            ResultsEngine.getInstance(this).loadResults();
+            ResultsDownloaderEngine.getInstance(this).loadResults();
         }
         else postLoad = true;
     }

@@ -27,7 +27,7 @@ import hu.bme.aut.digikaland.dblogic.AdminTotalEngine;
 import hu.bme.aut.digikaland.dblogic.ContactsEngineFull;
 import hu.bme.aut.digikaland.dblogic.ResultsCalculatorEngine;
 import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
-import hu.bme.aut.digikaland.dblogic.ResultsEngine;
+import hu.bme.aut.digikaland.dblogic.ResultsDownloaderEngine;
 import hu.bme.aut.digikaland.dblogic.enumeration.RaceState;
 import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.entities.EvaluationStatistics;
@@ -47,7 +47,7 @@ import hu.bme.aut.digikaland.ui.common.fragments.ResultsFragment;
 import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
 public class AdminTotalMainActivity extends AppCompatActivity implements ResultsFragment.ResultsFragmentListener,
-        AdminRunningFragment.AdminRunningListener, AdminRaceStarterFragment.AdminStarterListener, AdminTotalEngine.AdminTotalCommunicationInterface, ResultsEngine.CommunicationInterface,
+        AdminRunningFragment.AdminRunningListener, AdminRaceStarterFragment.AdminStarterListener, AdminTotalEngine.AdminTotalCommunicationInterface, ResultsDownloaderEngine.ResultsDownloaderCommunicationInterface,
         StationAdminEngine.StationAdminCommunicationInterface, ContactsEngineFull.ContactsEngineFullCommunicationInterface, ResultsCalculatorEngine.ResultsCalculatorCommunicationInterface {
 
     private Toolbar toolbar;
@@ -230,7 +230,7 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
     @Override
     public void endingStateLoaded() {
         if(uiReady) {
-            ResultsEngine.getInstance(this).loadResults();
+            ResultsDownloaderEngine.getInstance(this).loadResults();
         }
         else postLoad = true;
     }

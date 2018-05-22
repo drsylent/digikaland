@@ -11,19 +11,25 @@ import java.util.ArrayList;
 
 import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
 
-public class ResultsEngine {
-    private static final ResultsEngine ourInstance = new ResultsEngine();
+/**
+ * A végeredmények letöltését ezen a szolgáltatáson keresztül lehet megtenni.
+ */
+public class ResultsDownloaderEngine {
+    private static final ResultsDownloaderEngine ourInstance = new ResultsDownloaderEngine();
 
-    public static ResultsEngine getInstance(CommunicationInterface c)
+    public static ResultsDownloaderEngine getInstance(ResultsDownloaderCommunicationInterface c)
     {   ourInstance.comm = c;
         return ourInstance;
     }
 
-    private ResultsEngine() {
+    private ResultsDownloaderEngine() {
     }
 
-    private CommunicationInterface comm;
+    private ResultsDownloaderCommunicationInterface comm;
 
+    /**
+     * A végeredmények letöltésének elkezdése.
+     */
     public void loadResults(){
         if(teams.isEmpty() || points.isEmpty()) downloadResults();
         else comm.resultsLoaded(teams, points);
@@ -55,7 +61,7 @@ public class ResultsEngine {
     private ArrayList<String> teams = new ArrayList<>();
     private ArrayList<Double> points = new ArrayList<>();
 
-    public interface CommunicationInterface{
+    public interface ResultsDownloaderCommunicationInterface {
         void resultsLoaded(ArrayList<String> teamNames, ArrayList<Double> teamPoints);
         void resultsError(ErrorType type);
     }
