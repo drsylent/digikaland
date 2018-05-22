@@ -8,7 +8,10 @@ import java.io.Serializable;
 
 import hu.bme.aut.digikaland.entities.EvaluationStatistics;
 
-public class StationAdminPerspective implements Serializable, Comparable<StationAdminPerspective> {
+/**
+ * Egy állomás egy admin szemszögéből.
+ */
+public abstract class StationAdminPerspective implements Serializable, Comparable<StationAdminPerspective> {
     public Station station;
 
     @Override

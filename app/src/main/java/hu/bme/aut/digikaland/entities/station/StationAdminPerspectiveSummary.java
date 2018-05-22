@@ -5,9 +5,8 @@ import com.google.firebase.firestore.GeoPoint;
 import hu.bme.aut.digikaland.entities.EvaluationStatistics;
 
 /**
- * Created by Sylent on 2018. 04. 04..
+ * Egy állomás egy admin szemszögéből úgy, hogy látszanak az összesítő adatai.
  */
-
 public class StationAdminPerspectiveSummary extends StationAdminPerspective {
     public double latitude;
     public double longitude;

@@ -1,12 +1,14 @@
 package hu.bme.aut.digikaland.entities.station;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.firebase.firestore.GeoPoint;
 
 import java.io.Serializable;
 
 import hu.bme.aut.digikaland.entities.EvaluationStatistics;
 
+/**
+ * Egy állomás térkép által használható nézete.
+ */
 public class StationMapData implements Serializable{
     public Station station;
     private double latitude;
@@ -29,8 +31,5 @@ public class StationMapData implements Serializable{
     }
     public void setSpecialName(String name){
         specialName = name;
-    }
-    public void deleteSpecialName(){
-        specialName = null;
     }
 }

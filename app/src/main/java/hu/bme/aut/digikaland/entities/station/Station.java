@@ -8,16 +8,12 @@ import java.util.ArrayList;
 
 import hu.bme.aut.digikaland.entities.objectives.Objective;
 
+/**
+ * Egy állomást reprezentáló osztály.
+ */
 public class Station implements Serializable, Comparable<Station> {
-    public int oldId;
-    // TODO: ez nem csak a kliens perspektívába kell?
+    // egy sorrend - később kivehető, de akkor StationClientPerspective-be át kell helyezni!
     public int number;
-    private ArrayList<Objective> objectives = null;
-
-    public void addObjective(Objective obj){
-        if(objectives == null) objectives = new ArrayList<>();
-        objectives.add(obj);
-    }
 
     @Override
     public int compareTo(@NonNull Station station) {
@@ -27,26 +23,6 @@ public class Station implements Serializable, Comparable<Station> {
     @Override
     public boolean equals(Object obj) {
         return obj instanceof Station && ((Station) obj).id.equals(id);
-    }
-
-    public void setObjectives(ArrayList<Objective> set){
-        objectives = set;
-    }
-
-    @Nullable
-    public ArrayList<Objective> getObjectives(){
-        return objectives;
-    }
-
-    public Station(int i, int n, @NonNull ArrayList<Objective> obj){
-        oldId = i;
-        number = n;
-        objectives = obj;
-    }
-
-    public Station(int i, int n){
-        oldId = i;
-        number = n;
     }
 
     public String id;

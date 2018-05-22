@@ -428,7 +428,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     void goToMap(GeoPoint geo){
         Intent i = new Intent(ClientMainActivity.this, MapsActivity.class);
         ArrayList<StationMapData> stations = new ArrayList<>();
-        StationMapData data = new StationMapData(new Station(0,0), geo.getLatitude(), geo.getLongitude(), new EvaluationStatistics(0,0,0));
+        StationMapData data = new StationMapData(new Station("0",0), geo.getLatitude(), geo.getLongitude(), new EvaluationStatistics(0,0,0));
         data.setSpecialName("Következő állomás");
         stations.add(data);
         Bundle locationData = new Bundle();
