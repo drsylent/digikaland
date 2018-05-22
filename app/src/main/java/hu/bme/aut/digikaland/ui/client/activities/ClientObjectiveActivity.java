@@ -41,7 +41,7 @@ import static android.os.Environment.getExternalStoragePublicDirectory;
 
 @RuntimePermissions
 public class ClientObjectiveActivity extends AppCompatActivity implements PictureObjectiveFragment.PictureObjectiveListener, PictureFragment.PictureFragmentListener,
-        CustomAnswerObjectiveFragment.CustomObjectiveListener, SolutionUploadEngine.CommunicationInterface {
+        CustomAnswerObjectiveFragment.CustomObjectiveListener, SolutionUploadEngine.SolutionUploadCommunicationInterface {
     public final static String ARGS_OBJECTIVES = "objectives";
     public final static String ARG_SEND = "sendable";
     ArrayList<ObjectiveFragment> fragments = new ArrayList<>();

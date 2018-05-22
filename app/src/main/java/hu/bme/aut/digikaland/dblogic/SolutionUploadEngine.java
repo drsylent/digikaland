@@ -32,15 +32,14 @@ import hu.bme.aut.digikaland.entities.objectives.PictureObjective;
 import hu.bme.aut.digikaland.entities.objectives.TrueFalseObjective;
 
 /**
- * Created by Sylent on 2018. 04. 16..
+ * A kliensek a megoldásaikat ezen a szolgáltatáson keresztül tölthetik fel.
  */
-
 public class SolutionUploadEngine {
     private static final SolutionUploadEngine ourInstance = new SolutionUploadEngine();
 
-    private CommunicationInterface comm;
+    private SolutionUploadCommunicationInterface comm;
 
-    public static SolutionUploadEngine getInstance(CommunicationInterface c) {
+    public static SolutionUploadEngine getInstance(SolutionUploadCommunicationInterface c) {
         ourInstance.comm = c;
         return ourInstance;
     }
@@ -48,6 +47,11 @@ public class SolutionUploadEngine {
     private SolutionUploadEngine() {
     }
 
+    /**
+     * A megoldások feltöltése.
+     * @param objectives A feladatok, melyeket megoldott a csapat.
+     * @param teamId A csapat azonosítója.
+     */
     public void uploadSolutions(ArrayList<Objective> objectives, String teamId){
         new Uploader(objectives, teamId).start();
     }
@@ -331,7 +335,7 @@ public class SolutionUploadEngine {
         }
     }
 
-    public interface CommunicationInterface{
+    public interface SolutionUploadCommunicationInterface {
         void uploadCompleted();
         void uploadError(ErrorType errorType);
     }
