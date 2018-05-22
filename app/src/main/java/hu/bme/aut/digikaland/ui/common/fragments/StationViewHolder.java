@@ -6,6 +6,9 @@ import android.widget.TextView;
 
 import hu.bme.aut.digikaland.R;
 
+/**
+ * Egy station elemet felderítő viewholder - kliens és admin is használja.
+ */
 public class StationViewHolder extends RecyclerView.ViewHolder{
     public TextView station;
 

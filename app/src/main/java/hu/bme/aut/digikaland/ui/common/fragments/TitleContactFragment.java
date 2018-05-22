@@ -11,6 +11,9 @@ import android.widget.TextView;
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.entities.Contact;
 
+/**
+ * Egy olyan fragment, mely a kapcsolat elé egy címet/nevet is kiír.
+ */
 public class TitleContactFragment extends Fragment {
     private static final String ARG_TITLE = "title";
     private static final String ARG_CONTACT = "contactn";

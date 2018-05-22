@@ -10,6 +10,9 @@ import android.widget.TextView;
 
 import hu.bme.aut.digikaland.R;
 
+/**
+ * Egy egyszerű szövegmegjelenítő fragment logikája - állítható, hogy középen legyen-e a szöveg.
+ */
 public class TextFragment extends Fragment {
     private static final String ARG_TEXT = "text";
     private static final String ARG_CENTER = "center";

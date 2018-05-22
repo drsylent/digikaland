@@ -12,6 +12,10 @@ import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.utility.PhoneDial;
 
+/**
+ * Egy olyan fragment, mely egy kapcsolat adait írja ki - név és telefonszám.
+ * Ha a számra kattintanak, elindítja a tárcsázót.
+ */
 public class ContactFragment extends Fragment {
     private static final String ARG_NAME = "name";
     private static final String ARG_PHONE = "phone";
