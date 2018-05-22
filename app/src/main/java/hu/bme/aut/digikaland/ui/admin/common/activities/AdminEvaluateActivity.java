@@ -144,14 +144,6 @@ public class AdminEvaluateActivity extends AppCompatActivity implements PictureF
         startActivity(showPicture);
     }
 
-    @Override
-    public void onExistingPictureClicked(String parentTag, String tag) {
-        PictureFragment pf = pictureFragmentSearch(parentTag, tag);
-        Uri path = pf.getPictureUri();
-        if(path == null) return;
-        showGallery(path);
-    }
-
     // TODO: még nem tudjuk, hogy lesz a képletöltés
     // TODO: ha nem lesz megnyitható a uri, ilyet kell alkalmazni
     // teszteléshez egyelőre ezt kell használni
@@ -167,7 +159,7 @@ public class AdminEvaluateActivity extends AppCompatActivity implements PictureF
     }
 
     @Override
-    public void onExistingPictureLongClicked(String parentTag, String tag) {
+    public void onExistingPictureLongClicked(PictureFragment frag) {
     }
 
     @Override

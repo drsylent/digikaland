@@ -38,7 +38,7 @@ public class PictureSolutionFragment extends SolutionFragment {
         PictureSolution solution = (PictureSolution) getSolution();
         if(savedInstanceState == null)
             for(int i = 0; i < numberOfPictures; i++){
-                PictureFragment fragment = PictureFragment.newInstance(getTag(), solution.getAnswer().get(i));
+                PictureFragment fragment = PictureFragment.newInstance(solution.getAnswer().get(i));
                 fragments.add(fragment);
                 getChildFragmentManager().beginTransaction().add(R.id.pictureSolutionAnswer, fragment, PictureFragment.generateTag()).commit();
             }

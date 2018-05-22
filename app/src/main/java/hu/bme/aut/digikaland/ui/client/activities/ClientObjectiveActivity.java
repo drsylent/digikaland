@@ -120,10 +120,6 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
         return (PictureObjectiveFragment) getSupportFragmentManager().findFragmentByTag(tag);
     }
 
-    private PictureFragment pictureFragmentSearch(String parentTag, String tag){
-        return (PictureFragment) getSupportFragmentManager().findFragmentByTag(parentTag).getChildFragmentManager().findFragmentByTag(tag);
-    }
-
     PictureObjectiveFragment pictureObjective = null;
 
     @Override
@@ -216,14 +212,6 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
     }
 
     @Override
-    public void onExistingPictureClicked(String parentTag, String tag) {
-        PictureFragment pf = pictureFragmentSearch(parentTag, tag);
-        Uri path = pf.getPictureUri();
-        if(path == null) return;
-        showGallery(path);
-    }
-
-    @Override
     public void onExistingPictureClicked(PictureFragment frag) {
         Uri path = frag.getPictureUri();
         if(path == null) return;
@@ -231,8 +219,7 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
     }
 
     @Override
-    public void onExistingPictureLongClicked(String parentTag, String tag) {
-        final PictureFragment pf = pictureFragmentSearch(parentTag, tag);
+    public void onExistingPictureLongClicked(final PictureFragment frag) {
         new AlertDialog.Builder(this).setTitle(R.string.delete_picture).setMessage(getString(R.string.sure_to_delete))
                 .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     @Override
@@ -242,7 +229,7 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
                 .setPositiveButton(getString(R.string.delete), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        pf.deletePicture();
+                        frag.deletePicture();
                     }
                 }).create().show();
     }
