@@ -6,6 +6,9 @@ import java.io.Serializable;
 
 import hu.bme.aut.digikaland.entities.enumeration.EvaluationStatus;
 
+/**
+ * Egy csapatot szimbolizáló osztály.
+ */
 public class Team implements Serializable, Comparable<Team>{
     public String name;
     public EvaluationStatus status;
