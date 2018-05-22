@@ -15,23 +15,25 @@ import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
 import hu.bme.aut.digikaland.entities.Contact;
 
 /**
- * Created by Sylent on 2018. 05. 10..
+ * Ez a szolgáltatás segít egyben lekérdezni az összes kapcsolattartási adatot.
  */
-
 public class ContactsEngineFull {
     private static final ContactsEngineFull ourInstance = new ContactsEngineFull();
 
-    public static ContactsEngineFull getInstance(CommunicationInterface c) {
+    public static ContactsEngineFull getInstance(ContactsEngineFullCommunicationInterface c) {
         ourInstance.comm = c;
         return ourInstance;
     }
 
+    /**
+     * Elvégzi az összes adat betöltését.
+     */
     public void loadAllData(){
         if(dataLoaded) comm.allDataLoaded(totalAdmins, stationAdmins, teamCaptains);
         else new AllContactDownloader().downloadAllData();
     }
 
-    private CommunicationInterface comm;
+    private ContactsEngineFullCommunicationInterface comm;
 
     private ContactsEngineFull() {
     }
@@ -44,7 +46,8 @@ public class ContactsEngineFull {
 
     private HashMap<String, Contact> teamCaptains = new HashMap<>();
 
-    private class AllContactDownloader implements ContactsEngine.ContactsEngineCommunicationInterface {
+    private class AllContactDownloader
+            implements ContactsEngine.ContactsEngineCommunicationInterface {
         private ContactsEngine db = ContactsEngine.getInstance(this);
         private ArrayList<String> stationIds = new ArrayList<>();
         private ArrayList<String> stationNames = new ArrayList<>();
@@ -61,7 +64,8 @@ public class ContactsEngineFull {
         }
 
         private void loadStationIds(){
-            final CollectionReference stationRef = RacePermissionHandler.getInstance().getRaceReference().collection("stations");
+            final CollectionReference stationRef = RacePermissionHandler.getInstance()
+                    .getRaceReference().collection("stations");
             stationRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -85,7 +89,8 @@ public class ContactsEngineFull {
         }
 
         private void loadTeamIds(){
-            final CollectionReference teamRef = RacePermissionHandler.getInstance().getRaceReference().collection("teams");
+            final CollectionReference teamRef = RacePermissionHandler.getInstance()
+                    .getRaceReference().collection("teams");
             teamRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -150,8 +155,10 @@ public class ContactsEngineFull {
     }
 
 
-    public interface CommunicationInterface{
-        void allDataLoaded(ArrayList<Contact> totalAdmins, HashMap<String, ArrayList<Contact>> stationAdmins, HashMap<String, Contact> captains);
+    public interface ContactsEngineFullCommunicationInterface {
+        void allDataLoaded(ArrayList<Contact> totalAdmins,
+                           HashMap<String, ArrayList<Contact>> stationAdmins,
+                           HashMap<String, Contact> captains);
         void contactsError(ErrorType type);
     }
 }

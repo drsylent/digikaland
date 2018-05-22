@@ -48,7 +48,7 @@ import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
 public class AdminTotalMainActivity extends AppCompatActivity implements ResultsFragment.ResultsFragmentListener,
         AdminRunningFragment.AdminRunningListener, AdminRaceStarterFragment.AdminStarterListener, AdminTotalEngine.AdminTotalCommunicationInterface, ResultsEngine.CommunicationInterface,
-        StationAdminEngine.StationAdminCommunicationInterface, ContactsEngineFull.CommunicationInterface, ResultsCalculatorEngine.CommunicationInterface{
+        StationAdminEngine.StationAdminCommunicationInterface, ContactsEngineFull.ContactsEngineFullCommunicationInterface, ResultsCalculatorEngine.CommunicationInterface{
 
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
