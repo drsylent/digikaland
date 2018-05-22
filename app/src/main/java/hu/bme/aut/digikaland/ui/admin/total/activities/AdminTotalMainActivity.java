@@ -47,7 +47,7 @@ import hu.bme.aut.digikaland.ui.common.fragments.ResultsFragment;
 import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
 public class AdminTotalMainActivity extends AppCompatActivity implements ResultsFragment.ResultsFragmentListener,
-        AdminRunningFragment.AdminRunningListener, AdminRaceStarterFragment.AdminStarterListener, AdminTotalEngine.CommunicationInterface, ResultsEngine.CommunicationInterface,
+        AdminRunningFragment.AdminRunningListener, AdminRaceStarterFragment.AdminStarterListener, AdminTotalEngine.AdminTotalCommunicationInterface, ResultsEngine.CommunicationInterface,
         StationAdminEngine.StationAdminCommunicationInterface, ContactsEngineFull.CommunicationInterface, ResultsCalculatorEngine.CommunicationInterface{
 
     private Toolbar toolbar;

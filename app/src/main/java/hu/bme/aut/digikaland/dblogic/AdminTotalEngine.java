@@ -10,7 +10,6 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -26,22 +25,24 @@ import hu.bme.aut.digikaland.entities.Team;
 import hu.bme.aut.digikaland.entities.enumeration.EvaluationStatus;
 
 /**
- * Created by Sylent on 2018. 05. 13..
+ * A teljes adminoknak hozzáférést biztosít ez a szolgáltatás az adatbázishoz.
  */
-
 public class AdminTotalEngine {
     private static final AdminTotalEngine ourInstance = new AdminTotalEngine();
 
-    public static AdminTotalEngine getInstance(CommunicationInterface c) {
+    public static AdminTotalEngine getInstance(AdminTotalCommunicationInterface c) {
         ourInstance.comm = c;
         return ourInstance;
     }
 
-    private CommunicationInterface comm;
+    private AdminTotalCommunicationInterface comm;
 
     private AdminTotalEngine() {
     }
 
+    /**
+     * A teljes adminok fő nézetének megjelenítéséhez szükséges adatok betöltése.
+     */
     public void loadState(){
         resetData();
         final DocumentReference docRef = RacePermissionHandler.getInstance().getRaceReference();
@@ -75,7 +76,8 @@ public class AdminTotalEngine {
     }
 
     private void loadStartingState(){
-        final DocumentReference docRef = FirebaseFirestore.getInstance().collection("races").document(CodeHandler.getInstance().getRaceCode());
+        final DocumentReference docRef = FirebaseFirestore.getInstance().collection("races")
+                .document(CodeHandler.getInstance().getRaceCode());
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -83,9 +85,9 @@ public class AdminTotalEngine {
                     DocumentSnapshot document = task.getResult();
                     if (document != null && document.exists()) {
                         try {
-                            location = new Location(document.getString("startingaddr"), document.getString("startingaddr-detailed"));
+                            location = new Location(document.getString("startingaddr"),
+                                    document.getString("startingaddr-detailed"));
                             time = document.getDate("startingtime");
-                            geoPoint = document.getGeoPoint("startinggeo");
                             startingStateLoaded();
                         }catch(RuntimeException e){
                             comm.totalAdminError(ErrorType.DatabaseError);
@@ -109,9 +111,9 @@ public class AdminTotalEngine {
                     DocumentSnapshot document = task.getResult();
                     if (document != null && document.exists()) {
                         try {
-                            location = new Location(document.getString("endingaddr"), document.getString("endingaddr-detailed"));
+                            location = new Location(document.getString("endingaddr"),
+                                    document.getString("endingaddr-detailed"));
                             time = document.getDate("endingtime");
-                            geoPoint = document.getGeoPoint("endinggeo");
                             new StatisticsLoader().loadStatistics();
                         }catch(RuntimeException e){
                             comm.totalAdminError(ErrorType.DatabaseError);
@@ -133,7 +135,8 @@ public class AdminTotalEngine {
         private boolean errorFree = true;
 
         private void loadStatistics(){
-            final CollectionReference stationRef = RacePermissionHandler.getInstance().getRaceReference().collection("stations");
+            final CollectionReference stationRef = RacePermissionHandler.getInstance()
+                    .getRaceReference().collection("stations");
             stationRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -162,7 +165,8 @@ public class AdminTotalEngine {
                             boolean evaluatedAll = true;
                             boolean doneAll = true;
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                EvaluationStatus status = EvaluationStatus.valueOf(document.getString("status"));
+                                EvaluationStatus status =
+                                        EvaluationStatus.valueOf(document.getString("status"));
                                 switch (status){
                                     case Done: evaluatedAll = false; break;
                                     case NotArrivedYet: evaluatedAll = false; doneAll = false; break;
@@ -200,6 +204,10 @@ public class AdminTotalEngine {
         }
     }
 
+    /**
+     * A verseny állapotát frissíti a megadott állapotra.
+     * @param state A verseny új állapota.
+     */
     public void updateRaceStatus(RaceState state){
         RacePermissionHandler.getInstance().getRaceReference()
                 .update("status", state.toString())
@@ -217,8 +225,12 @@ public class AdminTotalEngine {
                 });
     }
 
+    /**
+     * Betölti a csapatok listáját.
+     */
     public void loadTeamList(){
-        CollectionReference teamsRef = RacePermissionHandler.getInstance().getRaceReference().collection("teams");
+        CollectionReference teamsRef = RacePermissionHandler.getInstance()
+                .getRaceReference().collection("teams");
         teamsRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -226,7 +238,8 @@ public class AdminTotalEngine {
                     try {
                         ArrayList<Team> teams = new ArrayList<>();
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            Team team = new Team(document.getString("name"), EvaluationStatus.NotArrivedYet);
+                            Team team = new Team(document.getString("name"),
+                                    EvaluationStatus.NotArrivedYet);
                             team.id = document.getId();
                             teams.add(team);
                         }
@@ -290,17 +303,15 @@ public class AdminTotalEngine {
         teamSum = -1;
         location = null;
         time = null;
-        geoPoint = null;
     }
 
     private Location location;
     private Date time;
-    private GeoPoint geoPoint;
 
     private int stationSum = -1;
     private int teamSum = -1;
 
-    public interface CommunicationInterface{
+    public interface AdminTotalCommunicationInterface {
         void totalAdminError(ErrorType type);
         void startingStateLoaded();
         void statusUpdateSuccessful();
