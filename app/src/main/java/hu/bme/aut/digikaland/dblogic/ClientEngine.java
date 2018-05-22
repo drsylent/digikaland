@@ -12,7 +12,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.ServerTimestamp;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -24,9 +23,8 @@ import hu.bme.aut.digikaland.dblogic.enumeration.RaceState;
 import hu.bme.aut.digikaland.entities.Location;
 
 /**
- * Created by Sylent on 2018. 04. 06..
+ * A kliensek számára biztosít ez a szolgáltatás kapcsolódást az adatbázishoz.
  */
-
 public class ClientEngine {
     private static final ClientEngine ourInstance = new ClientEngine();
 
@@ -34,12 +32,12 @@ public class ClientEngine {
         return ourInstance;
     }
 
-    public static ClientEngine getInstance(CommunicationInterface c) {
+    public static ClientEngine getInstance(ClientCommunicationInterface c) {
         ourInstance.comm = c;
         return ourInstance;
     }
 
-    private CommunicationInterface comm = null;
+    private ClientCommunicationInterface comm = null;
     private ClientEngine() {
     }
 
@@ -49,11 +47,17 @@ public class ClientEngine {
         return loadResult;
     }
 
+    /**
+     * Elvégzi a kliens csapatának nevének betöltését.
+     */
     public void loadTeamName(){
         if(teamName == null) downloadTeamName();
         else comm.teamNameLoaded();
     }
 
+    /**
+     * Összeszámolja, hány állomást teljesített a csapat.
+     */
     public void loadCompletedStations(){
         if(completedStations == -1) downloadCompletedStations();
         else comm.completedStationsLoaded();
@@ -98,6 +102,9 @@ public class ClientEngine {
         activationDistance = -1;
     }
 
+    /**
+     * A kliens főnézethez szükséges adatok betöltése.
+     */
     public void loadState(){
         resetData();
         final DocumentReference docRef = FirebaseFirestore.getInstance().collection("races").document(CodeHandler.getInstance().getRaceCode());
@@ -400,8 +407,12 @@ public class ClientEngine {
 
     private String nfcCode = null;
 
+    /**
+     * Elindítja a következő állomást a kliens csapatának.
+     */
     public void startStation(){
-        final DocumentReference stationRef = RacePermissionHandler.getInstance().getRaceReference().collection("stations").document(stationId);
+        final DocumentReference stationRef = RacePermissionHandler.getInstance().getRaceReference()
+                .collection("stations").document(stationId);
         stationRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -427,7 +438,8 @@ public class ClientEngine {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(ServerTime.getTime());
         calendar.add(Calendar.SECOND, Long.valueOf(secondsLimit).intValue());
-        RacePermissionHandler.getInstance().getTeamReference().collection("stations").document(Integer.toString(stationNumber))
+        RacePermissionHandler.getInstance().getTeamReference().collection("stations")
+                .document(Integer.toString(stationNumber))
                 .update("timeend", calendar.getTime())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -443,7 +455,7 @@ public class ClientEngine {
                 });
     }
 
-    public interface CommunicationInterface{
+    public interface ClientCommunicationInterface {
         void clientError(ErrorType type);
         void startingStateLoaded();
         void runningStateLoaded();

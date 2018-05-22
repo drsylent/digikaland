@@ -63,7 +63,7 @@ import permissions.dispatcher.RuntimePermissions;
 
 @RuntimePermissions
 public class ClientMainActivity extends AppCompatActivity implements ClientActualFragment.ClientActualMainListener, ClientObjectiveFragment.ClientActiveObjectiveListener,
-        ResultsFragment.ResultsFragmentListener, ClientEngine.CommunicationInterface, ResultsEngine.CommunicationInterface, ContactsEngine.CommunicationInterface,
+        ResultsFragment.ResultsFragmentListener, ClientEngine.ClientCommunicationInterface, ResultsEngine.CommunicationInterface, ContactsEngine.CommunicationInterface,
         ObjectiveEngine.CommunicationInterface, StationsEngine.CommunicationInterface{
 
     private static final String ARG_VIEWSTATE = "state";
