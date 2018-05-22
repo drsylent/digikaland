@@ -20,6 +20,9 @@ import java.util.Map;
 
 import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
 
+/**
+ * Ez az osztály végzi el az eredmények kiszámítását.
+ */
 public class ResultsCalculatorEngine {
     private class Result implements Comparable<Result>{
         private String teamName;
@@ -39,16 +42,25 @@ public class ResultsCalculatorEngine {
         }
     }
 
-    private CommunicationInterface comm;
-    private int stationSum = -1;
+    private ResultsCalculatorCommunicationInterface comm;
+    private int stationSum;
     private ArrayList<Result> results = new ArrayList<>();
     private ArrayList<Integer> stationObjectives = new ArrayList<>();
 
-    public ResultsCalculatorEngine(CommunicationInterface c, int stationSum){
+    /**
+     * A konstruktorba meg kell adni, hogy ki kéri a kiszámítást, és hány állomás
+     * van összesen.
+     * @param c Akit értesíteni kell arról, hogy kész a kiszámítás.
+     * @param stationSum Az állomások száma.
+     */
+    public ResultsCalculatorEngine(ResultsCalculatorCommunicationInterface c, int stationSum){
         this.stationSum = stationSum;
         comm = c;
     }
 
+    /**
+     * Az eredmények kiszámolásának és feltöltésének megkezdése.
+     */
     public void uploadResults(){
         getStationObjectiveNumbers(1);
         getTeams();
@@ -183,9 +195,6 @@ public class ResultsCalculatorEngine {
         for(int i = results.size()-1, position = 1; i >= 0; i--, position++){
             uploadResult(position, results.get(i));
         }
-//        for(int i = 0; i < results.size(); i++){
-//            uploadResult(i+1, results.get(i));
-//        }
     }
 
     private void uploadResult(int position, Result result){
@@ -214,7 +223,7 @@ public class ResultsCalculatorEngine {
         if(++resultsCounter == teamSum) comm.resultsUploaded();
     }
 
-    public interface CommunicationInterface{
+    public interface ResultsCalculatorCommunicationInterface {
         void resultsUploaded();
         void resultsUploadError(ErrorType type);
     }
