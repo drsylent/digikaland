@@ -2,11 +2,10 @@ package hu.bme.aut.digikaland.entities;
 
 import java.io.Serializable;
 
+/**
+ * Egy kapcsolattartást reprezentáló osztály, mely összeköt egy nevet és egy telefonszámot.
+ */
 public class Contact implements Serializable {
-    public Contact(){
-
-    }
-
     public Contact(String name, String phone){
         this.name = name;
         this.phone = phone;
@@ -18,14 +17,6 @@ public class Contact implements Serializable {
 
     public String getPhone() {
         return phone;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
     }
 
     private String name;
