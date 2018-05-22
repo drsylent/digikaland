@@ -131,7 +131,7 @@ public class StationAdminEngine {
         else new SummaryLoader(stationId).startLoad();
     }
 
-    private class SummaryLoader implements ContactsEngine.CommunicationInterface{
+    private class SummaryLoader implements ContactsEngine.ContactsEngineCommunicationInterface {
         private Location location;
         private String stationId;
         private ArrayList<Contact> stationAdmins;

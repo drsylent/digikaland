@@ -44,7 +44,7 @@ public class ContactsEngineFull {
 
     private HashMap<String, Contact> teamCaptains = new HashMap<>();
 
-    private class AllContactDownloader implements ContactsEngine.CommunicationInterface{
+    private class AllContactDownloader implements ContactsEngine.ContactsEngineCommunicationInterface {
         private ContactsEngine db = ContactsEngine.getInstance(this);
         private ArrayList<String> stationIds = new ArrayList<>();
         private ArrayList<String> stationNames = new ArrayList<>();

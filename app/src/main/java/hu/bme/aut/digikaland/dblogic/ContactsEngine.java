@@ -14,30 +14,45 @@ import java.util.Map;
 import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
 import hu.bme.aut.digikaland.entities.Contact;
 
+/**
+ * Ezen a szolgáltatáson keresztül lehet elérni az egyes versenyben részt vevő személyek
+ * kapcsolattartási adatait.
+ */
 public class ContactsEngine {
     private static final ContactsEngine ourInstance = new ContactsEngine();
 
-    public static ContactsEngine getInstance(CommunicationInterface c)
+    public static ContactsEngine getInstance(ContactsEngineCommunicationInterface c)
     {
         ourInstance.comm = c;
         return ourInstance;
     }
 
-    private CommunicationInterface comm;
+    private ContactsEngineCommunicationInterface comm;
 
     private ContactsEngine() {
     }
 
+    /**
+     * Betölti az összes teljes admint.
+     */
     public void loadTotalAdmins(){
         if(totalAdmins.isEmpty()) downloadTotalAdmins();
         else comm.totalAdminsLoaded();
     }
 
+    /**
+     * Betölti a megadott állomáshoz tartozó admint.
+     * @param stationId Az állomás azonosítója.
+     */
     public void loadStationAdmins(String stationId){
         if(stations.containsKey(stationId)) comm.stationAdminsLoaded();
         else downloadStationAdmins(stationId);
     }
 
+    /**
+     * Betölti a megadott csapat kapitányát.
+     * @param teamId A csapat azonosítója.
+     */
     public void loadCaptain(String teamId){
         if(captains.containsKey(teamId)) comm.captainLoaded();
         else downloadTeamCaptain(teamId);
@@ -99,8 +114,6 @@ public class ContactsEngine {
         });
     }
 
-    // majd lehet egy boollal jelezni kell, hogy ha az összes letöltésénél is ezeket a függvényeket fogjuk használni
-    // hogy összesített üzenet menjen az Extendeden keresztül, vagy mehet magától
     private void downloadStationAdmins(final String id){
         final DocumentReference totalAdminRef = RacePermissionHandler.getInstance().getRaceReference().collection("contacts").document("st" + id);
         totalAdminRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -169,7 +182,7 @@ public class ContactsEngine {
         return captains.get(id);
     }
 
-    public interface CommunicationInterface{
+    public interface ContactsEngineCommunicationInterface {
         void totalAdminsLoaded();
         void stationAdminsLoaded();
         void captainLoaded();
