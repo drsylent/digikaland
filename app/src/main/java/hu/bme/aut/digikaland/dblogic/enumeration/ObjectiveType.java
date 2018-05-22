@@ -2,7 +2,6 @@ package hu.bme.aut.digikaland.dblogic.enumeration;
 
 import hu.bme.aut.digikaland.entities.objectives.CustomAnswerObjective;
 import hu.bme.aut.digikaland.entities.objectives.MultipleChoiceObjective;
-import hu.bme.aut.digikaland.entities.objectives.Objective;
 import hu.bme.aut.digikaland.entities.objectives.PhysicalObjective;
 import hu.bme.aut.digikaland.entities.objectives.PictureObjective;
 import hu.bme.aut.digikaland.entities.objectives.TrueFalseObjective;
@@ -13,9 +12,8 @@ import hu.bme.aut.digikaland.entities.objectives.solutions.PictureSolution;
 import hu.bme.aut.digikaland.entities.objectives.solutions.TrueFalseSolution;
 
 /**
- * Created by Sylent on 2018. 04. 08..
+ * A feladatok típusai ezek lehetnek.
  */
-
 public enum ObjectiveType {
     TrueFalse,
     MultipleChoice,
@@ -23,6 +21,10 @@ public enum ObjectiveType {
     Picture,
     Physical;
 
+    /**
+     * A típushoz tartozó feladat osztályt visszaadja.
+     * @return A megfelelő feladat osztály a típushoz.
+     */
     public Class<?> getObjectiveClass(){
         switch (this){
             case Picture: return PictureObjective.class;
@@ -34,6 +36,10 @@ public enum ObjectiveType {
         }
     }
 
+    /**
+     * A típushoz tartozó megoldás osztályt visszaadja.
+     * @return A megfelelő megoldás oszátly a típushoz.
+     */
     public Class<?> getSolutionClass(){
         switch (this){
             case Picture: return PictureSolution.class;
@@ -43,14 +49,5 @@ public enum ObjectiveType {
             case MultipleChoice: return MultipleChoiceSolution.class;
             default: return null;
         }
-    }
-
-    public static ObjectiveType getObjectiveType(Objective obj){
-        if(obj instanceof TrueFalseObjective) return TrueFalse;
-        if(obj instanceof MultipleChoiceObjective) return MultipleChoice;
-        if(obj instanceof CustomAnswerObjective) return CustomAnswer;
-        if(obj instanceof PictureObjective) return Picture;
-        if(obj instanceof PhysicalObjective) return Physical;
-        return null;
     }
 }
