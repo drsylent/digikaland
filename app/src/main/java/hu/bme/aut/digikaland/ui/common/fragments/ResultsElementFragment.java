@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import hu.bme.aut.digikaland.R;
 
+/**
+ * Egy elem a végeredmény képernyőn (helyezés, csapatnév, pontszám)
+ */
 public class ResultsElementFragment extends Fragment {
     private static final String ARG_POSITION = "POSITION";
     private static final String ARG_TEAMNAME = "TEAMNAME";

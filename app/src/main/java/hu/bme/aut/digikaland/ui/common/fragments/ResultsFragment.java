@@ -12,12 +12,13 @@ import java.util.ArrayList;
 
 import hu.bme.aut.digikaland.R;
 
+/**
+ * A végeredmény megjelenítését végző fragment.
+ */
 public class ResultsFragment extends Fragment {
     private static final String ARG_TEAMS = "teams";
     private static final String ARG_POINTS = "points";
 
-//    private String[] teamList;
-//    private int[] pointList;
     private ArrayList<String> teamList;
     private ArrayList<Double> pointList;
 
@@ -25,10 +26,6 @@ public class ResultsFragment extends Fragment {
 
     public ResultsFragment() {
         // Required empty public constructor
-    }
-
-    public static ResultsFragment newInstance(String[] t, int[] p){
-        return null;
     }
 
     public static ResultsFragment newInstance(ArrayList<String> teams, ArrayList<Double> points) {
@@ -44,8 +41,6 @@ public class ResultsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-//            teamList = getArguments().getStringArray(ARG_TEAMS);
-//            pointList = getArguments().getIntArray(ARG_POINTS);
             teamList = getArguments().getStringArrayList(ARG_TEAMS);
             pointList = (ArrayList<Double>) getArguments().getSerializable(ARG_POINTS);
         }
@@ -55,11 +50,6 @@ public class ResultsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_results, container, false);
-//        if(savedInstanceState == null)
-//        for(int i = 0; i < teamList.length; i++){
-//            ResultsElementFragment element = ResultsElementFragment.newInstance(i+1, teamList[i], pointList[i]);
-//            getChildFragmentManager().beginTransaction().add(R.oldId.resultsContent, element).commit();
-//        }
         if(savedInstanceState == null) {
             for(int i = 0; i < teamList.size(); i++){
                 ResultsElementFragment element = ResultsElementFragment.newInstance(i+1, teamList.get(i), pointList.get(i));
