@@ -91,4 +91,7 @@
     <string name="upload_success">Feltöltés sikeres!</string>
     <string name="denied_evaluate">Nem értékelheted ezt a megoldást!</string>
     <string name="no_station_admin">Nincs felelőse az állomásnak</string>
+    <string name="nothing_to_evaluate">Nincs kiértékelésre váró csapat!</string>
+    <string name="results_calculating">Eredmények összesítése...</string>
+    <string name="sure_end_race">Biztos le akarod zárni a versenyt? Ezt a műveletet nem tudod visszavonni!</string>
 </resources>

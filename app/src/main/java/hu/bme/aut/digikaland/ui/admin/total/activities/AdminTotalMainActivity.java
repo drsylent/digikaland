@@ -44,11 +44,12 @@ import hu.bme.aut.digikaland.ui.admin.total.fragments.AdminRunningFragment;
 import hu.bme.aut.digikaland.ui.common.activities.MapsActivity;
 import hu.bme.aut.digikaland.ui.common.fragments.NewRaceStarter;
 import hu.bme.aut.digikaland.ui.common.fragments.ResultsFragment;
-import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
 public class AdminTotalMainActivity extends AppCompatActivity implements ResultsFragment.ResultsFragmentListener,
-        AdminRunningFragment.AdminRunningListener, AdminRaceStarterFragment.AdminStarterListener, AdminTotalEngine.AdminTotalCommunicationInterface, ResultsDownloaderEngine.ResultsDownloaderCommunicationInterface,
-        StationAdminEngine.StationAdminCommunicationInterface, ContactsEngineFull.ContactsEngineFullCommunicationInterface, ResultsCalculatorEngine.ResultsCalculatorCommunicationInterface {
+        AdminRunningFragment.AdminRunningListener, AdminRaceStarterFragment.AdminStarterListener,
+        AdminTotalEngine.AdminTotalCommunicationInterface, ResultsDownloaderEngine.ResultsDownloaderCommunicationInterface,
+        StationAdminEngine.StationAdminCommunicationInterface, ContactsEngineFull.ContactsEngineFullCommunicationInterface,
+        ResultsCalculatorEngine.ResultsCalculatorCommunicationInterface {
 
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
@@ -95,7 +96,6 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
         setupToolbar();
         nav.getMenu().getItem(0).setChecked(true);
         toolbar.setTitle(R.string.actual);
-       // if(savedInstanceState == null) setNotStarted();
         uiReady = true;
         if(postLoad) executePostLoad();
     }
@@ -130,20 +130,20 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
 
     @Override
     public void statusUpdateSuccessful() {
-        showSnackBarMessage("Feltöltés sikeres");
+        showSnackBarMessage(getString(R.string.upload_success));
         db.loadState();
     }
 
     @Override
     public void onEndPressed() {
-        new AlertDialog.Builder(this).setMessage("Biztos le akarod zárni a versenyt? Ezt a műveletet nem tudod visszavonni!")
-                .setPositiveButton("Igen", new DialogInterface.OnClickListener() {
+        new AlertDialog.Builder(this).setMessage(R.string.sure_end_race)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        showSnackBarMessage("Eredmények összesítése...");
+                        showSnackBarMessage(getString(R.string.results_calculating));
                         new ResultsCalculatorEngine(AdminTotalMainActivity.this, db.getStationSum()).uploadResults();
                     }
-                }).setNegativeButton("Mégse", new DialogInterface.OnClickListener() {
+                }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -345,7 +345,6 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
         return super.onOptionsItemSelected(item);
     }
 
-    // TODO: jelenleg csak placeholder megjelenítésre
     private void showSnackBarMessage(String message) {
         Snackbar.make(mainLayout, message, Snackbar.LENGTH_LONG).show();
     }

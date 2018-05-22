@@ -51,9 +51,12 @@ import permissions.dispatcher.OnPermissionDenied;
 import permissions.dispatcher.RuntimePermissions;
 
 @RuntimePermissions
-public class AdminStationMainActivity extends AppCompatActivity implements AdminStationActualFragment.AdminActivityInterface, ResultsFragment.ResultsFragmentListener,
-        AdminRaceStarterFragment.AdminStarterListener, AdminStationEngine.AdminStationCommunicationInterface, ResultsDownloaderEngine.ResultsDownloaderCommunicationInterface, ObjectiveEngine.ObjectiveCommunicationInterface,
-        ContactsEngineFull.ContactsEngineFullCommunicationInterface, SolutionDownloadEngine.SolutionDownloadCommunicationInterface, StationAdminEngine.StationAdminCommunicationInterface {
+public class AdminStationMainActivity extends AppCompatActivity implements AdminStationActualFragment.AdminActivityInterface,
+        ResultsFragment.ResultsFragmentListener,
+        AdminRaceStarterFragment.AdminStarterListener, AdminStationEngine.AdminStationCommunicationInterface,
+        ResultsDownloaderEngine.ResultsDownloaderCommunicationInterface, ObjectiveEngine.ObjectiveCommunicationInterface,
+        ContactsEngineFull.ContactsEngineFullCommunicationInterface,
+        SolutionDownloadEngine.SolutionDownloadCommunicationInterface, StationAdminEngine.StationAdminCommunicationInterface {
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private LinearLayout mainLayout;
@@ -108,7 +111,6 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
         toolbar.setTitle(R.string.actual);
         uiReady = true;
         if(postLoad) executePostLoad();
-        //if(savedInstanceState == null) setNotStarted();
     }
 
     @Override
@@ -127,7 +129,6 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
         switch (db.getLoadResult()){
             case Starting: startingStateLoaded(); break;
             case Running: runningStateLoaded(); break;
-//            case Station: stationStateLoaded(); break;
             case Ending: endingStateLoaded(); break;
         }
     }
@@ -191,7 +192,6 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
 
     @Override
     public void resultsLoaded(ArrayList<String> teamNames, ArrayList<Double> teamPoints) {
-        state = ContentState.Results;
         getSupportFragmentManager().beginTransaction().replace(R.id.adminStationContent, ResultsFragment.newInstance(teamNames, teamPoints)).commit();
     }
 
@@ -264,14 +264,6 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
         startActivity(i);
     }
 
-    private enum ContentState{
-        NotStarted,
-        Actual,
-        Results
-    }
-
-    private ContentState state;
-
     private void setNotStarted(){
         if(uiReady)
         goToNotStarted(db.getLastLoadedLocation(), db.getLastLoadedStartingTime());
@@ -279,13 +271,11 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
     }
 
     private void goToNotStarted(Location loc, Date time){
-        state = ContentState.NotStarted;
         getSupportFragmentManager().beginTransaction().replace(R.id.adminStationContent,
                 AdminRaceStarterFragment.newInstance(loc, time, false)).commit();
     }
 
     private void goToActual(Location location){
-        state = ContentState.Actual;
         if(fragment == null) {
             fragment = AdminStationActualFragment.newInstance(location);
             getSupportFragmentManager().beginTransaction().replace(R.id.adminStationContent, fragment).commit();
@@ -362,7 +352,6 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
         drawerLayout.addDrawerListener(toggler);
     }
 
-    // TODO: jelenleg csak placeholder megjelenítésre
     private void showSnackBarMessage(String message) {
         Snackbar.make(mainLayout, message, Snackbar.LENGTH_LONG).show();
     }
@@ -412,7 +401,7 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
             if(ignoredPermission) prepareEvaluation();
             else AdminStationMainActivityPermissionsDispatcher.prepareEvaluationWithPermissionCheck(this);
         }
-        else showSnackBarMessage("Nincs kiértékelésre váró csapat!");
+        else showSnackBarMessage(getString(R.string.nothing_to_evaluate));
     }
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -429,7 +418,7 @@ public class AdminStationMainActivity extends AppCompatActivity implements Admin
 
     @OnPermissionDenied(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     public void picturesCantLoad(){
-        showSnackBarMessage("A képek így nem tudnak megjelenni.");
+        showSnackBarMessage(getString(R.string.pictures_cant_show));
         ignoredPermission = true;
     }
 

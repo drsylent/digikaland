@@ -16,14 +16,7 @@ import hu.bme.aut.digikaland.ui.common.fragments.TextFragment;
 import hu.bme.aut.digikaland.ui.common.fragments.TitleContactFragment;
 
 public class AdminStationActualFragment extends Fragment {
-    private static final String ARG_LOCATION = "location";
-    private static final String ARG_SUBLOCATION = "detailedlocation";
     private static final String ARG_FULLLOCATION = "fulllocation";
-
-    // Mivel a gazda activity fogja kezelni a hálózati kapcsolatot, és gondoskodik az adatok frisseségéért
-    // ezért praktikusabb, ha a változó adatokat ott tároljuk.
-    private String location;
-    private String sublocation;
 
     private Location fullLocation;
 
@@ -31,16 +24,6 @@ public class AdminStationActualFragment extends Fragment {
 
     public AdminStationActualFragment() {
         // Required empty public constructor
-    }
-
-    // TODO: deprecated
-    public static AdminStationActualFragment newInstance(String location, String sublocation) {
-        AdminStationActualFragment fragment = new AdminStationActualFragment();
-        Bundle arguments = new Bundle();
-        arguments.putString(ARG_LOCATION, location);
-        arguments.putString(ARG_SUBLOCATION, sublocation);
-        fragment.setArguments(arguments);
-        return fragment;
     }
 
     public static AdminStationActualFragment newInstance(Location location) {
@@ -55,8 +38,6 @@ public class AdminStationActualFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            location = getArguments().getString(ARG_LOCATION);
-            sublocation = getArguments().getString(ARG_SUBLOCATION);
             fullLocation = (Location) getArguments().getSerializable(ARG_FULLLOCATION);
         }
     }
