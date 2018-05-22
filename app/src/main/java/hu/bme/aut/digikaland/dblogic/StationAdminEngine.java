@@ -156,7 +156,6 @@ public class StationAdminEngine {
                             try {
                                 location = new Location(document.getString("address"),
                                         document.getString("address-detailed"));
-                                //geoPoint = document.getGeoPoint("geodata");
                                 loadContact();
                             } catch (RuntimeException e){
                                 comm.adminStationError(ErrorType.DatabaseError);

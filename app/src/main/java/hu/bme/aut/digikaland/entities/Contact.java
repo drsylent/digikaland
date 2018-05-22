@@ -6,6 +6,10 @@ import java.io.Serializable;
  * Egy kapcsolattartást reprezentáló osztály, mely összeköt egy nevet és egy telefonszámot.
  */
 public class Contact implements Serializable {
+    // szükséges, hogy a firebase szerializálni tudjon
+    public Contact(){
+    }
+
     public Contact(String name, String phone){
         this.name = name;
         this.phone = phone;
