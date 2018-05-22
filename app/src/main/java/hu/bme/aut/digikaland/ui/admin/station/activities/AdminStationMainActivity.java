@@ -53,7 +53,7 @@ import permissions.dispatcher.RuntimePermissions;
 @RuntimePermissions
 public class AdminStationMainActivity extends AppCompatActivity implements AdminStationActualFragment.AdminActivityInterface, ResultsFragment.ResultsFragmentListener,
         AdminRaceStarterFragment.AdminStarterListener, AdminStationEngine.AdminStationCommunicationInterface, ResultsDownloaderEngine.ResultsDownloaderCommunicationInterface, ObjectiveEngine.ObjectiveCommunicationInterface,
-        ContactsEngineFull.ContactsEngineFullCommunicationInterface, SolutionDownloadEngine.CommunicationInterface, StationAdminEngine.StationAdminCommunicationInterface {
+        ContactsEngineFull.ContactsEngineFullCommunicationInterface, SolutionDownloadEngine.SolutionDownloadCommunicationInterface, StationAdminEngine.StationAdminCommunicationInterface {
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private LinearLayout mainLayout;

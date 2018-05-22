@@ -31,7 +31,7 @@ import permissions.dispatcher.OnPermissionDenied;
 import permissions.dispatcher.RuntimePermissions;
 
 @RuntimePermissions
-public class AdminTeamsActivity extends AppCompatActivity implements AdminTeamsAdapter.AdminTeamsListener, SolutionDownloadEngine.CommunicationInterface,
+public class AdminTeamsActivity extends AppCompatActivity implements AdminTeamsAdapter.AdminTeamsListener, SolutionDownloadEngine.SolutionDownloadCommunicationInterface,
         StationAdminEngine.StationAdminCommunicationInterface {
     public final static String ARG_TEAMS = "teams";
     public final static String ARG_SUMMARY = "summary";

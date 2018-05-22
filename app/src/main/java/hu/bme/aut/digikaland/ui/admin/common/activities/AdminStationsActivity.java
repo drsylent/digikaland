@@ -34,7 +34,7 @@ import permissions.dispatcher.RuntimePermissions;
 
 @RuntimePermissions
 public class AdminStationsActivity extends AppCompatActivity implements AdminStationAdapter.AdminStationListener, StationAdminEngine.StationAdminCommunicationInterface,
-            SolutionDownloadEngine.CommunicationInterface{
+        SolutionDownloadEngine.SolutionDownloadCommunicationInterface {
     public final static String ARGS_STATIONS = "stations";
     public final static String ARG_SUMMARY = "summary";
     public final static String ARG_TEAM = "team";

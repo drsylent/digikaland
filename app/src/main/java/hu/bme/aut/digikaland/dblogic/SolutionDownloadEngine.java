@@ -33,22 +33,26 @@ import hu.bme.aut.digikaland.entities.objectives.solutions.TrueFalseSolution;
 import static android.os.Environment.getExternalStoragePublicDirectory;
 
 /**
- * Created by Sylent on 2018. 05. 10..
+ * A megoldások letöltését ezen a szolgáltatáson keresztül lehet megtenni.
  */
-
 public class SolutionDownloadEngine {
     private static final SolutionDownloadEngine ourInstance = new SolutionDownloadEngine();
 
-    public static SolutionDownloadEngine getInstance(CommunicationInterface c) {
+    public static SolutionDownloadEngine getInstance(SolutionDownloadCommunicationInterface c) {
         ourInstance.comm = c;
         return ourInstance;
     }
 
-    private CommunicationInterface comm;
+    private SolutionDownloadCommunicationInterface comm;
 
     private SolutionDownloadEngine() {
     }
 
+    /**
+     * A megadott csapat adott állomáshoz tartozó megoldásainak letöltése.
+     * @param stationId Az állomás azonosítója, melyhez a megoldások tartoznak.
+     * @param teamId A csapat azonosítója, melynek a megoldásaira kíváncsiak vagyunk.
+     */
     public void loadSolutions(String stationId, String teamId){
         new SolutionLoader(stationId, teamId).startDownload();
     }
@@ -295,8 +299,6 @@ public class SolutionDownloadEngine {
                     Collections.sort(objectives);
                     if(firstDone) mergeResults();
                     else firstDone = true;
-                    //objectiveMap.put(stationId, objectives);
-                    //comm.solutionsLoaded(objectives);
                 }
             }
         }
@@ -423,7 +425,6 @@ public class SolutionDownloadEngine {
                 }
             }
 
-            // TODO: engedélyt kell kérni a fájl létrehozásához
             private void downloadPicture(final String onlinePath){
                 StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(onlinePath);
                 File storageDir = new File(directoryCreator());
@@ -495,7 +496,6 @@ public class SolutionDownloadEngine {
                                     int auto = document.getLong("auto").intValue();
                                     if(auto == answer) currentPoints = maxpoints;
                                 }
-                                // TODO: automata megoldás itt
                                 if(document.contains("points")) currentPoints = document.getLong("points").intValue();
                                 Solution sol = new MultipleChoiceSolution(currentPoints, maxpoints, answer);
                                 sol.setId(document.getId());
@@ -512,7 +512,6 @@ public class SolutionDownloadEngine {
                 }
             });
         }
-
         // összefogjuk a hibaüzeneteket, hogy ne jusson ki annyi, illetve letiltjuk,
         // hogy a nem teljesen letöltött adat megjelenjen
         private void loaderError(ErrorType type){
@@ -521,11 +520,7 @@ public class SolutionDownloadEngine {
         }
     }
 
-    // stationid-vel mapelve, elvileg nem változik, szóval jó ha eltároljuk hosszútávra
-//    private Map<String, ArrayList<Objective>> objectiveMap = new HashMap<>();
-
-
-    public interface CommunicationInterface{
+    public interface SolutionDownloadCommunicationInterface {
         void solutionsLoaded(ArrayList<Solution> solutions, int penalty, Date uploadTime, String teamName);
         void solutionsLoadError(ErrorType type);
     }
