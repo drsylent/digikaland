@@ -23,26 +23,23 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import java.util.ArrayList;
-import java.util.List;
 
 import hu.bme.aut.digikaland.R;
-import hu.bme.aut.digikaland.dblogic.AdminStationEngine;
+import hu.bme.aut.digikaland.dblogic.StationAdminEngine;
 import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
 import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.entities.EvaluationStatistics;
 import hu.bme.aut.digikaland.entities.Team;
 import hu.bme.aut.digikaland.entities.station.StationAdminPerspective;
-import hu.bme.aut.digikaland.entities.station.StationAdminPerspectiveSummary;
 import hu.bme.aut.digikaland.entities.station.StationMapData;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminStationSummaryActivity;
-import hu.bme.aut.digikaland.ui.admin.common.activities.AdminStationsActivity;
 import hu.bme.aut.digikaland.utility.development.MockGenerator;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnPermissionDenied;
 import permissions.dispatcher.RuntimePermissions;
 
 @RuntimePermissions
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, AdminStationEngine.CommunicationInterface {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, StationAdminEngine.CommunicationInterface {
 
     public static final String MARKER_LOCATIONS = "markerlocations";
     public static final String MARKER_SPECIAL = "indexofspecial";
@@ -115,7 +112,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void prepareStationSummary(StationMapData item){
         statistics = item.statistics;
         loc = item.getLocation();
-        AdminStationEngine.getInstance(this).loadStationData(item.station.id);
+        StationAdminEngine.getInstance(this).loadStationData(item.station.id);
     }
 
     @Override

@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import hu.bme.aut.digikaland.R;
-import hu.bme.aut.digikaland.dblogic.AdminStationEngine;
+import hu.bme.aut.digikaland.dblogic.StationAdminEngine;
 import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
 import hu.bme.aut.digikaland.dblogic.RacePermissionHandler;
 import hu.bme.aut.digikaland.dblogic.SolutionDownloadEngine;
@@ -32,7 +32,7 @@ import permissions.dispatcher.RuntimePermissions;
 
 @RuntimePermissions
 public class AdminTeamsActivity extends AppCompatActivity implements AdminTeamsAdapter.AdminTeamsListener, SolutionDownloadEngine.CommunicationInterface,
-            AdminStationEngine.CommunicationInterface {
+            StationAdminEngine.CommunicationInterface {
     public final static String ARG_TEAMS = "teams";
     public final static String ARG_SUMMARY = "summary";
     public final static String ARG_STATIONID = "stationid";
@@ -88,7 +88,7 @@ public class AdminTeamsActivity extends AppCompatActivity implements AdminTeamsA
                 .setPositiveButton("Igen", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        AdminStationEngine.getInstance(AdminTeamsActivity.this).startStation(stationId, team.id);
+                        StationAdminEngine.getInstance(AdminTeamsActivity.this).startStation(stationId, team.id);
                     }
                 }).setNegativeButton("Mégse", new DialogInterface.OnClickListener() {
             @Override
@@ -100,7 +100,7 @@ public class AdminTeamsActivity extends AppCompatActivity implements AdminTeamsA
 
     private void prepareStations(Team team){
         lastTeamId = team.id;
-        AdminStationEngine.getInstance(this).loadStationDataForTeam(team.id);
+        StationAdminEngine.getInstance(this).loadStationDataForTeam(team.id);
     }
 
     @Override

@@ -15,7 +15,7 @@ import android.view.MenuItem;
 import java.util.ArrayList;
 import java.util.Date;
 
-import hu.bme.aut.digikaland.dblogic.AdminStationEngine;
+import hu.bme.aut.digikaland.dblogic.StationAdminEngine;
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
 import hu.bme.aut.digikaland.dblogic.RacePermissionHandler;
@@ -33,7 +33,7 @@ import permissions.dispatcher.OnPermissionDenied;
 import permissions.dispatcher.RuntimePermissions;
 
 @RuntimePermissions
-public class AdminStationsActivity extends AppCompatActivity implements AdminStationAdapter.AdminStationListener, AdminStationEngine.CommunicationInterface,
+public class AdminStationsActivity extends AppCompatActivity implements AdminStationAdapter.AdminStationListener, StationAdminEngine.CommunicationInterface,
             SolutionDownloadEngine.CommunicationInterface{
     public final static String ARGS_STATIONS = "stations";
     public final static String ARG_SUMMARY = "summary";
@@ -79,7 +79,7 @@ public class AdminStationsActivity extends AppCompatActivity implements AdminSta
                 .setPositiveButton("Igen", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        AdminStationEngine.getInstance(AdminStationsActivity.this).startStation(station.station.id, teamId);
+                        StationAdminEngine.getInstance(AdminStationsActivity.this).startStation(station.station.id, teamId);
                     }
                 }).setNegativeButton("Mégse", new DialogInterface.OnClickListener() {
             @Override
@@ -164,7 +164,7 @@ public class AdminStationsActivity extends AppCompatActivity implements AdminSta
         statistics = summary.statistics;
         lastLat = summary.latitude;
         lastLon = summary.longitude;
-        AdminStationEngine.getInstance(this).loadStationData(item.station.id);
+        StationAdminEngine.getInstance(this).loadStationData(item.station.id);
     }
 
     // TODO: jelenleg csak placeholder megjelenítésre

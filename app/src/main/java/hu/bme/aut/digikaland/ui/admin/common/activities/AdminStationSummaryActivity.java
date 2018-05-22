@@ -11,11 +11,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.firebase.firestore.GeoPoint;
-
 import java.util.ArrayList;
 
-import hu.bme.aut.digikaland.dblogic.AdminStationEngine;
+import hu.bme.aut.digikaland.dblogic.StationAdminEngine;
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
 import hu.bme.aut.digikaland.entities.Contact;
@@ -25,13 +23,12 @@ import hu.bme.aut.digikaland.entities.Team;
 import hu.bme.aut.digikaland.entities.station.Station;
 import hu.bme.aut.digikaland.entities.station.StationAdminPerspective;
 import hu.bme.aut.digikaland.entities.station.StationMapData;
-import hu.bme.aut.digikaland.ui.client.activities.ClientMainActivity;
 import hu.bme.aut.digikaland.ui.common.activities.MapsActivity;
 import hu.bme.aut.digikaland.ui.common.fragments.ContactFragment;
 import hu.bme.aut.digikaland.ui.common.fragments.TextFragment;
 import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
-public class AdminStationSummaryActivity extends AppCompatActivity implements AdminStationEngine.CommunicationInterface {
+public class AdminStationSummaryActivity extends AppCompatActivity implements StationAdminEngine.CommunicationInterface {
     public final static String ARG_STATIONID = "stationid";
     public final static String ARG_LOCATION = "loc";
     public final static String ARG_CONTACT = "contact";
@@ -114,7 +111,7 @@ public class AdminStationSummaryActivity extends AppCompatActivity implements Ad
     }
 
     public void prepareTeams(){
-        AdminStationEngine.getInstance(this).loadTeamList(Integer.toString(stationId));
+        StationAdminEngine.getInstance(this).loadTeamList(Integer.toString(stationId));
     }
 
     @Override

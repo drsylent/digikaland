@@ -17,16 +17,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.google.firebase.firestore.GeoPoint;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
-import hu.bme.aut.digikaland.dblogic.AdminStationEngine;
+import hu.bme.aut.digikaland.dblogic.StationAdminEngine;
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.dblogic.AdminTotalEngine;
-import hu.bme.aut.digikaland.dblogic.CodeHandler;
 import hu.bme.aut.digikaland.dblogic.ContactsEngineFull;
 import hu.bme.aut.digikaland.dblogic.ResultsCalculatorEngine;
 import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
@@ -45,15 +42,13 @@ import hu.bme.aut.digikaland.ui.admin.common.activities.AdminTeamsActivity;
 import hu.bme.aut.digikaland.ui.admin.common.fragments.AdminRaceStarterFragment;
 import hu.bme.aut.digikaland.ui.admin.total.fragments.AdminRunningFragment;
 import hu.bme.aut.digikaland.ui.common.activities.MapsActivity;
-import hu.bme.aut.digikaland.ui.common.activities.SplashActivity;
-import hu.bme.aut.digikaland.ui.common.activities.StartupActivity;
 import hu.bme.aut.digikaland.ui.common.fragments.NewRaceStarter;
 import hu.bme.aut.digikaland.ui.common.fragments.ResultsFragment;
 import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
 public class AdminTotalMainActivity extends AppCompatActivity implements ResultsFragment.ResultsFragmentListener,
         AdminRunningFragment.AdminRunningListener, AdminRaceStarterFragment.AdminStarterListener, AdminTotalEngine.CommunicationInterface, ResultsEngine.CommunicationInterface,
-        AdminStationEngine.CommunicationInterface, ContactsEngineFull.CommunicationInterface, ResultsCalculatorEngine.CommunicationInterface{
+        StationAdminEngine.CommunicationInterface, ContactsEngineFull.CommunicationInterface, ResultsCalculatorEngine.CommunicationInterface{
 
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
@@ -254,7 +249,7 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
 
     private void prepareMap(){
         loadStationsForMap = true;
-        AdminStationEngine.getInstance(this).loadStationDatas(db.getTeamSum());
+        StationAdminEngine.getInstance(this).loadStationDatas(db.getTeamSum());
     }
 
     private void setMap(ArrayList<StationAdminPerspective> stationPerspectives){
@@ -277,7 +272,7 @@ public class AdminTotalMainActivity extends AppCompatActivity implements Results
 
     private void prepareStations(){
         loadStationsForMap = false;
-        AdminStationEngine.getInstance(this).loadStationDatas(db.getTeamSum());
+        StationAdminEngine.getInstance(this).loadStationDatas(db.getTeamSum());
     }
 
     @Override
