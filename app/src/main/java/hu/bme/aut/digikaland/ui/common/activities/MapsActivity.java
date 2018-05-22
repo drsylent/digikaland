@@ -33,10 +33,11 @@ import hu.bme.aut.digikaland.entities.Team;
 import hu.bme.aut.digikaland.entities.station.StationAdminPerspective;
 import hu.bme.aut.digikaland.entities.station.StationMapData;
 import hu.bme.aut.digikaland.ui.admin.common.activities.AdminStationSummaryActivity;
-import hu.bme.aut.digikaland.utility.development.MockGenerator;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnPermissionDenied;
 import permissions.dispatcher.RuntimePermissions;
+
+// példakód alapján https://developers.google.com/maps/documentation/android-api/current-place-tutorial
 
 @RuntimePermissions
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, StationAdminEngine.StationAdminCommunicationInterface {
@@ -121,11 +122,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     @Override
-    public void stationStarted() {
-
-    }
-
-    @Override
     public void adminStationError(ErrorType type) {
         showSnackBarMessage(type.getDefaultMessage());
     }
@@ -152,8 +148,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // NOTE: delegate the permission handling to generated method
         MapsActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
-
-    // példakódból https://developers.google.com/maps/documentation/android-api/current-place-tutorial
 
     @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     public void updateLocationUI() {
@@ -216,9 +210,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
     }
 
-    // TODO: jelenleg csak placeholder megjelenítésre
     private void showSnackBarMessage(String message) {
         Snackbar.make(mainLayout, message, Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void stationStarted() {
+
     }
 
     @Override

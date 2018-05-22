@@ -53,20 +53,17 @@ public class StartupActivity extends AppCompatActivity implements PrimaryCodeFra
     String raceCode = null;
     String roleCode = null;
 
-    private boolean inputValidator(String string){
+    private boolean isValidInput(String string){
         return Pattern.matches("\\w{0,8}", string);
     }
     private Button disabledButton;
     // le kell tiltani a gombot, hogy ne nyomogassa a felhasználó
     @Override
     public void onPrimaryCodeHit(String raceCode, Button button) {
-        if(!inputValidator(raceCode)){
+        if(!isValidInput(raceCode)){
             raceNameLoadingError(ErrorType.IllegalCharacter);
             return;
         }
-        // tervezo modba lepes
-        if(raceCode.toUpperCase().equals("PLANMACH"))
-            return;
         if(raceCode.toUpperCase().equals("NFC"))
             startActivity(new Intent(StartupActivity.this, NFCActivity.class));
         button.setEnabled(false);
@@ -77,7 +74,7 @@ public class StartupActivity extends AppCompatActivity implements PrimaryCodeFra
 
     @Override
     public void onSecondaryCodeHit(String roleCode, Button button) {
-        if(!inputValidator(roleCode)){
+        if(!isValidInput(roleCode)){
             permissionError(ErrorType.IllegalCharacter);
             return;
         }
@@ -87,7 +84,6 @@ public class StartupActivity extends AppCompatActivity implements PrimaryCodeFra
         RaceRoleHandler.getInstance(this).loadPermissionData(raceCode, roleCode);
     }
 
-    // TODO: jelenleg csak placeholder megjelenítésre
     private void showSnackBarMessage(String message) {
         Snackbar.make(mainLayout, message, Snackbar.LENGTH_LONG).show();
     }
@@ -117,10 +113,9 @@ public class StartupActivity extends AppCompatActivity implements PrimaryCodeFra
     public void permissionReady() {
         disabledButton.setEnabled(true);
         CodeHandler.getInstance().setCodes(raceCode, roleCode, getSharedPreferences(CodeHandler.SharedPreferencesName, MODE_PRIVATE));
-        RaceRoleHandler rph = RaceRoleHandler.getInstance(this);
         Intent intent;
-        if(rph.getMainMode() == RaceRoleHandler.MainMode.Admin){
-            if(rph.getAdminMode() == RaceRoleHandler.AdminMode.Total){
+        if(RaceRoleHandler.getMainMode() == RaceRoleHandler.MainMode.Admin){
+            if(RaceRoleHandler.getAdminMode() == RaceRoleHandler.AdminMode.Total){
                 intent = new Intent(StartupActivity.this, AdminTotalMainActivity.class);
             }
             else{
@@ -128,7 +123,7 @@ public class StartupActivity extends AppCompatActivity implements PrimaryCodeFra
             }
         }
         else{
-            if(rph.getClientMode() == RaceRoleHandler.ClientMode.Captain){
+            if(RaceRoleHandler.getClientMode() == RaceRoleHandler.ClientMode.Captain){
                 intent = new Intent(StartupActivity.this, ClientMainActivity.class);
             }
             else{
