@@ -136,7 +136,7 @@ public class SolutionDownloadEngine {
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if (task.isSuccessful()) {
                                 try {
-                                    if(task.getResult().size() != 1) loaderError(ErrorType.IllegalCharacter);
+                                    if(task.getResult().size() != 1) loaderError(ErrorType.DatabaseError);
                                     else{
                                         DocumentSnapshot result = task.getResult().getDocuments().get(0);
                                         uploadTime = result.getDate("timedone");

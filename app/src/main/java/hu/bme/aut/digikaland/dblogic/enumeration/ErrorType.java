@@ -1,5 +1,9 @@
 package hu.bme.aut.digikaland.dblogic.enumeration;
 
+/**
+ * Ha hiba történik a letöltések közben, akkor a hiba típusát ezzel az enummal lehet továbbítani
+ * a UI logika felé.
+ */
 public enum ErrorType {
     NoContact,
     RaceNotExists,
@@ -11,6 +15,10 @@ public enum ErrorType {
     DownloadError,
     PictureUploadError;
 
+    /**
+     * Egy default üzenet visszaadása minden hibatípushoz.
+     * @return Egy általános üzenet a hibatípushoz tartozóan.
+     */
     public String getDefaultMessage(){
         switch (this){
             case DatabaseError: return "Nem várt hiba az adatbázisban.";
