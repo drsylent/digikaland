@@ -52,7 +52,7 @@ public class PictureObjectiveFragment extends ObjectiveFragment {
         int numberOfPictures = getMaxNumberOfPictures();
         if(savedInstanceState == null)
         for(int i = 0; i < numberOfPictures; i++){
-            PictureFragment fragment = PictureFragment.newInstance(getTag());
+            PictureFragment fragment = PictureFragment.newInstance();
             fragments.add(fragment);
             getChildFragmentManager().beginTransaction().add(R.id.pictureAnswer, fragment, PictureFragment.generateTag()).commit();
         }
