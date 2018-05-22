@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
+import hu.bme.aut.digikaland.dblogic.utility.ServerTime;
 import hu.bme.aut.digikaland.entities.enumeration.EvaluationStatus;
 import hu.bme.aut.digikaland.entities.objectives.CustomAnswerObjective;
 import hu.bme.aut.digikaland.entities.objectives.MultipleChoiceObjective;

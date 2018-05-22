@@ -19,6 +19,7 @@ import java.util.GregorianCalendar;
 import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
 import hu.bme.aut.digikaland.dblogic.enumeration.LoadResult;
 import hu.bme.aut.digikaland.dblogic.enumeration.RaceState;
+import hu.bme.aut.digikaland.dblogic.utility.ServerTime;
 import hu.bme.aut.digikaland.entities.Location;
 
 /**
