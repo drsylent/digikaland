@@ -21,13 +21,12 @@ import hu.bme.aut.digikaland.entities.objectives.Objective;
 import hu.bme.aut.digikaland.entities.objectives.PictureObjective;
 
 /**
- * Created by Sylent on 2018. 04. 08..
+ * Ezen a szolgáltatáson keresztül lehet a feladatok letöltését elvégezni.
  */
-
 public class ObjectiveEngine {
     private static final ObjectiveEngine ourInstance = new ObjectiveEngine();
 
-    public static ObjectiveEngine getInstance(CommunicationInterface c) {
+    public static ObjectiveEngine getInstance(ObjectiveCommunicationInterface c) {
         ourInstance.comm = c;
         return ourInstance;
     }
@@ -35,6 +34,10 @@ public class ObjectiveEngine {
     private ObjectiveEngine() {
     }
 
+    /**
+     * Az állomáshoz tartozó feladatok letöltését végzi.
+     * @param stationId Az állomás azonosítója.
+     */
     public void loadObjectives(String stationId){
         if(objectiveMap.containsKey(stationId)) comm.objectivesLoaded(objectiveMap.get(stationId));
         else new ObjectiveLoader(stationId).downloadObjectives();
@@ -184,9 +187,9 @@ public class ObjectiveEngine {
     // stationid-vel mapelve, elvileg nem változik, szóval jó ha eltároljuk hosszútávra
     private Map<String, ArrayList<Objective>> objectiveMap = new HashMap<>();
 
-    private CommunicationInterface comm;
+    private ObjectiveCommunicationInterface comm;
 
-    public interface CommunicationInterface{
+    public interface ObjectiveCommunicationInterface {
         void objectivesLoaded(ArrayList<Objective> objectives);
         void objectiveLoadError(ErrorType type);
     }

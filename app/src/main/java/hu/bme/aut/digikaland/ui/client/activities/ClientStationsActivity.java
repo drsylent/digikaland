@@ -20,7 +20,7 @@ import hu.bme.aut.digikaland.entities.objectives.Objective;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientStationAdapter;
 
 public class ClientStationsActivity extends AppCompatActivity implements ClientStationAdapter.ClientStationListener, StationsEngine.CommunicationInterface,
-        ObjectiveEngine.CommunicationInterface{
+        ObjectiveEngine.ObjectiveCommunicationInterface {
     public final static String ARGS_STATIONS = "stations";
 
     RecyclerView mainLayout;
