@@ -93,7 +93,7 @@ public class AdminEvaluateActivity extends AppCompatActivity implements PictureF
             sendButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    showSnackBarMessage("Nem értékelheted ezt a megoldást!");
+                    showSnackBarMessage(getString(R.string.denied_evaluate));
                 }
             });
         }
@@ -101,7 +101,6 @@ public class AdminEvaluateActivity extends AppCompatActivity implements PictureF
         uploadSum = evaluators.size()+1;
     }
 
-    // TODO: jelenleg csak placeholder megjelenítésre
     private void showSnackBarMessage(String message) {
         Snackbar.make(mainLayout, message, Snackbar.LENGTH_LONG).show();
     }
@@ -111,7 +110,7 @@ public class AdminEvaluateActivity extends AppCompatActivity implements PictureF
     private void sendEvaluation(){
         uploadNumber = 0;
         errorFired = false;
-        showSnackBarMessage("Elküldés");
+        showSnackBarMessage(getString(R.string.send));
         EvaluatorEngine db = EvaluatorEngine.getInstance(this);
         for(EvaluateFragment fragment : evaluators){
             db.uploadEvaluation(fragment.getSolution());
@@ -130,23 +129,13 @@ public class AdminEvaluateActivity extends AppCompatActivity implements PictureF
         }
     }
 
-    private PictureFragment pictureFragmentSearch(String parentTag, String tag){
-        return (PictureFragment) getSupportFragmentManager().findFragmentByTag(parentTag).getChildFragmentManager().findFragmentByTag(tag);
-    }
-
     private void showGallery(Uri path){
-        // TODO: galériából törölhető a kép!!!!
-        // fájl megnyitó uri: content://com.android.providers.media.documents/document/image%3A30449
-        // galéria uri: content://media/external/images/media/30094
         Intent showPicture = new Intent(Intent.ACTION_VIEW);
         showPicture.setDataAndType(path, "image/jpeg");
         showPicture.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         startActivity(showPicture);
     }
 
-    // TODO: még nem tudjuk, hogy lesz a képletöltés
-    // TODO: ha nem lesz megnyitható a uri, ilyet kell alkalmazni
-    // teszteléshez egyelőre ezt kell használni
     @Override
     public void onExistingPictureClicked(PictureFragment frag) {
         Uri path = frag.getPictureUri();
@@ -190,7 +179,7 @@ public class AdminEvaluateActivity extends AppCompatActivity implements PictureF
 
     private void uploadSuccess(){
         if(!errorFired && ++uploadNumber == uploadSum){
-            showSnackBarMessage("Feltöltés sikeres!");
+            showSnackBarMessage(getString(R.string.upload_success));
         }
     }
 

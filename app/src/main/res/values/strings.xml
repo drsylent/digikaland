@@ -85,4 +85,10 @@
     <string name="yes">Igen</string>
     <string name="no">Nem</string>
     <string name="sure_new_race">Biztos új versenyt szeretnél kezdeni?</string>
+    <string name="pictures_cant_show">A képek így nem tudnak megjelenni.</string>
+    <string name="station_start_success">Az állomás elindítása sikeres volt.</string>
+    <string name="station_start_sure">Szeretnéd elindítani ezt az állomást ennek a csapatnak?</string>
+    <string name="upload_success">Feltöltés sikeres!</string>
+    <string name="denied_evaluate">Nem értékelheted ezt a megoldást!</string>
+    <string name="no_station_admin">Nincs felelőse az állomásnak</string>
 </resources>

@@ -84,13 +84,13 @@ public class AdminTeamsActivity extends AppCompatActivity implements AdminTeamsA
 
     @Override
     public void onTeamActivation(final Team team) {
-        new AlertDialog.Builder(this).setMessage("Szeretnéd elindítani ezt az állomást ennek a csapatnak?")
-                .setPositiveButton("Igen", new DialogInterface.OnClickListener() {
+        new AlertDialog.Builder(this).setMessage(R.string.station_start_sure)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         StationAdminEngine.getInstance(AdminTeamsActivity.this).startStation(stationId, team.id);
                     }
-                }).setNegativeButton("Mégse", new DialogInterface.OnClickListener() {
+                }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -105,7 +105,7 @@ public class AdminTeamsActivity extends AppCompatActivity implements AdminTeamsA
 
     @Override
     public void stationStarted() {
-        showSnackBarMessage("Az állomás elindítása sikeres volt.");
+        showSnackBarMessage(getString(R.string.station_start_success));
     }
 
     @Override
@@ -149,7 +149,7 @@ public class AdminTeamsActivity extends AppCompatActivity implements AdminTeamsA
 
     @OnPermissionDenied(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     public void picturesCantLoad(){
-        showSnackBarMessage("A képek így nem tudnak megjelenni.");
+        showSnackBarMessage(getString(R.string.pictures_cant_show));
         ignoredPermission = true;
     }
 
@@ -182,7 +182,6 @@ public class AdminTeamsActivity extends AppCompatActivity implements AdminTeamsA
         showSnackBarMessage(type.getDefaultMessage());
     }
 
-    // TODO: jelenleg csak placeholder megjelenítésre
     private void showSnackBarMessage(String message) {
         Snackbar.make(mainLayout, message, Snackbar.LENGTH_LONG).show();
     }

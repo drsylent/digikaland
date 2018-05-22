@@ -26,7 +26,6 @@ import hu.bme.aut.digikaland.entities.station.StationMapData;
 import hu.bme.aut.digikaland.ui.common.activities.MapsActivity;
 import hu.bme.aut.digikaland.ui.common.fragments.ContactFragment;
 import hu.bme.aut.digikaland.ui.common.fragments.TextFragment;
-import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
 public class AdminStationSummaryActivity extends AppCompatActivity implements StationAdminEngine.StationAdminCommunicationInterface {
     public final static String ARG_STATIONID = "stationid";
@@ -84,7 +83,7 @@ public class AdminStationSummaryActivity extends AppCompatActivity implements St
                         ContactFragment.newInstance(contact, true)).commit();
             else
                 getSupportFragmentManager().beginTransaction().add(R.id.adminStationSummaryAdminContent,
-                        TextFragment.newInstance("Nincs felelőse az állomásnak", true)).commit();
+                        TextFragment.newInstance(getString(R.string.no_station_admin), true)).commit();
         }
         TextView tvStatus = findViewById(R.id.adminStationSummaryStatus);
         tvStatus.setText(getResources().getString(R.string.tri_status, status.evaluated, status.done, status.all));
@@ -168,7 +167,6 @@ public class AdminStationSummaryActivity extends AppCompatActivity implements St
         startActivity(i);
     }
 
-    // TODO: jelenleg csak placeholder megjelenítésre
     private void showSnackBarMessage(String message) {
         Snackbar.make(mainLayout, message, Snackbar.LENGTH_LONG).show();
     }
