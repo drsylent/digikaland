@@ -563,9 +563,9 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         if(nfcWatching) {
             IntentFilter tagDetected = new IntentFilter(
                     NfcAdapter.ACTION_NDEF_DISCOVERED);
-            tagDetected.addDataScheme("vnd.android.nfc");
-            tagDetected.addDataPath("/digikaland", PatternMatcher.PATTERN_PREFIX);
-            tagDetected.addDataAuthority("ext", null);
+            tagDetected.addDataScheme(getString(R.string.nfc_data_scheme));
+            tagDetected.addDataPath(getString(R.string.nfc_data_path), PatternMatcher.PATTERN_PREFIX);
+            tagDetected.addDataAuthority(getString(R.string.nfc_data_authority), null);
             IntentFilter[] tagFilters = new IntentFilter[]{tagDetected};
             PendingIntent nfcPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this,
                     getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);

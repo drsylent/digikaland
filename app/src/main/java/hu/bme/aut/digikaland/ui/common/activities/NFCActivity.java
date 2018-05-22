@@ -18,13 +18,13 @@ import hu.bme.aut.digikaland.R;
 
 public class NFCActivity extends AppCompatActivity {
 
-    TextView nfctext;
+    TextView nfcText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nfc);
-        nfctext = findViewById(R.id.nfctext);
+        nfcText = findViewById(R.id.nfctext);
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         nfcPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this,
@@ -37,9 +37,9 @@ public class NFCActivity extends AppCompatActivity {
     private void enableForegroundDispatch() {
         IntentFilter tagDetected = new IntentFilter(
                 NfcAdapter.ACTION_NDEF_DISCOVERED);
-        tagDetected.addDataScheme("vnd.android.nfc");
-        tagDetected.addDataPath("/digikaland", PatternMatcher.PATTERN_PREFIX);
-        tagDetected.addDataAuthority("ext", null);
+        tagDetected.addDataScheme(getString(R.string.nfc_data_scheme));
+        tagDetected.addDataPath(getString(R.string.nfc_data_path), PatternMatcher.PATTERN_PREFIX);
+        tagDetected.addDataAuthority(getString(R.string.nfc_data_authority), null);
         IntentFilter[] tagFilters = new IntentFilter[] { tagDetected };
         nfcAdapter.enableForegroundDispatch(this, nfcPendingIntent,
                 tagFilters, null);
@@ -70,7 +70,7 @@ public class NFCActivity extends AppCompatActivity {
                 ndef.connect();
                 byte[] bytes = ndef.getCachedNdefMessage().getRecords()[0].getPayload();
                 String test = new String(bytes);
-                nfctext.setText(test);
+                nfcText.setText(test);
             }catch (IOException e){
                 Log.e("io error", "I/O Failure");
             }catch (NullPointerException e) {
