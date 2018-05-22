@@ -92,6 +92,16 @@
     <string name="denied_evaluate">Nem értékelheted ezt a megoldást!</string>
     <string name="no_station_admin">Nincs felelőse az állomásnak</string>
     <string name="nothing_to_evaluate">Nincs kiértékelésre váró csapat!</string>
-    <string name="results_calculating">Eredmények összesítése...</string>
+    <string name="results_calculating">Eredmények összesítése…</string>
     <string name="sure_end_race">Biztos le akarod zárni a versenyt? Ezt a műveletet nem tudod visszavonni!</string>
+    <string name="admins_go_here">Verseny közben itt jelennek majd meg a felügyelők</string>
+    <string name="next_station">Következő állomás</string>
+    <string name="nfc_cant_activate_with">Ezt a feladatot nem lehet NFC-vel aktiválni!</string>
+    <string name="nfc_incorrect">Helytelen NFC tag!</string>
+    <string name="loading_objectives">Feladatok betöltése…</string>
+    <string name="nfc_retouch">Érintsd újra az NFC-t!</string>
+    <string name="location_unable_detect">Nem állapítható meg a jelenlegi helyzeted.</string>
+    <string name="denied_solution">Nem küldhetsz be megoldást!</string>
+    <string name="solution_upload_success">Megoldás feltöltése sikeres!</string>
+    <string name="incorrect_text_upload">A szöveg amit megadtál nem tölthető fel.</string>
 </resources>

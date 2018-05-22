@@ -100,7 +100,7 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showSnackBarMessage("Nem küldhetsz be megoldást!");
+                showSnackBarMessage(getString(R.string.denied_solution));
             }
         });
     }
@@ -206,7 +206,6 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
         }
     }
 
-    // TODO: jelenleg csak placeholder megjelenítésre
     private void showSnackBarMessage(String message) {
         Snackbar.make(mainLayout, message, Snackbar.LENGTH_LONG).show();
     }
@@ -235,9 +234,6 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
     }
 
     private void showGallery(Uri path){
-        // TODO: galériából törölhető a kép!!!!
-        // fájl megnyitó uri: content://com.android.providers.media.documents/document/image%3A30449
-        // galéria uri: content://media/external/images/media/30094
         Intent showPicture = new Intent(Intent.ACTION_VIEW);
         showPicture.setDataAndType(path, "image/jpeg");
         showPicture.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -260,7 +256,6 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
                 storageDir      /* directory */
         );
         photoPath = image.getAbsolutePath();
-        Log.e("Path for the image", photoPath);
         // Save a file: path for use with ACTION_VIEW intents
         photoUri = FileProvider.getUriForFile(this,
                 "hu.bme.aut.digikaland.fileprovider",
@@ -293,14 +288,13 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
     @Override
     public void inputValidationError() {
         uploadOk = false;
-        showSnackBarMessage("A szöveg amit megadtál nem tölthető fel.");
+        showSnackBarMessage(getString(R.string.incorrect_text_upload));
     }
 
-    // TODO: megcsinálni a státusz haladásokat (stationsben, teams/stationsben)
     @Override
     public void uploadCompleted() {
         disableButton(send);
-        showSnackBarMessage("Megoldás feltöltése sikeres!");
+        showSnackBarMessage(getString(R.string.solution_upload_success));
     }
 
     @Override

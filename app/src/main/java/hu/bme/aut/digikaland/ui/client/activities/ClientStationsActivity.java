@@ -34,8 +34,6 @@ public class ClientStationsActivity extends AppCompatActivity implements ClientS
             toolbar.setDisplayHomeAsUpEnabled(true);
             toolbar.setTitle(R.string.stations);
         }
-        // mockolt
-        //ArrayList<StationClientPerspective> stations = (ArrayList<StationClientPerspective>) getIntent().getBundleExtra(ARGS_STATIONS).getSerializable(ARGS_STATIONS);
         ArrayList<StationClientPerspective> stations = (ArrayList<StationClientPerspective>) getIntent().getSerializableExtra(ARGS_STATIONS);
         mainLayout = findViewById(R.id.clientStationList);
         mainLayout.setLayoutManager(new LinearLayoutManager(this));
@@ -66,17 +64,6 @@ public class ClientStationsActivity extends AppCompatActivity implements ClientS
         }
     }
 
-    // mock alapú
-//    @Override
-//    public void onStartedStationClick(StationClientPerspective item) {
-//        ArrayList<Objective> objectives = item.station.getObjectives();
-//        if(objectives != null) {
-//            Intent i = new Intent(ClientStationsActivity.this, ClientObjectiveActivity.class);
-//            i.putExtra(ClientObjectiveActivity.ARGS_OBJECTIVES, objectives);
-//            startActivity(i);
-//        }
-//    }
-
     @Override
     public void onStartedStationClick(StationClientPerspective item) {
         ObjectiveEngine.getInstance(this).loadObjectives(item.station.id);
@@ -89,7 +76,6 @@ public class ClientStationsActivity extends AppCompatActivity implements ClientS
         startActivity(i);
     }
 
-    // TODO: jelenleg csak placeholder megjelenítésre
     private void showSnackBarMessage(String message) {
         Snackbar.make(mainLayout, message, Snackbar.LENGTH_LONG).show();
     }

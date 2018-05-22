@@ -11,13 +11,11 @@ import android.widget.TextView;
 import java.util.Date;
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.entities.Location;
-import hu.bme.aut.digikaland.utility.TimeWriter;
 
 public class ClientActualFragment extends Fragment {
     public static final String ARG_STATIONS = "stations";
     public static final String ARG_STATION_NUMBER = "stationnumber";
     public static final String ARG_LOCATION = "location";
-    public static final String ARG_SUBLOCATION = "detailedlocation";
     public static final String ARG_TIME = "time";
 
     private int stationSum;

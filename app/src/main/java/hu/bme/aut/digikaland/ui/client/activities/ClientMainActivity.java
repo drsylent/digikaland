@@ -87,7 +87,6 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     }
 
     private int oneHelpLoaded = 0;
-    private final int oneHelpLoadedSum = 2;
 
     private void prepareHelp(){
         oneHelpLoaded = 0;
@@ -108,6 +107,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
 
     private void setHelp(){
         oneHelpLoaded++;
+        int oneHelpLoadedSum = 2;
         if(oneHelpLoaded == oneHelpLoadedSum) goToHelp(ContactsEngine.getInstance(this).getTotalAdmins(), ContactsEngine.getInstance(this).getStationAdmins(db.getLastLoadedStationId()));
     }
 
@@ -119,7 +119,6 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     }
 
     private int oneStatusLoaded = 0;
-    private int oneStatusLoadedSum = 3;
 
     private void prepareStatus(){
         oneStatusLoaded = 0;
@@ -145,6 +144,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
 
     private void setStatus(){
         oneStatusLoaded++;
+        int oneStatusLoadedSum = 3;
         if(oneStatusLoaded == oneStatusLoadedSum){
             Bundle bundle = new Bundle();
             bundle.putString(ClientStatusFragment.ARG_RACENAME, db.getRaceName());
@@ -192,7 +192,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
 
     @Override
     public void objectiveLoadError(ErrorType type) {
-        showSnackBarMessage("ObjectiveEngine: " + type.getDefaultMessage());
+        showSnackBarMessage(type.getDefaultMessage());
     }
 
     private void goToObjectives(ArrayList<Objective> objectives){
@@ -209,7 +209,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
 
     @Override
     public void clientError(ErrorType type) {
-        showSnackBarMessage("ClientEngine: " + type.getDefaultMessage());
+        showSnackBarMessage(type.getDefaultMessage());
     }
 
     private boolean uiReady = false;
@@ -221,12 +221,12 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
 
     @Override
     public void resultsError(ErrorType type) {
-        showSnackBarMessage("ResultsDownloaderEngine: " + type.getDefaultMessage());
+        showSnackBarMessage(type.getDefaultMessage());
     }
 
     @Override
     public void contactsError(ErrorType type) {
-        showSnackBarMessage("ContactsEngine: " + type.getDefaultMessage());
+        showSnackBarMessage(type.getDefaultMessage());
     }
 
     private boolean postLoad = false;
@@ -326,7 +326,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
 
     @Override
     public void stationLoadingError(ErrorType type) {
-        showSnackBarMessage("StationClientEngine: " + type.getDefaultMessage());
+        showSnackBarMessage(type.getDefaultMessage());
     }
 
 
@@ -429,7 +429,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         Intent i = new Intent(ClientMainActivity.this, MapsActivity.class);
         ArrayList<StationMapData> stations = new ArrayList<>();
         StationMapData data = new StationMapData(new Station("0",0), geo.getLatitude(), geo.getLongitude(), new EvaluationStatistics(0,0,0));
-        data.setSpecialName("Következő állomás");
+        data.setSpecialName(getString(R.string.next_station));
         stations.add(data);
         Bundle locationData = new Bundle();
         locationData.putSerializable(MapsActivity.MARKER_LOCATIONS, stations);
@@ -443,7 +443,6 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     public void onBackPressed() {
         if(drawerLayout.isDrawerOpen(findViewById(R.id.clientNavigation))) drawerLayout.closeDrawers();
         else if(state == ViewState.Status){
-            //setActualMock();
             setActual();
         }
         else super.onBackPressed();
@@ -483,7 +482,6 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
         drawerLayout.addDrawerListener(toggler);
     }
 
-    // TODO: jelenleg csak placeholder megjelenítésre
     private void showSnackBarMessage(String message) {
         Snackbar.make(mainLayout, message, Snackbar.LENGTH_LONG).show();
     }
@@ -511,7 +509,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
                         checkDistance();
                     } else {
                         Log.e("locationerror", "Exception: %s", task.getException());
-                        showSnackBarMessage("Nem állapítható meg a jelenlegi helyzeted");
+                        showSnackBarMessage(getString(R.string.location_unable_detect));
                     }
                 }
             });
@@ -543,7 +541,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
 
     @OnPermissionDenied(Manifest.permission.ACCESS_FINE_LOCATION)
     public void locationPermissionDenied(){
-        showSnackBarMessage("Nem állapítható meg a jelenlegi helyzeted.");
+        showSnackBarMessage(getString(R.string.location_unable_detect));
         loadRunningUi();
     }
 
@@ -601,10 +599,10 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
                 activateNfcObjective(record);
             }catch (IOException e){
                 Log.e("io error", "I/O Failure");
-                showSnackBarMessage("Érintsd újra az NFC-t!");
+                showSnackBarMessage(getString(R.string.nfc_retouch));
             }catch (NullPointerException e) {
                 Log.e("nullpointer", "Unable to read");
-                showSnackBarMessage("Érintsd újra az NFC-t!");
+                showSnackBarMessage(getString(R.string.nfc_retouch));
             }
         }
     }
@@ -615,14 +613,14 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
             String raceCode = codeCollection[0];
             String stationCode = codeCollection[1];
             if(CodeHandler.getInstance().getRaceCode().equals(raceCode) && db.getNfcCode().equals(stationCode)){
-                showSnackBarMessage("Feladatok betöltése...");
+                showSnackBarMessage(getString(R.string.loading_objectives));
                 db.startStation();
             }
             else{
-                showSnackBarMessage("Helytelen NFC tag!");
+                showSnackBarMessage(getString(R.string.nfc_incorrect));
             }
         }else{
-            showSnackBarMessage("Ezt a feladatot nem lehet NFC-vel aktiválni!");
+            showSnackBarMessage(getString(R.string.nfc_cant_activate_with));
         }
     }
 }
