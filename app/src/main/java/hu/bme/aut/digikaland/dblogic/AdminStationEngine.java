@@ -149,7 +149,7 @@ public class AdminStationEngine {
                                     }
                                 break;
                                 case Evaluated: done++; evaluated++; break;
-                                case NotArrivedYet:
+                                case NotDone:
                                     if(firstNotArrived){
                                         notArrivedTeam = document.getDocumentReference("reference");
                                         firstNotArrived = false;

@@ -167,14 +167,14 @@ public class AdminTotalEngine {
                                         EvaluationStatus.valueOf(document.getString("status"));
                                 switch (status){
                                     case Done: evaluatedAll = false; break;
-                                    case NotArrivedYet: evaluatedAll = false; doneAll = false; break;
+                                    case NotDone: evaluatedAll = false; doneAll = false; break;
                                 }
                             }
                             if(doneAll){
                                 if(evaluatedAll) stationLoaded(EvaluationStatus.Evaluated);
                                 else stationLoaded(EvaluationStatus.Done);
                             }
-                            else stationLoaded(EvaluationStatus.NotArrivedYet);
+                            else stationLoaded(EvaluationStatus.NotDone);
                         } catch (RuntimeException e){
                             error(ErrorType.DatabaseError);
                         }
@@ -237,7 +237,7 @@ public class AdminTotalEngine {
                         ArrayList<Team> teams = new ArrayList<>();
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Team team = new Team(document.getString("name"),
-                                    EvaluationStatus.NotArrivedYet);
+                                    EvaluationStatus.NotDone);
                             team.id = document.getId();
                             teams.add(team);
                         }
