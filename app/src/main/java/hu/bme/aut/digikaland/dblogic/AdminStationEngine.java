@@ -7,7 +7,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -47,7 +46,7 @@ public class AdminStationEngine {
      */
     public void loadState(){
         resetData();
-        final DocumentReference docRef = RacePermissionHandler.getInstance().getRaceReference();
+        final DocumentReference docRef = RaceRoleHandler.getRaceReference();
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -77,7 +76,7 @@ public class AdminStationEngine {
     }
 
     private void loadStartingState(){
-        final DocumentReference docRef = FirebaseFirestore.getInstance().collection("races").document(CodeHandler.getInstance().getRaceCode());
+        final DocumentReference docRef = RaceRoleHandler.getRaceReference();
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -102,7 +101,7 @@ public class AdminStationEngine {
     }
 
     private void loadRunningState(){
-        final DocumentReference stationRef = RacePermissionHandler.getInstance().getStationReference();
+        final DocumentReference stationRef = RaceRoleHandler.getStationReference();
         stationRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -127,7 +126,7 @@ public class AdminStationEngine {
     }
 
     private void loadStationState(){
-        final CollectionReference stationRef = RacePermissionHandler.getInstance().getStationReference().collection("teams");
+        final CollectionReference stationRef = RaceRoleHandler.getStationReference().collection("teams");
         stationRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -295,7 +294,7 @@ public class AdminStationEngine {
 
     private Date startingTime = null;
 
-    public String getMyStationId(){ return RacePermissionHandler.getInstance().getStationReference().getId(); }
+    public String getMyStationId(){ return RaceRoleHandler.getStationReference().getId(); }
 
     public Location getLastLoadedLocation(){
         return location;

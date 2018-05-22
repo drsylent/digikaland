@@ -8,7 +8,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -65,7 +64,7 @@ public class ClientEngine {
 
     private void downloadCompletedStations(){
         completedStations = 0;
-        RacePermissionHandler.getInstance().getTeamReference().collection("stations")
+        RaceRoleHandler.getTeamReference().collection("stations")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -107,7 +106,7 @@ public class ClientEngine {
      */
     public void loadState(){
         resetData();
-        final DocumentReference docRef = FirebaseFirestore.getInstance().collection("races").document(CodeHandler.getInstance().getRaceCode());
+        final DocumentReference docRef = RaceRoleHandler.getRaceReference();
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -138,7 +137,7 @@ public class ClientEngine {
     }
 
     private void loadStartingState(){
-        final DocumentReference docRef = FirebaseFirestore.getInstance().collection("races").document(CodeHandler.getInstance().getRaceCode());
+        final DocumentReference docRef = RaceRoleHandler.getRaceReference();
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -146,7 +145,8 @@ public class ClientEngine {
                     DocumentSnapshot document = task.getResult();
                     if (document != null && document.exists()) {
                         try {
-                            location = new Location(document.getString("startingaddr"), document.getString("startingaddr-detailed"));
+                            location = new Location(document.getString("startingaddr"),
+                                    document.getString("startingaddr-detailed"));
                             startingTime = document.getDate("startingtime");
                             geoPoint = document.getGeoPoint("startinggeo");
                             startingStateLoaded();
@@ -164,7 +164,7 @@ public class ClientEngine {
     }
 
     private void loadRunningState(){
-        final DocumentReference teamRef = RacePermissionHandler.getInstance().getTeamReference();
+        final DocumentReference teamRef = RaceRoleHandler.getTeamReference();
         teamRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -189,7 +189,7 @@ public class ClientEngine {
     }
 
     private void loadEndingLocation(){
-        final DocumentReference docRef = FirebaseFirestore.getInstance().collection("races").document(CodeHandler.getInstance().getRaceCode());
+        final DocumentReference docRef = RaceRoleHandler.getRaceReference();
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -197,7 +197,8 @@ public class ClientEngine {
                     DocumentSnapshot document = task.getResult();
                     if (document != null && document.exists()) {
                         try {
-                            location = new Location(document.getString("endingaddr"), document.getString("endingaddr-detailed"));
+                            location = new Location(document.getString("endingaddr"),
+                                    document.getString("endingaddr-detailed"));
                             startingTime = document.getDate("endingtime");
                             geoPoint = document.getGeoPoint("endinggeo");
                             runningStateLoaded();
@@ -215,7 +216,7 @@ public class ClientEngine {
     }
 
     private void downloadTeamName(){
-        final DocumentReference teamStationRef = RacePermissionHandler.getInstance().getTeamReference();
+        final DocumentReference teamStationRef = RaceRoleHandler.getTeamReference();
         teamStationRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -239,7 +240,8 @@ public class ClientEngine {
     }
 
     private void loadTeamStation(int number){
-        final DocumentReference teamStationRef = RacePermissionHandler.getInstance().getTeamReference().collection("stations").document(Integer.toString(number));
+        final DocumentReference teamStationRef = RaceRoleHandler.getTeamReference()
+                .collection("stations").document(Integer.toString(number));
         teamStationRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -278,10 +280,12 @@ public class ClientEngine {
                     DocumentSnapshot document = task.getResult();
                     if (document != null && document.exists()) {
                         try {
-                            location = new Location(document.getString("address"), document.getString("address-detailed"));
+                            location = new Location(document.getString("address"),
+                                    document.getString("address-detailed"));
                             geoPoint = document.getGeoPoint("geodata");
                             distanceActivatable = document.contains("distance");
-                            if(distanceActivatable) activationDistance = document.getDouble("distance");
+                            if(distanceActivatable)
+                                activationDistance = document.getDouble("distance");
                             nfcCode = document.getString("nfccode");
                             if(onStation) stationStateLoaded();
                             else runningStateLoaded();
@@ -362,7 +366,7 @@ public class ClientEngine {
     }
 
     public String getTeamId(){
-        return RacePermissionHandler.getInstance().getTeamReference().getId();
+        return RaceRoleHandler.getTeamReference().getId();
     }
 
     private String stationId = null;
@@ -411,7 +415,7 @@ public class ClientEngine {
      * Elindítja a következő állomást a kliens csapatának.
      */
     public void startStation(){
-        final DocumentReference stationRef = RacePermissionHandler.getInstance().getRaceReference()
+        final DocumentReference stationRef = RaceRoleHandler.getRaceReference()
                 .collection("stations").document(stationId);
         stationRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -438,7 +442,7 @@ public class ClientEngine {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(ServerTime.getTime());
         calendar.add(Calendar.SECOND, Long.valueOf(secondsLimit).intValue());
-        RacePermissionHandler.getInstance().getTeamReference().collection("stations")
+        RaceRoleHandler.getTeamReference().collection("stations")
                 .document(Integer.toString(stationNumber))
                 .update("timeend", calendar.getTime())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

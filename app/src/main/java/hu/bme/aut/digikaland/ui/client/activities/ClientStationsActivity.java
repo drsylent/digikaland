@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
 import hu.bme.aut.digikaland.dblogic.ObjectiveEngine;
-import hu.bme.aut.digikaland.dblogic.RacePermissionHandler;
+import hu.bme.aut.digikaland.dblogic.RaceRoleHandler;
 import hu.bme.aut.digikaland.dblogic.StationsEngine;
 import hu.bme.aut.digikaland.entities.station.StationClientPerspective;
 import hu.bme.aut.digikaland.entities.objectives.Objective;
@@ -85,7 +85,7 @@ public class ClientStationsActivity extends AppCompatActivity implements ClientS
     private void goToObjectives(ArrayList<Objective> objectives){
         Intent i = new Intent(ClientStationsActivity.this, ClientObjectiveActivity.class);
         i.putExtra(ClientObjectiveActivity.ARGS_OBJECTIVES, objectives);
-        i.putExtra(ClientObjectiveActivity.ARG_SEND, RacePermissionHandler.getInstance().getClientMode() == RacePermissionHandler.ClientMode.Captain);
+        i.putExtra(ClientObjectiveActivity.ARG_SEND, RaceRoleHandler.getClientMode() == RaceRoleHandler.ClientMode.Captain);
         startActivity(i);
     }
 

@@ -77,7 +77,7 @@ public class SolutionDownloadEngine {
         }
 
         private void downloadPenaltyData(){
-            final DocumentReference teamRef = RacePermissionHandler.getInstance().getRaceReference().collection("stations").document(stationId);
+            final DocumentReference teamRef = RaceRoleHandler.getRaceReference().collection("stations").document(stationId);
             teamRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -100,7 +100,7 @@ public class SolutionDownloadEngine {
         }
 
         private void downloadTeamName(){
-            final DocumentReference teamRef = RacePermissionHandler.getInstance().getRaceReference().collection("teams").document(teamId);
+            final DocumentReference teamRef = RaceRoleHandler.getRaceReference().collection("teams").document(teamId);
             teamRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -124,8 +124,8 @@ public class SolutionDownloadEngine {
         }
 
         private void solutionSumData(final int penaltyrate){
-            RacePermissionHandler.getInstance().getRaceReference().collection("teams").document(teamId).collection("stations")
-                    .whereEqualTo("station", RacePermissionHandler.getInstance().getRaceReference().collection("stations").document(stationId))
+            RaceRoleHandler.getRaceReference().collection("teams").document(teamId).collection("stations")
+                    .whereEqualTo("station", RaceRoleHandler.getRaceReference().collection("stations").document(stationId))
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
@@ -152,8 +152,8 @@ public class SolutionDownloadEngine {
         }
 
         private void findTeamDocument(){
-            RacePermissionHandler.getInstance().getRaceReference().collection("stations").document(stationId)
-                    .collection("teams").whereEqualTo("reference", RacePermissionHandler.getInstance().getRaceReference().collection("teams").document(teamId))
+            RaceRoleHandler.getRaceReference().collection("stations").document(stationId)
+                    .collection("teams").whereEqualTo("reference", RaceRoleHandler.getRaceReference().collection("teams").document(teamId))
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override

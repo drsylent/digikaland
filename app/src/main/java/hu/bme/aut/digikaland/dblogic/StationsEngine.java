@@ -32,7 +32,7 @@ public class StationsEngine {
     private CommunicationInterface comm;
 
     public void loadStationList(){
-        RacePermissionHandler.getInstance().getTeamReference().collection("stations")
+        RaceRoleHandler.getTeamReference().collection("stations")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

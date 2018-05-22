@@ -25,11 +25,10 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
-import hu.bme.aut.digikaland.dblogic.RacePermissionHandler;
+import hu.bme.aut.digikaland.dblogic.RaceRoleHandler;
 import hu.bme.aut.digikaland.dblogic.SolutionUploadEngine;
 import hu.bme.aut.digikaland.entities.objectives.Objective;
 import hu.bme.aut.digikaland.ui.common.fragments.PictureFragment;
@@ -207,7 +206,7 @@ public class ClientObjectiveActivity extends AppCompatActivity implements Pictur
         for(ObjectiveFragment fragment : fragments)
             fragment.upload();
         if(uploadOk){
-            SolutionUploadEngine.getInstance(this).uploadSolutions(objectives, RacePermissionHandler.getInstance().getTeamReference().getId());
+            SolutionUploadEngine.getInstance(this).uploadSolutions(objectives, RaceRoleHandler.getTeamReference().getId());
         }
     }
 

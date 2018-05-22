@@ -1,33 +1,25 @@
 package hu.bme.aut.digikaland.ui.common.activities;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.dblogic.CodeHandler;
 import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
-import hu.bme.aut.digikaland.dblogic.RacePermissionHandler;
+import hu.bme.aut.digikaland.dblogic.RaceRoleHandler;
 import hu.bme.aut.digikaland.ui.admin.total.activities.AdminTotalMainActivity;
 import hu.bme.aut.digikaland.ui.admin.station.activities.AdminStationMainActivity;
 import hu.bme.aut.digikaland.ui.client.activities.ClientMainActivity;
 import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
-public class SplashActivity extends AppCompatActivity implements RacePermissionHandler.CommunicationInterface {
+public class SplashActivity extends AppCompatActivity implements RaceRoleHandler.RaceRoleCommunicationInterface {
 
     private final static int milestoneVersion = 0;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -43,7 +35,7 @@ public class SplashActivity extends AppCompatActivity implements RacePermissionH
 
         mainLayout = findViewById(R.id.splash_layout);
 
-        if(!RacePermissionHandler.getInstance(this).startUp(getSharedPreferences(CodeHandler.SharedPreferencesName ,MODE_PRIVATE))){
+        if(!RaceRoleHandler.getInstance(this).startUp(getSharedPreferences(CodeHandler.SharedPreferencesName ,MODE_PRIVATE))){
             firstEnter();
         }
     }
@@ -96,9 +88,9 @@ public class SplashActivity extends AppCompatActivity implements RacePermissionH
 
     @Override
     public void permissionReady() {
-        RacePermissionHandler rph = RacePermissionHandler.getInstance(this);
-        if(rph.getMainMode() == RacePermissionHandler.MainMode.Admin){
-            if(rph.getAdminMode() == RacePermissionHandler.AdminMode.Total){
+        RaceRoleHandler rph = RaceRoleHandler.getInstance(this);
+        if(rph.getMainMode() == RaceRoleHandler.MainMode.Admin){
+            if(rph.getAdminMode() == RaceRoleHandler.AdminMode.Total){
                 adminTotalEnter();
             }
             else{
@@ -106,7 +98,7 @@ public class SplashActivity extends AppCompatActivity implements RacePermissionH
             }
         }
         else{
-            if(rph.getClientMode() == RacePermissionHandler.ClientMode.Captain){
+            if(rph.getClientMode() == RaceRoleHandler.ClientMode.Captain){
                 clientCaptainEnter();
             }
             else{

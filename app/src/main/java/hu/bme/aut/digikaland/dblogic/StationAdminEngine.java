@@ -58,7 +58,8 @@ public class StationAdminEngine {
     public void loadStationDatas(int teamSum) {
         stations.clear();
         this.teamSum = teamSum;
-        final CollectionReference stationRef = RacePermissionHandler.getInstance().getRaceReference().collection("stations");
+        final CollectionReference stationRef = RaceRoleHandler.
+                getRaceReference().collection("stations");
         stationRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -82,7 +83,8 @@ public class StationAdminEngine {
     }
 
     private void loadEvaluationDatas(final Station station, final GeoPoint point){
-        final CollectionReference stationRef = RacePermissionHandler.getInstance().getRaceReference().collection("stations")
+        final CollectionReference stationRef = RaceRoleHandler
+                .getRaceReference().collection("stations")
                 .document(station.id).collection("teams");
         stationRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -92,7 +94,8 @@ public class StationAdminEngine {
                         int done = 0;
                         int evaluated = 0;
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            EvaluationStatus status = EvaluationStatus.valueOf(document.getString("status"));
+                            EvaluationStatus status =
+                                    EvaluationStatus.valueOf(document.getString("status"));
                             switch (status){
                                 case Done: done++; break;
                                 case Evaluated: done++; evaluated++; break;
@@ -141,7 +144,8 @@ public class StationAdminEngine {
         }
 
         private void startLoad(){
-            final DocumentReference stationRef = RacePermissionHandler.getInstance().getRaceReference().collection("stations").document(stationId);
+            final DocumentReference stationRef = RaceRoleHandler
+                    .getRaceReference().collection("stations").document(stationId);
             stationRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -149,7 +153,8 @@ public class StationAdminEngine {
                         DocumentSnapshot document = task.getResult();
                         if (document != null && document.exists()) {
                             try {
-                                location = new Location(document.getString("address"), document.getString("address-detailed"));
+                                location = new Location(document.getString("address"),
+                                        document.getString("address-detailed"));
                                 //geoPoint = document.getGeoPoint("geodata");
                                 loadContact();
                             } catch (RuntimeException e){
@@ -209,7 +214,7 @@ public class StationAdminEngine {
      */
     public void loadTeamList(String stationId){
         teams.clear();
-        final CollectionReference stationRef = RacePermissionHandler.getInstance().getRaceReference().collection("stations")
+        final CollectionReference stationRef = RaceRoleHandler.getRaceReference().collection("stations")
                 .document(stationId).collection("teams");
         stationRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -277,7 +282,7 @@ public class StationAdminEngine {
      */
     public void loadStationDataForTeam(final String teamId){
         stationTeams.clear();
-        final CollectionReference stationRef = RacePermissionHandler.getInstance().getRaceReference().collection("teams")
+        final CollectionReference stationRef = RaceRoleHandler.getRaceReference().collection("teams")
                 .document(teamId).collection("stations");
         stationRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -302,9 +307,10 @@ public class StationAdminEngine {
     }
 
     private void loadEvaluationDataForTeam(String teamId, final Station station){
-        RacePermissionHandler.getInstance().getRaceReference().collection("stations")
+        RaceRoleHandler.getRaceReference().collection("stations")
                 .document(station.id).collection("teams")
-                .whereEqualTo("reference", RacePermissionHandler.getInstance().getRaceReference().collection("teams").document(teamId))
+                .whereEqualTo("reference", RaceRoleHandler
+                        .getRaceReference().collection("teams").document(teamId))
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -359,7 +365,7 @@ public class StationAdminEngine {
         }
 
         private void startStation(){
-            final DocumentReference stationRef = RacePermissionHandler.getInstance().getRaceReference().collection("stations").document(stationId);
+            final DocumentReference stationRef = RaceRoleHandler.getRaceReference().collection("stations").document(stationId);
             stationRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -383,9 +389,9 @@ public class StationAdminEngine {
         }
 
         private void getStationNumber(){
-            RacePermissionHandler.getInstance().getRaceReference().collection("teams")
+            RaceRoleHandler.getRaceReference().collection("teams")
                     .document(teamId).collection("stations")
-                    .whereEqualTo("station", RacePermissionHandler.getInstance().getRaceReference().collection("stations").document(stationId))
+                    .whereEqualTo("station", RaceRoleHandler.getRaceReference().collection("stations").document(stationId))
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
@@ -409,7 +415,7 @@ public class StationAdminEngine {
             Calendar calendar = new GregorianCalendar();
             calendar.setTime(ServerTime.getTime());
             calendar.add(Calendar.SECOND, Long.valueOf(secondsLimit).intValue());
-            RacePermissionHandler.getInstance().getRaceReference().collection("teams").document(teamId).collection("stations").document(currentStationId)
+            RaceRoleHandler.getRaceReference().collection("teams").document(teamId).collection("stations").document(currentStationId)
                     .update("timeend", calendar.getTime())
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override

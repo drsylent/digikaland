@@ -30,7 +30,7 @@ public class ResultsEngine {
     }
 
     private void downloadResults(){
-        RacePermissionHandler.getInstance().getRaceReference().collection("endresults")
+        RaceRoleHandler.getRaceReference().collection("endresults")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

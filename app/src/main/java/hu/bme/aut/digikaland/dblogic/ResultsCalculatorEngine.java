@@ -56,7 +56,7 @@ public class ResultsCalculatorEngine {
 
     // station id-k 1-től kezdődnek
     private void getStationObjectiveNumbers(final int index){
-        final CollectionReference stationObjectiveRef = RacePermissionHandler.getInstance().getRaceReference()
+        final CollectionReference stationObjectiveRef = RaceRoleHandler.getRaceReference()
                 .collection("stations").document(Integer.toString(index)).collection("objectives");
         stationObjectiveRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -77,14 +77,16 @@ public class ResultsCalculatorEngine {
     }
 
     private void getTeams(){
-        final CollectionReference teamsRef = RacePermissionHandler.getInstance().getRaceReference().collection("teams");
+        final CollectionReference teamsRef =
+                RaceRoleHandler.getRaceReference().collection("teams");
         teamsRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     try {
                         for(QueryDocumentSnapshot document : task.getResult()){
-                            Result result = new Result(document.getId(), document.getString("name"));
+                            Result result = new Result(document.getId(),
+                                    document.getString("name"));
                             results.add(result);
                         }
                         preparationCompleted();
@@ -132,7 +134,8 @@ public class ResultsCalculatorEngine {
         }
 
         private void downloadSolution(String id){
-            final DocumentReference solutionRef = RacePermissionHandler.getInstance().getRaceReference().collection("solutions").document(id);
+            final DocumentReference solutionRef = RaceRoleHandler.getRaceReference()
+                    .collection("solutions").document(id);
             solutionRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -186,7 +189,7 @@ public class ResultsCalculatorEngine {
     }
 
     private void uploadResult(int position, Result result){
-        final DocumentReference endResultsReference = RacePermissionHandler.getInstance().getRaceReference().collection("endresults").document(Integer.toString(position));
+        final DocumentReference endResultsReference = RaceRoleHandler.getRaceReference().collection("endresults").document(Integer.toString(position));
         Map<String, Object> updateData = new HashMap<>();
         updateData.put("points", result.points);
         updateData.put("teamname", result.teamName);

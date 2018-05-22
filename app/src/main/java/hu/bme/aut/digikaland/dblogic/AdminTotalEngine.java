@@ -9,7 +9,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -45,7 +44,7 @@ public class AdminTotalEngine {
      */
     public void loadState(){
         resetData();
-        final DocumentReference docRef = RacePermissionHandler.getInstance().getRaceReference();
+        final DocumentReference docRef = RaceRoleHandler.getRaceReference();
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -76,8 +75,7 @@ public class AdminTotalEngine {
     }
 
     private void loadStartingState(){
-        final DocumentReference docRef = FirebaseFirestore.getInstance().collection("races")
-                .document(CodeHandler.getInstance().getRaceCode());
+        final DocumentReference docRef = RaceRoleHandler.getRaceReference();
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -103,7 +101,7 @@ public class AdminTotalEngine {
     }
 
     private void loadRunningState(){
-        final DocumentReference docRef = RacePermissionHandler.getInstance().getRaceReference();
+        final DocumentReference docRef = RaceRoleHandler.getRaceReference();
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -135,7 +133,7 @@ public class AdminTotalEngine {
         private boolean errorFree = true;
 
         private void loadStatistics(){
-            final CollectionReference stationRef = RacePermissionHandler.getInstance()
+            final CollectionReference stationRef = RaceRoleHandler
                     .getRaceReference().collection("stations");
             stationRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
@@ -209,7 +207,7 @@ public class AdminTotalEngine {
      * @param state A verseny új állapota.
      */
     public void updateRaceStatus(RaceState state){
-        RacePermissionHandler.getInstance().getRaceReference()
+        RaceRoleHandler.getRaceReference()
                 .update("status", state.toString())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -229,7 +227,7 @@ public class AdminTotalEngine {
      * Betölti a csapatok listáját.
      */
     public void loadTeamList(){
-        CollectionReference teamsRef = RacePermissionHandler.getInstance()
+        CollectionReference teamsRef = RaceRoleHandler
                 .getRaceReference().collection("teams");
         teamsRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override

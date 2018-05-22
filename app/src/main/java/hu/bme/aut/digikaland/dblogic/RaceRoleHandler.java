@@ -11,39 +11,23 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
 
-public class RacePermissionHandler {
-    private static final RacePermissionHandler ourInstance = new RacePermissionHandler();
+/**
+ * Ez a szolgáltatás kezeli, a felhasználó milyen szerepben van a verseny során,
+ * illetve az ebből következő dokumentumok referenciáit is innen lehet elérni.
+ */
+public class RaceRoleHandler {
+    private static final RaceRoleHandler ourInstance = new RaceRoleHandler();
 
-    // TODO: vagy inkább ezt kivenni? elég sokan használják, de csak a startup használja kommunikálásra...
-    public static RacePermissionHandler getInstance(CommunicationInterface c) {
+    // kommunikálni csak a StartupActivityvel fog
+    public static RaceRoleHandler getInstance(RaceRoleCommunicationInterface c) {
         ourInstance.comm = c;
         return ourInstance;
     }
 
-    public static RacePermissionHandler getInstance() {
-        return ourInstance;
+    private RaceRoleHandler() {
     }
 
-    private RacePermissionHandler() {
-    }
-
-    private CommunicationInterface comm = null;
-
-    // TODO: feltehetően nem fog kelleni
-    public RacePermissionHandler attach(CommunicationInterface c){
-        comm = c;
-        return this;
-    }
-
-    public void detach(){
-        comm = null;
-    }
-
-    public boolean isReady() {
-        return ready;
-    }
-    // TODO: kell? callbackel szólunk úgyis...
-    private boolean ready = false;
+    private RaceRoleCommunicationInterface comm = null;
 
     // A visszatérési értékkel jelezzük, hogy most kéne-e beállításnak történnie, vagy nem.
     public boolean startUp(SharedPreferences preferences){
@@ -60,7 +44,8 @@ public class RacePermissionHandler {
             comm.permissionError(ErrorType.EmptyField);
             return;
         }
-        final DocumentReference docRef = FirebaseFirestore.getInstance().collection("races").document(raceCode);
+        final DocumentReference docRef = FirebaseFirestore.getInstance()
+                .collection("races").document(raceCode);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -106,7 +91,6 @@ public class RacePermissionHandler {
 
     private void modeSet(String toConvert){
         toConvert = toConvert.toLowerCase();
-        ready = true;
         switch (toConvert){
             case "total": mainMode = MainMode.Admin; adminMode = AdminMode.Total; break;
             case "station": mainMode = MainMode.Admin; adminMode = AdminMode.Station; break;
@@ -114,7 +98,6 @@ public class RacePermissionHandler {
             case "normal": mainMode = MainMode.Client; clientMode = ClientMode.Normal; break;
             default: if(comm != null) comm.permissionError(ErrorType.DatabaseError);
         }
-        // Lehet bent marad a korábbi admin... biztos mindig meglesz a reset hívás?
     }
 
     private void setReference(DocumentReference ref){
@@ -122,40 +105,55 @@ public class RacePermissionHandler {
         else if(adminMode == AdminMode.Station) stationReference = ref;
     }
 
-    public void reset(){
-        ready = false;
-        mainMode = null;
-        adminMode = null;
-        clientMode = null;
+    public static void reset(){
+        ourInstance.mainMode = null;
+        ourInstance.adminMode = null;
+        ourInstance.clientMode = null;
     }
 
-    public MainMode getMainMode() {
-        return mainMode;
+    // mivel ezek staticok, nem kell elkérni feleslegesen a példányt a RacePermissionHandlerből
+
+    public static MainMode getMainMode() {
+        return ourInstance.mainMode;
     }
 
-    public AdminMode getAdminMode() {
-        return adminMode;
+    public static AdminMode getAdminMode() {
+        return ourInstance.adminMode;
     }
 
-    public ClientMode getClientMode() {
-        return clientMode;
+    public static ClientMode getClientMode() {
+        return ourInstance.clientMode;
     }
 
-    public DocumentReference getTeamReference() {
-        return teamReference;
+    /**
+     * A kliens csapatához tartozó dokumentum referenciáját adja vissza.
+     * @return A kliens csapatához tartozó dokumentum.
+     */
+    public static DocumentReference getTeamReference() {
+        return ourInstance.teamReference;
     }
 
-    public DocumentReference getStationReference() {
-        return stationReference;
+    /**
+     * Az állomás admin állomásához tartozó dokumentum referenciáját adja vissza.
+     * @return Az állomás admin állomásához tartozó dokumentum.
+     */
+    public static DocumentReference getStationReference() {
+        return ourInstance.stationReference;
     }
 
-    public DocumentReference getRaceReference(){ return FirebaseFirestore.getInstance().collection("races").document(CodeHandler.getInstance().getRaceCode()); }
+    /**
+     * A versenyt tároló dokumentum referenciáját adja vissza.
+     * @return A versenyt tároló dokumentum.
+     */
+    public static DocumentReference getRaceReference(){
+        return FirebaseFirestore.getInstance().collection("races")
+                .document(CodeHandler.getInstance().getRaceCode());
+    }
 
     private MainMode mainMode = null;
     private AdminMode adminMode = null;
     private ClientMode clientMode = null;
     private DocumentReference teamReference = null;
-    // ha ez lesz az állomásadminnak
     private DocumentReference stationReference = null;
 
     public enum MainMode{
@@ -173,7 +171,7 @@ public class RacePermissionHandler {
         Normal
     }
 
-    public interface CommunicationInterface{
+    public interface RaceRoleCommunicationInterface {
         void permissionError(ErrorType type);
         void permissionReady();
     }

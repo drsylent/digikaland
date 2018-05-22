@@ -43,7 +43,7 @@ public class EvaluatorEngine {
         Map<String, Object> updateData = new HashMap<>();
         updateData.put("points", solution.getCurrentPoints());
         updateData.put("truepoints", solution.getCurrentPoints()*(1-solution.getPenalty()*0.01));
-        RacePermissionHandler.getInstance().getRaceReference().collection("solutions").document(solution.getId())
+        RaceRoleHandler.getRaceReference().collection("solutions").document(solution.getId())
                 .update(updateData)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -65,8 +65,8 @@ public class EvaluatorEngine {
      * @param teamId A csapat azonosítója.
      */
     public void updateEvaluationStatus(String stationId, String teamId){
-        RacePermissionHandler.getInstance().getRaceReference().collection("stations").document(stationId).collection("teams")
-                .whereEqualTo("reference", RacePermissionHandler.getInstance().getRaceReference().collection("teams").document(teamId))
+        RaceRoleHandler.getRaceReference().collection("stations").document(stationId).collection("teams")
+                .whereEqualTo("reference", RaceRoleHandler.getRaceReference().collection("teams").document(teamId))
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

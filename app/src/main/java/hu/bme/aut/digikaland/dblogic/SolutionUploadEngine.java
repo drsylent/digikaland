@@ -10,7 +10,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.ServerTimestamp;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -95,7 +94,7 @@ public class SolutionUploadEngine {
         }
 
         private void uploadTrueFalse(TrueFalseObjective objective, String solutionId){
-            RacePermissionHandler.getInstance().getRaceReference().collection("solutions").document(solutionId)
+            RaceRoleHandler.getRaceReference().collection("solutions").document(solutionId)
                     .update("answer", objective.getAnswer())
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
@@ -112,7 +111,7 @@ public class SolutionUploadEngine {
         }
 
         private void uploadMultipleChoice(MultipleChoiceObjective objective, String solutionId){
-            RacePermissionHandler.getInstance().getRaceReference().collection("solutions").document(solutionId)
+            RaceRoleHandler.getRaceReference().collection("solutions").document(solutionId)
                     .update("answer", objective.getChosenIndex())
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
@@ -137,7 +136,7 @@ public class SolutionUploadEngine {
         }
 
         private void uploadStringAnswer(String answer, String solutionId){
-            RacePermissionHandler.getInstance().getRaceReference().collection("solutions").document(solutionId)
+            RaceRoleHandler.getRaceReference().collection("solutions").document(solutionId)
                     .update("answer", answer)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
@@ -168,7 +167,7 @@ public class SolutionUploadEngine {
         }
 
         private String filePathGenerator(){
-            String path = RacePermissionHandler.getInstance().getRaceReference().getId() + "/" + "images/";
+            String path = RaceRoleHandler.getRaceReference().getId() + "/" + "images/";
             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
             return path + "JPEG_" + timeStamp + "_" + objective.getStationId() + Integer.toString(counter++) + ".jpg";
         }
@@ -182,7 +181,7 @@ public class SolutionUploadEngine {
         private void pictureUploaded(String path){
             filepaths.add(path);
             if(filepaths.size() == objective.getPictures().size()) {
-                RacePermissionHandler.getInstance().getRaceReference().collection("solutions").document(solutionId)
+                RaceRoleHandler.getRaceReference().collection("solutions").document(solutionId)
                         .update("answer", filepaths)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
@@ -228,7 +227,7 @@ public class SolutionUploadEngine {
         }
 
         private DocumentReference getStationReference(){
-            return RacePermissionHandler.getInstance().getRaceReference().collection("stations").document(stationId);
+            return RaceRoleHandler.getRaceReference().collection("stations").document(stationId);
         }
 
         private void statusUploadCompleted(){
@@ -236,7 +235,7 @@ public class SolutionUploadEngine {
         }
 
         private void updateTeamStationNumber(){
-            RacePermissionHandler.getInstance().getTeamReference()
+            RaceRoleHandler.getTeamReference()
                     .update("stationnumber", ClientEngine.getInstance().getStationNumber()+1)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
@@ -253,7 +252,7 @@ public class SolutionUploadEngine {
         }
 
         private void updateTeamStationStatus(){
-            RacePermissionHandler.getInstance().getTeamReference().collection("stations").whereEqualTo("station", getStationReference())
+            RaceRoleHandler.getTeamReference().collection("stations").whereEqualTo("station", getStationReference())
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
@@ -292,8 +291,8 @@ public class SolutionUploadEngine {
         }
 
         private void updateStationStatus(){
-            RacePermissionHandler.getInstance().getRaceReference().collection("stations").document(stationId).collection("teams")
-                    .whereEqualTo("reference", RacePermissionHandler.getInstance().getTeamReference())
+            RaceRoleHandler.getRaceReference().collection("stations").document(stationId).collection("teams")
+                    .whereEqualTo("reference", RaceRoleHandler.getTeamReference())
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override

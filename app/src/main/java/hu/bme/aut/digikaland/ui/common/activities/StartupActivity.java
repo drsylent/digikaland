@@ -14,7 +14,7 @@ import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.dblogic.CodeHandler;
 import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
 import hu.bme.aut.digikaland.dblogic.RaceNameEngine;
-import hu.bme.aut.digikaland.dblogic.RacePermissionHandler;
+import hu.bme.aut.digikaland.dblogic.RaceRoleHandler;
 import hu.bme.aut.digikaland.ui.admin.total.activities.AdminTotalMainActivity;
 import hu.bme.aut.digikaland.ui.admin.station.activities.AdminStationMainActivity;
 import hu.bme.aut.digikaland.ui.client.activities.ClientMainActivity;
@@ -22,7 +22,7 @@ import hu.bme.aut.digikaland.ui.common.fragments.PrimaryCodeFragment;
 import hu.bme.aut.digikaland.ui.common.fragments.SecondaryCodeFragment;
 
 public class StartupActivity extends AppCompatActivity implements PrimaryCodeFragment.PrimaryCodeReady, SecondaryCodeFragment.SecondaryCodeReady,
-        RaceNameEngine.RaceNameCommunicationInterface, RacePermissionHandler.CommunicationInterface {
+        RaceNameEngine.RaceNameCommunicationInterface, RaceRoleHandler.RaceRoleCommunicationInterface {
     private static final String ARG_RACECODE = "racecode";
     private static final String ARG_ROLECODE = "rolecode";
 
@@ -84,7 +84,7 @@ public class StartupActivity extends AppCompatActivity implements PrimaryCodeFra
         button.setEnabled(false);
         this.roleCode = roleCode;
         disabledButton = button;
-        RacePermissionHandler.getInstance(this).loadPermissionData(raceCode, roleCode);
+        RaceRoleHandler.getInstance(this).loadPermissionData(raceCode, roleCode);
     }
 
     // TODO: jelenleg csak placeholder megjelenítésre
@@ -117,10 +117,10 @@ public class StartupActivity extends AppCompatActivity implements PrimaryCodeFra
     public void permissionReady() {
         disabledButton.setEnabled(true);
         CodeHandler.getInstance().setCodes(raceCode, roleCode, getSharedPreferences(CodeHandler.SharedPreferencesName, MODE_PRIVATE));
-        RacePermissionHandler rph = RacePermissionHandler.getInstance(this);
+        RaceRoleHandler rph = RaceRoleHandler.getInstance(this);
         Intent intent;
-        if(rph.getMainMode() == RacePermissionHandler.MainMode.Admin){
-            if(rph.getAdminMode() == RacePermissionHandler.AdminMode.Total){
+        if(rph.getMainMode() == RaceRoleHandler.MainMode.Admin){
+            if(rph.getAdminMode() == RaceRoleHandler.AdminMode.Total){
                 intent = new Intent(StartupActivity.this, AdminTotalMainActivity.class);
             }
             else{
@@ -128,7 +128,7 @@ public class StartupActivity extends AppCompatActivity implements PrimaryCodeFra
             }
         }
         else{
-            if(rph.getClientMode() == RacePermissionHandler.ClientMode.Captain){
+            if(rph.getClientMode() == RaceRoleHandler.ClientMode.Captain){
                 intent = new Intent(StartupActivity.this, ClientMainActivity.class);
             }
             else{

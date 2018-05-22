@@ -30,7 +30,7 @@ public class RaceNameEngine {
 
     /**
      * Végrehajtja a verseny nevének betöltését.
-     * @param raceCode
+     * @param raceCode A verseny kódja.
      */
     public void loadRaceName(@NonNull String raceCode){
         if(raceCode.isEmpty()){

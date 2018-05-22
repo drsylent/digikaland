@@ -55,7 +55,7 @@ public class ObjectiveEngine {
         }
 
         private void downloadObjectives(){
-            RacePermissionHandler.getInstance().getRaceReference().collection("stations").document(stationId).collection("objectives")
+            RaceRoleHandler.getRaceReference().collection("stations").document(stationId).collection("objectives")
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override

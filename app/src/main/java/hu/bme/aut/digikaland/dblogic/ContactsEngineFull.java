@@ -64,7 +64,7 @@ public class ContactsEngineFull {
         }
 
         private void loadStationIds(){
-            final CollectionReference stationRef = RacePermissionHandler.getInstance()
+            final CollectionReference stationRef = RaceRoleHandler
                     .getRaceReference().collection("stations");
             stationRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
@@ -89,7 +89,7 @@ public class ContactsEngineFull {
         }
 
         private void loadTeamIds(){
-            final CollectionReference teamRef = RacePermissionHandler.getInstance()
+            final CollectionReference teamRef = RaceRoleHandler
                     .getRaceReference().collection("teams");
             teamRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
