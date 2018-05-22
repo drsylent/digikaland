@@ -40,10 +40,10 @@ import hu.bme.aut.digikaland.dblogic.ClientEngine;
 import hu.bme.aut.digikaland.dblogic.CodeHandler;
 import hu.bme.aut.digikaland.dblogic.ContactsEngine;
 import hu.bme.aut.digikaland.dblogic.ResultsDownloaderEngine;
+import hu.bme.aut.digikaland.dblogic.StationClientEngine;
 import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
 import hu.bme.aut.digikaland.dblogic.ObjectiveEngine;
 import hu.bme.aut.digikaland.dblogic.RaceRoleHandler;
-import hu.bme.aut.digikaland.dblogic.StationsEngine;
 import hu.bme.aut.digikaland.entities.Contact;
 import hu.bme.aut.digikaland.entities.EvaluationStatistics;
 import hu.bme.aut.digikaland.entities.objectives.Objective;
@@ -64,7 +64,7 @@ import permissions.dispatcher.RuntimePermissions;
 @RuntimePermissions
 public class ClientMainActivity extends AppCompatActivity implements ClientActualFragment.ClientActualMainListener, ClientObjectiveFragment.ClientActiveObjectiveListener,
         ResultsFragment.ResultsFragmentListener, ClientEngine.ClientCommunicationInterface, ResultsDownloaderEngine.ResultsDownloaderCommunicationInterface, ContactsEngine.ContactsEngineCommunicationInterface,
-        ObjectiveEngine.ObjectiveCommunicationInterface, StationsEngine.CommunicationInterface{
+        ObjectiveEngine.ObjectiveCommunicationInterface, StationClientEngine.StationClientCommunicationInterface {
 
     private static final String ARG_VIEWSTATE = "state";
 
@@ -316,7 +316,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
     }
 
     private void prepareStations(){
-        StationsEngine.getInstance(this).loadStationList();
+        StationClientEngine.getInstance(this).loadStationList();
     }
 
     @Override
@@ -326,7 +326,7 @@ public class ClientMainActivity extends AppCompatActivity implements ClientActua
 
     @Override
     public void stationLoadingError(ErrorType type) {
-        showSnackBarMessage("StationsEngine: " + type.getDefaultMessage());
+        showSnackBarMessage("StationClientEngine: " + type.getDefaultMessage());
     }
 
 

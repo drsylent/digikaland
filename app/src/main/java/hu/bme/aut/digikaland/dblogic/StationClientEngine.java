@@ -15,22 +15,25 @@ import hu.bme.aut.digikaland.entities.enumeration.StationStatusFromClient;
 import hu.bme.aut.digikaland.entities.station.StationClientPerspective;
 
 /**
- * Created by Sylent on 2018. 04. 08..
+ * A kliensek az állomással kapcsolatos komplexebb adatokat ezen a szolgáltatáson keresztül
+ * érhetik el.
  */
+public class StationClientEngine {
+    private static final StationClientEngine ourInstance = new StationClientEngine();
 
-public class StationsEngine {
-    private static final StationsEngine ourInstance = new StationsEngine();
-
-    public static StationsEngine getInstance(CommunicationInterface c) {
+    public static StationClientEngine getInstance(StationClientCommunicationInterface c) {
         ourInstance.comm = c;
         return ourInstance;
     }
 
-    private StationsEngine() {
+    private StationClientEngine() {
     }
 
-    private CommunicationInterface comm;
+    private StationClientCommunicationInterface comm;
 
+    /**
+     * Az állomások listájának betöltése.
+     */
     public void loadStationList(){
         RaceRoleHandler.getTeamReference().collection("stations")
                 .get()
@@ -69,7 +72,7 @@ public class StationsEngine {
         }
     }
 
-    public interface CommunicationInterface{
+    public interface StationClientCommunicationInterface {
         void stationListLoaded(ArrayList<StationClientPerspective> stations);
         void stationLoadingError(ErrorType type);
     }

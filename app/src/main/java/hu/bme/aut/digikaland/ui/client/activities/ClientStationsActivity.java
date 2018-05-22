@@ -14,12 +14,12 @@ import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
 import hu.bme.aut.digikaland.dblogic.ObjectiveEngine;
 import hu.bme.aut.digikaland.dblogic.RaceRoleHandler;
-import hu.bme.aut.digikaland.dblogic.StationsEngine;
+import hu.bme.aut.digikaland.dblogic.StationClientEngine;
 import hu.bme.aut.digikaland.entities.station.StationClientPerspective;
 import hu.bme.aut.digikaland.entities.objectives.Objective;
 import hu.bme.aut.digikaland.ui.client.fragments.ClientStationAdapter;
 
-public class ClientStationsActivity extends AppCompatActivity implements ClientStationAdapter.ClientStationListener, StationsEngine.CommunicationInterface,
+public class ClientStationsActivity extends AppCompatActivity implements ClientStationAdapter.ClientStationListener, StationClientEngine.StationClientCommunicationInterface,
         ObjectiveEngine.ObjectiveCommunicationInterface {
     public final static String ARGS_STATIONS = "stations";
 
@@ -50,7 +50,7 @@ public class ClientStationsActivity extends AppCompatActivity implements ClientS
 
     private void refresh(){
         showSnackBarMessage(getString(R.string.refresh));
-        StationsEngine.getInstance(this).loadStationList();
+        StationClientEngine.getInstance(this).loadStationList();
     }
 
     @Override
