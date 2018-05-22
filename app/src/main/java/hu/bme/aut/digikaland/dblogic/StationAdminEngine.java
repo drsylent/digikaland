@@ -37,7 +37,7 @@ import hu.bme.aut.digikaland.entities.station.StationAdminPerspectiveTeam;
 public class StationAdminEngine {
     private static final StationAdminEngine ourInstance = new StationAdminEngine();
 
-    public static StationAdminEngine getInstance(CommunicationInterface c) {
+    public static StationAdminEngine getInstance(StationAdminCommunicationInterface c) {
         ourInstance.comm = c;
         return ourInstance;
     }
@@ -46,7 +46,7 @@ public class StationAdminEngine {
 
     private int stationNumber = 0;
 
-    private CommunicationInterface comm;
+    private StationAdminCommunicationInterface comm;
 
     private StationAdminEngine() {
     }
@@ -428,7 +428,7 @@ public class StationAdminEngine {
     }
 
 
-    public interface CommunicationInterface {
+    public interface StationAdminCommunicationInterface {
         void stationStarted();
         void adminStationError(ErrorType type);
         void stationTeamDataLoaded(ArrayList<StationAdminPerspective> stations);

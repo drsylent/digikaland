@@ -33,7 +33,7 @@ import permissions.dispatcher.OnPermissionDenied;
 import permissions.dispatcher.RuntimePermissions;
 
 @RuntimePermissions
-public class AdminStationsActivity extends AppCompatActivity implements AdminStationAdapter.AdminStationListener, StationAdminEngine.CommunicationInterface,
+public class AdminStationsActivity extends AppCompatActivity implements AdminStationAdapter.AdminStationListener, StationAdminEngine.StationAdminCommunicationInterface,
             SolutionDownloadEngine.CommunicationInterface{
     public final static String ARGS_STATIONS = "stations";
     public final static String ARG_SUMMARY = "summary";

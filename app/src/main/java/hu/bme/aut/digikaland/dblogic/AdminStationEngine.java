@@ -26,12 +26,12 @@ import hu.bme.aut.digikaland.entities.enumeration.EvaluationStatus;
 public class AdminStationEngine {
     private static final AdminStationEngine ourInstance = new AdminStationEngine();
 
-    public static AdminStationEngine getInstance(CommunicationInterface c) {
+    public static AdminStationEngine getInstance(AdminStationCommunicationInterface c) {
         ourInstance.comm = c;
         return ourInstance;
     }
 
-    private CommunicationInterface comm = null;
+    private AdminStationCommunicationInterface comm = null;
 
     private AdminStationEngine() {
     }
@@ -305,7 +305,7 @@ public class AdminStationEngine {
         return startingTime;
     }
 
-    public interface CommunicationInterface{
+    public interface AdminStationCommunicationInterface {
         void adminError(ErrorType type);
         void startingStateLoaded();
         void runningStateLoaded();

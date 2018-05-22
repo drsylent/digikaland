@@ -39,7 +39,7 @@ import permissions.dispatcher.OnPermissionDenied;
 import permissions.dispatcher.RuntimePermissions;
 
 @RuntimePermissions
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, StationAdminEngine.CommunicationInterface {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, StationAdminEngine.StationAdminCommunicationInterface {
 
     public static final String MARKER_LOCATIONS = "markerlocations";
     public static final String MARKER_SPECIAL = "indexofspecial";

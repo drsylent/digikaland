@@ -28,7 +28,7 @@ import hu.bme.aut.digikaland.ui.common.fragments.ContactFragment;
 import hu.bme.aut.digikaland.ui.common.fragments.TextFragment;
 import hu.bme.aut.digikaland.utility.development.MockGenerator;
 
-public class AdminStationSummaryActivity extends AppCompatActivity implements StationAdminEngine.CommunicationInterface {
+public class AdminStationSummaryActivity extends AppCompatActivity implements StationAdminEngine.StationAdminCommunicationInterface {
     public final static String ARG_STATIONID = "stationid";
     public final static String ARG_LOCATION = "loc";
     public final static String ARG_CONTACT = "contact";
