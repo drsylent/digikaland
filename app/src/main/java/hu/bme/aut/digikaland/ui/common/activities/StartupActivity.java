@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 import hu.bme.aut.digikaland.R;
 import hu.bme.aut.digikaland.dblogic.CodeHandler;
 import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
-import hu.bme.aut.digikaland.dblogic.RaceNameGetter;
+import hu.bme.aut.digikaland.dblogic.RaceNameEngine;
 import hu.bme.aut.digikaland.dblogic.RacePermissionHandler;
 import hu.bme.aut.digikaland.ui.admin.total.activities.AdminTotalMainActivity;
 import hu.bme.aut.digikaland.ui.admin.station.activities.AdminStationMainActivity;
@@ -22,7 +22,7 @@ import hu.bme.aut.digikaland.ui.common.fragments.PrimaryCodeFragment;
 import hu.bme.aut.digikaland.ui.common.fragments.SecondaryCodeFragment;
 
 public class StartupActivity extends AppCompatActivity implements PrimaryCodeFragment.PrimaryCodeReady, SecondaryCodeFragment.SecondaryCodeReady,
-        RaceNameGetter.CommunicationInterface, RacePermissionHandler.CommunicationInterface {
+        RaceNameEngine.RaceNameCommunicationInterface, RacePermissionHandler.CommunicationInterface {
     private static final String ARG_RACECODE = "racecode";
     private static final String ARG_ROLECODE = "rolecode";
 
@@ -72,7 +72,7 @@ public class StartupActivity extends AppCompatActivity implements PrimaryCodeFra
         button.setEnabled(false);
         this.raceCode = raceCode;
         disabledButton = button;
-        RaceNameGetter.getInstance(this).loadRaceName(raceCode);
+        RaceNameEngine.getInstance(this).loadRaceName(raceCode);
     }
 
     @Override

@@ -10,21 +10,28 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import hu.bme.aut.digikaland.dblogic.enumeration.ErrorType;
 
-public class RaceNameGetter {
-    private static final RaceNameGetter ourInstance = new RaceNameGetter();
+/**
+ * A versenyek nevét ezen a szolgáltatáson keresztül lehet lekérni.
+ */
+public class RaceNameEngine {
+    private static final RaceNameEngine ourInstance = new RaceNameEngine();
 
     // Huzamosabb ideig ezt nem használjuk, csak erre a lekérésre - a csatolást bevonjuk ezért
     // a példánykérésbe minden alkalommal.
-    public static RaceNameGetter getInstance(CommunicationInterface c) {
+    public static RaceNameEngine getInstance(RaceNameCommunicationInterface c) {
         ourInstance.comm = c;
         return ourInstance;
     }
 
-    private RaceNameGetter() {
+    private RaceNameEngine() {
     }
 
-    private CommunicationInterface comm;
+    private RaceNameCommunicationInterface comm;
 
+    /**
+     * Végrehajtja a verseny nevének betöltését.
+     * @param raceCode
+     */
     public void loadRaceName(@NonNull String raceCode){
         if(raceCode.isEmpty()){
             comm.raceNameLoadingError(ErrorType.EmptyField);
@@ -52,7 +59,7 @@ public class RaceNameGetter {
         });
     }
 
-    public interface CommunicationInterface{
+    public interface RaceNameCommunicationInterface {
         void raceNameLoaded(String result);
         void raceNameLoadingError(ErrorType type);
     }
