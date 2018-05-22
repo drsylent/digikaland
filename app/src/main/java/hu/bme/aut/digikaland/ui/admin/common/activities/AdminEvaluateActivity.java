@@ -30,7 +30,7 @@ import hu.bme.aut.digikaland.ui.common.objectives.solutions.PointDisplayFragment
 import hu.bme.aut.digikaland.ui.common.objectives.solutions.EvaluateFragment;
 
 public class AdminEvaluateActivity extends AppCompatActivity implements PictureFragment.PictureFragmentListener, PointDisplayFragment.PointHandleActivity,
-        NumberPickerDialogFragment.PointSettingInterface, CustomAnswerObjectiveFragment.CustomObjectiveListener, EvaluatorEngine.CommunicationInterface{
+        NumberPickerDialogFragment.PointSettingInterface, CustomAnswerObjectiveFragment.CustomObjectiveListener, EvaluatorEngine.EvaluatorCommunicationInterface {
     public final static String ARG_STATION = "stat";
     public final static String ARG_TEAM = "team";
     public final static String ARG_TIME = "time";

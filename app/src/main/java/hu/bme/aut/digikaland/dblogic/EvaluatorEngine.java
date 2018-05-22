@@ -19,23 +19,26 @@ import hu.bme.aut.digikaland.entities.enumeration.EvaluationStatus;
 import hu.bme.aut.digikaland.entities.objectives.solutions.Solution;
 
 /**
- * Created by Sylent on 2018. 05. 12..
+ * A kiértékelések feltöltését elvégző szolgáltatás.
  */
-
 public class EvaluatorEngine {
     private static final EvaluatorEngine ourInstance = new EvaluatorEngine();
 
-    public static EvaluatorEngine getInstance(CommunicationInterface c)
+    public static EvaluatorEngine getInstance(EvaluatorCommunicationInterface c)
     {
         ourInstance.comm = c;
         return ourInstance;
     }
 
-    private CommunicationInterface comm;
+    private EvaluatorCommunicationInterface comm;
 
     private EvaluatorEngine() {
     }
 
+    /**
+     * Egy kiértékelés feltöltését végzi el.
+     * @param solution A megoldás, mely ki lett értékelve.
+     */
     public void uploadEvaluation(Solution solution){
         Map<String, Object> updateData = new HashMap<>();
         updateData.put("points", solution.getCurrentPoints());
@@ -56,6 +59,11 @@ public class EvaluatorEngine {
                 });
     }
 
+    /**
+     * A kiértékelés tényét rögzíti egy állomáson egy csapathoz.
+     * @param stationId Az állomás azonosítója.
+     * @param teamId A csapat azonosítója.
+     */
     public void updateEvaluationStatus(String stationId, String teamId){
         RacePermissionHandler.getInstance().getRaceReference().collection("stations").document(stationId).collection("teams")
                 .whereEqualTo("reference", RacePermissionHandler.getInstance().getRaceReference().collection("teams").document(teamId))
@@ -95,7 +103,7 @@ public class EvaluatorEngine {
                 });
     }
 
-    public interface CommunicationInterface{
+    public interface EvaluatorCommunicationInterface {
         void evaluationUploaded();
         void evaluationStatusUpdated();
         void evaluationUploadError(ErrorType type);
